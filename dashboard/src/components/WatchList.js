@@ -9,6 +9,9 @@ import {
   KeyboardArrowDown,
   KeyboardArrowUp,
   MoreHoriz,
+  Search,
+  TrendingUp,
+  ShowChart
 } from "@mui/icons-material";
 
 import { watchlist } from "../data/data";
@@ -71,17 +74,34 @@ const WatchList = () => {
   // ],
   // };
 
+  const upCount = watchlist.filter(stock => !stock.isDown).length;
+  const downCount = watchlist.filter(stock => stock.isDown).length;
+
   return (
     <div className="watchlist-container">
+      {/* Enhanced Header */}
+      <div className="watchlist-header">
+        <div className="watchlist-title">
+          <ShowChart style={{ fontSize: '18px' }} />
+          <span>Watchlist</span>
+        </div>
+        <div className="market-status">
+          <div className="status-dot"></div>
+          <span>LIVE</span>
+        </div>
+      </div>
+
+      {/* Enhanced Search */}
       <div className="search-container">
+        <Search className="search-icon" />
         <input
           type="text"
           name="search"
           id="search"
-          placeholder="Search eg:infy, bse, nifty fut weekly, gold mcx"
+          placeholder="Search stocks, indices..."
           className="search"
         />
-        <span className="counts"> {watchlist.length} / 50</span>
+        <span className="counts">{watchlist.length}/50</span>
       </div>
 
       <ul className="list">
@@ -90,7 +110,25 @@ const WatchList = () => {
         })}
       </ul>
 
-      <DoughnutChart data={data} />
+      {/* Chart - Desktop Only */}
+      <div className="chart-container mt-4 p-3 hidden lg:block">
+        <DoughnutChart data={data} />
+      </div>
+
+      {/* Enhanced Footer */}
+      <div className="watchlist-footer">
+        <div className="footer-stats">
+          <div className="stat-item">
+            <div className="stat-dot up"></div>
+            <span>{upCount} Up</span>
+          </div>
+          <div className="stat-item">
+            <div className="stat-dot down"></div>
+            <span>{downCount} Down</span>
+          </div>
+        </div>
+        <TrendingUp style={{ fontSize: '16px', color: '#10b981' }} />
+      </div>
     </div>
   );
 };
@@ -113,13 +151,17 @@ const WatchListItem = ({ stock }) => {
       <div className="item">
         <p className={stock.isDown ? "down" : "up"}>{stock.name}</p>
         <div className="itemInfo">
-          <span className="percent">{stock.percent}</span>
-          {stock.isDown ? (
-            <KeyboardArrowDown className="down" />
-          ) : (
-            <KeyboardArrowUp className="down" />
-          )}
-          <span className="price">{stock.price}</span>
+          <span className={`percent ${stock.isDown ? 'negative' : 'positive'}`}>
+            {stock.percent}
+          </span>
+          <div className="price-change-indicator">
+            <span className="price">₹{stock.price}</span>
+            {stock.isDown ? (
+              <KeyboardArrowDown className="down trend-arrow" />
+            ) : (
+              <KeyboardArrowUp className="up trend-arrow" />
+            )}
+          </div>
         </div>
       </div>
       {showWatchlistActions && <WatchListActions uid={stock.name} />}

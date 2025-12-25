@@ -109,29 +109,29 @@ const Apps = () => {
 
   return (
     <div className={`transition-colors ${theme === "dark" ? "text-white" : ""}`}>
-      <h3 className={`title ${theme === "light" ? "text-gray-800" : "text-white"}`}>
+      <h3 className={`title text-responsive-lg ${theme === "light" ? "text-gray-800" : "text-white"}`}>
         Zerodha Ecosystem
       </h3>
 
       {/* Live Market Data */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-6">
         {Object.entries(marketData).map(([key, data]) => (
-          <div key={key} className={`p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"} shadow-sm`}>
-            <h4 className={`font-semibold text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
+          <div key={key} className={`p-2 sm:p-3 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"} shadow-sm`}>
+            <h4 className={`font-medium text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
               {key.toUpperCase().replace('BANKNIFTY', 'BANK NIFTY')}
             </h4>
-            <div className="flex items-center justify-between mt-2">
-              <span className={`text-lg font-bold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
+            <div className="flex items-center justify-between mt-1">
+              <span className={`text-sm sm:text-base font-bold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
                 {data.value.toFixed(2)}
               </span>
-              <span className={`text-sm font-medium ${
+              <span className={`text-xs font-medium ${
                 data.change >= 0 ? 'text-green-500' : 'text-red-500'
               }`}>
                 {data.change >= 0 ? '+' : ''}{data.change.toFixed(2)}
               </span>
             </div>
             <div className="flex items-center mt-1">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
+              <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse mr-1"></div>
               <span className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>Live</span>
             </div>
           </div>
@@ -139,19 +139,19 @@ const Apps = () => {
       </div>
 
       {/* Apps Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
         {apps.map((app, index) => (
-          <div key={index} className={`p-6 rounded-xl border-2 ${getColorClasses(app.color)} hover:shadow-lg transition-all duration-200 cursor-pointer`}>
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <span className="text-3xl">{app.icon}</span>
+          <div key={index} className={`p-3 sm:p-4 rounded-lg border ${getColorClasses(app.color)} hover:shadow-md transition-all duration-200 cursor-pointer`}>
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className="text-lg sm:text-xl">{app.icon}</span>
                 <div>
-                  <h4 className="text-xl font-bold">{app.name}</h4>
-                  <p className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>{app.description}</p>
+                  <h4 className="text-sm sm:text-base font-semibold">{app.name}</h4>
+                  <p className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>{app.description}</p>
                 </div>
               </div>
               <div className="text-right">
-                <div className={`text-2xl font-bold ${app.color === 'blue' ? 'text-blue-600' : app.color === 'green' ? 'text-green-600' : app.color === 'purple' ? 'text-purple-600' : 'text-orange-600'}`}>
+                <div className={`text-lg sm:text-xl font-bold ${app.color === 'blue' ? 'text-blue-600' : app.color === 'green' ? 'text-green-600' : app.color === 'purple' ? 'text-purple-600' : 'text-orange-600'}`}>
                   {app.usage}%
                 </div>
                 <div className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>Usage</div>
@@ -159,9 +159,9 @@ const Apps = () => {
             </div>
             
             {/* Usage Bar */}
-            <div className={`w-full rounded-full h-2 mb-4 ${theme === "dark" ? "bg-gray-700" : "bg-gray-200"}`}>
+            <div className={`w-full rounded-full h-1.5 mb-3 ${theme === "dark" ? "bg-gray-700" : "bg-gray-200"}`}>
               <div 
-                className={`h-2 rounded-full transition-all duration-500 ${
+                className={`h-1.5 rounded-full transition-all duration-500 ${
                   app.color === 'blue' ? 'bg-blue-500' : 
                   app.color === 'green' ? 'bg-green-500' : 
                   app.color === 'purple' ? 'bg-purple-500' : 'bg-orange-500'
@@ -171,15 +171,15 @@ const Apps = () => {
             </div>
             
             {/* Features */}
-            <div className="space-y-2">
+            <div className="space-y-1">
               {app.features.map((feature, idx) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <div className={`w-1.5 h-1.5 rounded-full ${
+                  <div className={`w-1 h-1 rounded-full ${
                     app.color === 'blue' ? 'bg-blue-500' : 
                     app.color === 'green' ? 'bg-green-500' : 
                     app.color === 'purple' ? 'bg-purple-500' : 'bg-orange-500'
                   }`}></div>
-                  <span className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>{feature}</span>
+                  <span className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>{feature}</span>
                 </div>
               ))}
             </div>
@@ -188,52 +188,54 @@ const Apps = () => {
       </div>
 
       {/* App Usage Chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className={`p-6 rounded-xl border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
-          <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
+        <div className={`p-3 sm:p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
+          <h4 className={`text-sm sm:text-base font-semibold mb-3 ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
             App Usage Distribution
           </h4>
-          <DoughnutChart data={chartData} />
+          <div className="w-full max-w-[200px] mx-auto chart-container">
+            <DoughnutChart data={chartData} />
+          </div>
         </div>
 
         {/* Quick Actions */}
-        <div className={`p-6 rounded-xl border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
-          <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
+        <div className={`p-3 sm:p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
+          <h4 className={`text-sm sm:text-base font-semibold mb-3 ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
             Quick Actions
           </h4>
-          <div className="space-y-3">
-            <button className={`w-full p-4 rounded-lg border-2 border-dashed transition-all duration-200 hover:border-solid ${
+          <div className="space-y-2">
+            <button className={`w-full p-2 sm:p-3 rounded-lg border border-dashed transition-all duration-200 hover:border-solid ${
               theme === "dark" ? "border-gray-600 hover:border-blue-500 hover:bg-blue-900/20" : "border-gray-300 hover:border-blue-500 hover:bg-blue-50"
             }`}>
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">📱</span>
+              <div className="flex items-center gap-2">
+                <span className="text-base sm:text-lg">📱</span>
                 <div className="text-left">
-                  <p className={`font-medium ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Download Mobile App</p>
-                  <p className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>Trade on the go</p>
+                  <p className={`font-medium text-xs sm:text-sm ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Download Mobile App</p>
+                  <p className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>Trade on the go</p>
                 </div>
               </div>
             </button>
             
-            <button className={`w-full p-4 rounded-lg border-2 border-dashed transition-all duration-200 hover:border-solid ${
+            <button className={`w-full p-2 sm:p-3 rounded-lg border border-dashed transition-all duration-200 hover:border-solid ${
               theme === "dark" ? "border-gray-600 hover:border-green-500 hover:bg-green-900/20" : "border-gray-300 hover:border-green-500 hover:bg-green-50"
             }`}>
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">📊</span>
+              <div className="flex items-center gap-2">
+                <span className="text-base sm:text-lg">📊</span>
                 <div className="text-left">
-                  <p className={`font-medium ${theme === "dark" ? "text-white" : "text-gray-900"}`}>API Documentation</p>
-                  <p className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>Build trading apps</p>
+                  <p className={`font-medium text-xs sm:text-sm ${theme === "dark" ? "text-white" : "text-gray-900"}`}>API Documentation</p>
+                  <p className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>Build trading apps</p>
                 </div>
               </div>
             </button>
             
-            <button className={`w-full p-4 rounded-lg border-2 border-dashed transition-all duration-200 hover:border-solid ${
+            <button className={`w-full p-2 sm:p-3 rounded-lg border border-dashed transition-all duration-200 hover:border-solid ${
               theme === "dark" ? "border-gray-600 hover:border-purple-500 hover:bg-purple-900/20" : "border-gray-300 hover:border-purple-500 hover:bg-purple-50"
             }`}>
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">🎓</span>
+              <div className="flex items-center gap-2">
+                <span className="text-base sm:text-lg">🎓</span>
                 <div className="text-left">
-                  <p className={`font-medium ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Learning Center</p>
-                  <p className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>Improve your skills</p>
+                  <p className={`font-medium text-xs sm:text-sm ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Learning Center</p>
+                  <p className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>Improve your skills</p>
                 </div>
               </div>
             </button>
@@ -242,22 +244,22 @@ const Apps = () => {
       </div>
 
       {/* Developer Tools */}
-      <div className={`mt-8 p-6 rounded-xl border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200"}`}>
-        <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
+      <div className={`mt-4 sm:mt-6 p-3 sm:p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200"}`}>
+        <h4 className={`text-sm sm:text-base font-semibold mb-3 ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
           🚀 Developer Tools & APIs
         </h4>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className={`p-4 rounded-lg ${theme === "dark" ? "bg-gray-700" : "bg-white"} border ${theme === "dark" ? "border-gray-600" : "border-gray-200"}`}>
-            <h5 className={`font-semibold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}>Kite Connect API</h5>
-            <p className={`text-sm mt-2 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>REST & WebSocket APIs for trading</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3">
+          <div className={`p-2 sm:p-3 rounded-lg ${theme === "dark" ? "bg-gray-700" : "bg-white"} border ${theme === "dark" ? "border-gray-600" : "border-gray-200"}`}>
+            <h5 className={`font-medium text-xs sm:text-sm ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}>Kite Connect API</h5>
+            <p className={`text-xs mt-1 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>REST & WebSocket APIs for trading</p>
           </div>
-          <div className={`p-4 rounded-lg ${theme === "dark" ? "bg-gray-700" : "bg-white"} border ${theme === "dark" ? "border-gray-600" : "border-gray-200"}`}>
-            <h5 className={`font-semibold ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>Publisher API</h5>
-            <p className={`text-sm mt-2 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Real-time market data streaming</p>
+          <div className={`p-2 sm:p-3 rounded-lg ${theme === "dark" ? "bg-gray-700" : "bg-white"} border ${theme === "dark" ? "border-gray-600" : "border-gray-200"}`}>
+            <h5 className={`font-medium text-xs sm:text-sm ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>Publisher API</h5>
+            <p className={`text-xs mt-1 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Real-time market data streaming</p>
           </div>
-          <div className={`p-4 rounded-lg ${theme === "dark" ? "bg-gray-700" : "bg-white"} border ${theme === "dark" ? "border-gray-600" : "border-gray-200"}`}>
-            <h5 className={`font-semibold ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>Historical API</h5>
-            <p className={`text-sm mt-2 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Access historical market data</p>
+          <div className={`p-2 sm:p-3 rounded-lg ${theme === "dark" ? "bg-gray-700" : "bg-white"} border ${theme === "dark" ? "border-gray-600" : "border-gray-200"}`}>
+            <h5 className={`font-medium text-xs sm:text-sm ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>Historical API</h5>
+            <p className={`text-xs mt-1 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Access historical market data</p>
           </div>
         </div>
       </div>

@@ -358,12 +358,14 @@ export default function OrbitProfile() {
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-500 to-transparent animate-pulse"></div>
         </div>
         
-        <div className="relative px-8 py-12">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
+        <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          {/* Row 1: Avatar + Name + Menu */}
+          <div className="flex items-center justify-between mb-6">
+            {/* Avatar and Name */}
+            <div className="flex items-center gap-4 sm:gap-6">
               <div className="relative group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
-                <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-green-500 shadow-2xl shadow-green-500/20">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full overflow-hidden border-4 border-green-500 shadow-2xl shadow-green-500/20">
                   <img 
                     src={user.avatar} 
                     alt={user.name}
@@ -373,7 +375,7 @@ export default function OrbitProfile() {
                     }}
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                    <Camera className="text-green-400" size={28} />
+                    <Camera className="text-green-400" size={16} />
                     <input
                       type="file"
                       accept="image/*"
@@ -385,239 +387,203 @@ export default function OrbitProfile() {
               </div>
 
               <div className="text-white">
-                <h1 className="text-5xl font-bold mb-3 bg-gradient-to-r from-white to-green-400 bg-clip-text text-transparent">{user.name}</h1>
-                <div className="flex items-center gap-4 mb-3">
-                  <span className="px-4 py-2 bg-green-500/20 backdrop-blur-sm rounded-full text-sm font-medium border border-green-500/30 text-green-400">
-                    {user.role === 'admin' ? '👑 Administrator' : '📈 Professional Trader'}
-                  </span>
-                  <span className="px-4 py-2 bg-emerald-500/90 backdrop-blur-sm rounded-full text-sm font-medium text-black">
-                    ✅ Verified Account
-                  </span>
-                </div>
-                <p className="text-green-100 text-lg flex items-center gap-2">
+                <h1 className="text-xl sm:text-2xl lg:text-4xl font-bold bg-gradient-to-r from-white to-green-400 bg-clip-text text-transparent">
+                  {user.name}
+                </h1>
+                <p className="text-green-100 text-xs sm:text-sm flex items-center gap-2 mt-1">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                   Live Trading • Market Hours
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              <div className="text-right text-white">
-                <p className="text-4xl font-bold text-green-400">₹{user.balance || 0}</p>
-                <p className="text-green-200">Available Balance</p>
-                <div className="flex items-center gap-2 mt-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs text-green-300">Real-time</span>
-                </div>
+            {/* Menu Button */}
+            <button
+              onClick={() => setShowMenuModal(true)}
+              className="p-3 sm:p-4 rounded-full bg-black/30 backdrop-blur-sm hover:bg-green-500/20 transition-all duration-200 border border-green-500/30"
+            >
+              <MoreVertical className="text-green-400" size={20} />
+            </button>
+          </div>
+
+          {/* Row 2: Two Components */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            {/* Component 1: Balance */}
+            <div className="text-center sm:text-left text-white">
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-400">₹{user.balance || 0}</p>
+              <p className="text-green-200 text-sm sm:text-base">Available Balance</p>
+              <div className="flex items-center justify-center sm:justify-start gap-2 mt-1">
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-xs text-green-300">Real-time</span>
               </div>
-              
-              <button
-                onClick={() => setShowMenuModal(true)}
-                className="p-4 rounded-full bg-black/30 backdrop-blur-sm hover:bg-green-500/20 transition-all duration-200 border border-green-500/30"
-              >
-                <MoreVertical className="text-green-400" size={24} />
-              </button>
+            </div>
+
+            {/* Component 2: Role & Status */}
+            <div className="text-center sm:text-right text-white">
+              <div className="flex flex-col sm:items-end gap-2">
+                <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-green-500/20 backdrop-blur-sm rounded-full text-xs sm:text-sm font-medium border border-green-500/30 text-green-400 inline-block">
+                  {user.role === 'admin' ? '👑 Administrator' : '📈 Professional Trader'}
+                </span>
+                <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-emerald-500/90 backdrop-blur-sm rounded-full text-xs sm:text-sm font-medium text-black inline-block">
+                  ✅ Verified Account
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* DASHBOARD GRID */}
-      <div className="px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-          {/* PORTFOLIO OVERVIEW */}
-          <div className={`lg:col-span-2 p-8 rounded-2xl shadow-2xl border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-black border-green-500/20 shadow-green-500/10"
+      <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        {/* Portfolio Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+          <div className={`p-3 sm:p-4 rounded-xl border ${
+            theme === "light" ? "bg-gradient-to-br from-green-50 to-emerald-50 border-green-200" : "bg-gradient-to-br from-green-900/20 to-emerald-900/20 border-green-500/30"
           }`}>
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-4">
-                <div className={`p-4 rounded-xl ${
-                  theme === "light" ? "bg-blue-100" : "bg-green-500/10 border border-green-500/30"
-                }`}>
-                  <Wallet className={theme === "light" ? "text-blue-600" : "text-green-400"} size={28} />
-                </div>
-                <div>
-                  <h3 className={`text-3xl font-bold ${
-                    theme === "light" ? "text-gray-900" : "text-white"
-                  }`}>Portfolio Overview</h3>
-                  <p className={theme === "light" ? "text-gray-500" : "text-green-400"}>Live Trading Performance</p>
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  setShowTransactionHistory(true);
-                  fetchTransactionHistory();
-                }}
-                className={`px-8 py-4 rounded-xl font-semibold transition-all duration-200 shadow-lg ${
-                  theme === "light" 
-                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700" 
-                    : "bg-gradient-to-r from-green-600 to-emerald-600 text-black hover:from-green-500 hover:to-emerald-500 border border-green-500/30"
-                }`}
-              >
-                View History
-              </button>
+            <div className="flex items-center justify-between mb-2">
+              <Wallet className={theme === "light" ? "text-green-600" : "text-green-400"} size={18} />
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className={`p-6 rounded-xl border-2 ${
-                theme === "light" ? "bg-gradient-to-br from-green-50 to-emerald-50 border-green-200" : "bg-gradient-to-br from-green-900/20 to-emerald-900/20 border-green-500/30 shadow-lg shadow-green-500/10"
-              }`}>
-                <div className="flex items-center justify-between mb-4">
-                  <span className={theme === "light" ? "text-green-600 font-semibold" : "text-green-400 font-semibold"}>Available Funds</span>
-                  <TrendingUp className={theme === "light" ? "text-green-600" : "text-green-400"} size={24} />
-                </div>
-                <p className={`text-4xl font-bold mb-2 ${
-                  theme === "light" ? "text-green-700" : "text-green-300"
-                }`}>₹{user.balance || 0}</p>
-                <p className={theme === "light" ? "text-green-600" : "text-green-400"}>Ready for trading</p>
-                <div className="mt-3 flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs text-green-500">Live</span>
-                </div>
-              </div>
-
-              <div className={`p-6 rounded-xl border-2 ${
-                theme === "light" ? "bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200" : "bg-gradient-to-br from-gray-900/50 to-black border-gray-700/50"
-              }`}>
-                <div className="flex items-center justify-between mb-4">
-                  <span className={theme === "light" ? "text-blue-600 font-semibold" : "text-gray-300 font-semibold"}>Used Margin</span>
-                  <Shield className={theme === "light" ? "text-blue-600" : "text-gray-400"} size={24} />
-                </div>
-                <p className={`text-4xl font-bold mb-2 ${
-                  theme === "light" ? "text-blue-700" : "text-gray-300"
-                }`}>₹0</p>
-                <p className={theme === "light" ? "text-blue-600" : "text-gray-400"}>No active positions</p>
-              </div>
-
-              <div className={`p-6 rounded-xl border-2 ${
-                theme === "light" ? "bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200" : "bg-gradient-to-br from-green-900/30 to-emerald-900/30 border-green-500/20"
-              }`}>
-                <div className="flex items-center justify-between mb-4">
-                  <span className={theme === "light" ? "text-purple-600 font-semibold" : "text-green-400 font-semibold"}>Today's P&L</span>
-                  <TrendingUp className={theme === "light" ? "text-purple-600" : "text-green-400"} size={24} />
-                </div>
-                <p className={`text-4xl font-bold mb-2 ${
-                  theme === "light" ? "text-purple-700" : "text-green-300"
-                }`}>+₹1,550</p>
-                <p className={theme === "light" ? "text-purple-600" : "text-green-400"}>Excellent performance!</p>
-                <div className="mt-3 text-xs text-green-500">+2.8% ↑</div>
-              </div>
-            </div>
+            <p className={`text-lg sm:text-xl font-bold ${
+              theme === "light" ? "text-green-700" : "text-green-300"
+            }`}>₹{user.balance || 0}</p>
+            <p className={`text-xs ${theme === "light" ? "text-green-600" : "text-green-400"}`}>Available Funds</p>
           </div>
 
-          {/* QUICK ACTIONS */}
-          <div className={`p-8 rounded-2xl shadow-2xl border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-black border-green-500/20 shadow-green-500/10"
+          <div className={`p-3 sm:p-4 rounded-xl border ${
+            theme === "light" ? "bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200" : "bg-gradient-to-br from-gray-900/50 to-black border-gray-700/50"
           }`}>
-            <div className="flex items-center gap-4 mb-8">
-              <div className={`p-4 rounded-xl ${
-                theme === "light" ? "bg-purple-100" : "bg-green-500/10 border border-green-500/30"
-              }`}>
-                <LogOut className={theme === "light" ? "text-purple-600" : "text-green-400"} size={28} />
-              </div>
-              <div>
-                <h3 className={`text-2xl font-bold ${
-                  theme === "light" ? "text-gray-900" : "text-white"
-                }`}>Quick Actions</h3>
-                <p className={theme === "light" ? "text-gray-500" : "text-green-400"}>Manage your account</p>
-              </div>
+            <div className="flex items-center justify-between mb-2">
+              <Shield className={theme === "light" ? "text-blue-600" : "text-gray-400"} size={18} />
             </div>
+            <p className={`text-lg sm:text-xl font-bold ${
+              theme === "light" ? "text-blue-700" : "text-gray-300"
+            }`}>₹0</p>
+            <p className={`text-xs ${theme === "light" ? "text-blue-600" : "text-gray-400"}`}>Used Margin</p>
+          </div>
 
-            <div className="space-y-4">
-              <button
-                onClick={() => { setFundType("add"); setShowFundModal(true); }}
-                className={`w-full p-5 rounded-xl font-semibold transition-all duration-200 shadow-lg flex items-center justify-center gap-3 text-lg ${
-                  theme === "light" 
-                    ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600" 
-                    : "bg-gradient-to-r from-green-600 to-emerald-600 text-black hover:from-green-500 hover:to-emerald-500 border border-green-500/30"
-                }`}
-              >
-                <Wallet size={24} />
-                Add Funds
-              </button>
-              
-              <button
-                onClick={() => { setFundType("withdraw"); setShowFundModal(true); }}
-                className={`w-full p-5 rounded-xl font-semibold transition-all duration-200 shadow-lg flex items-center justify-center gap-3 text-lg ${
-                  theme === "light" 
-                    ? "bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600" 
-                    : "bg-gradient-to-r from-gray-700 to-gray-800 text-white hover:from-gray-600 hover:to-gray-700 border border-gray-600"
-                }`}
-              >
-                <TrendingUp size={24} />
-                Withdraw Funds
-              </button>
-              
-              <button 
-                onClick={handleLogout} 
-                className={`w-full p-5 rounded-xl font-semibold transition-all duration-200 shadow-lg flex items-center justify-center gap-3 text-lg ${
-                  theme === "light" 
-                    ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white hover:from-gray-700 hover:to-gray-800" 
-                    : "bg-gradient-to-r from-red-600/20 to-red-700/20 text-red-400 hover:from-red-600/30 hover:to-red-700/30 border border-red-500/30"
-                }`}
-              >
-                <LogOut size={24} />
-                Logout
-              </button>
+          <div className={`p-3 sm:p-4 rounded-xl border ${
+            theme === "light" ? "bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200" : "bg-gradient-to-br from-green-900/30 to-emerald-900/30 border-green-500/20"
+          }`}>
+            <div className="flex items-center justify-between mb-2">
+              <TrendingUp className={theme === "light" ? "text-purple-600" : "text-green-400"} size={18} />
+              <span className="text-xs text-green-500">+2.8%</span>
             </div>
+            <p className={`text-lg sm:text-xl font-bold ${
+              theme === "light" ? "text-purple-700" : "text-green-300"
+            }`}>+₹1,550</p>
+            <p className={`text-xs ${theme === "light" ? "text-purple-600" : "text-green-400"}`}>Today's P&L</p>
+          </div>
 
-            {/* Market Status */}
-            <div className={`mt-8 p-4 rounded-xl border ${
-              theme === "light" ? "bg-gray-50 border-gray-200" : "bg-green-500/5 border-green-500/20"
-            }`}>
-              <div className="flex items-center justify-between">
-                <span className={theme === "light" ? "text-gray-600" : "text-green-400"}>Market Status</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-green-500 font-semibold">OPEN</span>
-                </div>
-              </div>
-              <p className={`text-xs mt-2 ${
-                theme === "light" ? "text-gray-500" : "text-green-300"
-              }`}>NSE: 09:15 - 15:30 IST</p>
+          <div className={`p-3 sm:p-4 rounded-xl border ${
+            theme === "light" ? "bg-gradient-to-br from-orange-50 to-red-50 border-orange-200" : "bg-gradient-to-br from-orange-900/20 to-red-900/20 border-orange-500/30"
+          }`}>
+            <div className="flex items-center justify-between mb-2">
+              <span className={`text-xs font-medium ${
+                theme === "light" ? "text-orange-600" : "text-orange-400"
+              }`}>87%</span>
             </div>
+            <p className={`text-lg sm:text-xl font-bold ${
+              theme === "light" ? "text-orange-700" : "text-orange-300"
+            }`}>Win Rate</p>
+            <p className={`text-xs ${theme === "light" ? "text-orange-600" : "text-orange-400"}`}>Success Rate</p>
           </div>
         </div>
 
+        {/* Quick Actions */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+          <button
+            onClick={() => { setFundType("add"); setShowFundModal(true); }}
+            className={`p-3 sm:p-4 rounded-xl font-semibold transition-all duration-200 flex flex-col items-center gap-2 ${
+              theme === "light" 
+                ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600" 
+                : "bg-gradient-to-r from-green-600 to-emerald-600 text-black hover:from-green-500 hover:to-emerald-500 border border-green-500/30"
+            }`}
+          >
+            <Wallet size={20} />
+            <span className="text-xs sm:text-sm">Add Funds</span>
+          </button>
+          
+          <button
+            onClick={() => { setFundType("withdraw"); setShowFundModal(true); }}
+            className={`p-3 sm:p-4 rounded-xl font-semibold transition-all duration-200 flex flex-col items-center gap-2 ${
+              theme === "light" 
+                ? "bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600" 
+                : "bg-gradient-to-r from-gray-700 to-gray-800 text-white hover:from-gray-600 hover:to-gray-700 border border-gray-600"
+            }`}
+          >
+            <TrendingUp size={20} />
+            <span className="text-xs sm:text-sm">Withdraw</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setShowTransactionHistory(true);
+              fetchTransactionHistory();
+            }}
+            className={`p-3 sm:p-4 rounded-xl font-semibold transition-all duration-200 flex flex-col items-center gap-2 ${
+              theme === "light" 
+                ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600" 
+                : "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500 border border-blue-500/30"
+            }`}
+          >
+            <TrendingUp size={20} />
+            <span className="text-xs sm:text-sm">History</span>
+          </button>
+          
+          <button 
+            onClick={handleLogout} 
+            className={`p-3 sm:p-4 rounded-xl font-semibold transition-all duration-200 flex flex-col items-center gap-2 ${
+              theme === "light" 
+                ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white hover:from-gray-700 hover:to-gray-800" 
+                : "bg-gradient-to-r from-red-600/20 to-red-700/20 text-red-400 hover:from-red-600/30 hover:to-red-700/30 border border-red-500/30"
+            }`}
+          >
+            <LogOut size={20} />
+            <span className="text-xs sm:text-sm">Logout</span>
+          </button>
+        </div>
+
         {/* PERSONAL INFO & SETTINGS */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className={`p-8 rounded-2xl shadow-2xl border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-black border-green-500/20 shadow-green-500/10"
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div className={`p-4 sm:p-6 rounded-xl border ${
+            theme === "light" ? "bg-white border-gray-200" : "bg-black border-green-500/20"
           }`}>
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-4">
-                <div className={`p-4 rounded-xl ${
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 sm:p-3 rounded-lg ${
                   theme === "light" ? "bg-indigo-100" : "bg-green-500/10 border border-green-500/30"
                 }`}>
-                  <Sliders className={theme === "light" ? "text-indigo-600" : "text-green-400"} size={28} />
+                  <Sliders className={theme === "light" ? "text-indigo-600" : "text-green-400"} size={20} />
                 </div>
                 <div>
-                  <h3 className={`text-2xl font-bold ${
+                  <h3 className={`text-lg sm:text-xl font-bold ${
                     theme === "light" ? "text-gray-900" : "text-white"
                   }`}>Account Details</h3>
-                  <p className={theme === "light" ? "text-gray-500" : "text-green-400"}>Manage your information</p>
+                  <p className={`text-xs sm:text-sm ${theme === "light" ? "text-gray-500" : "text-green-400"}`}>Manage information</p>
                 </div>
               </div>
               {!isEditing && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg flex items-center gap-2 ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 text-sm ${
                     theme === "light" 
                       ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700" 
                       : "bg-gradient-to-r from-green-600 to-emerald-600 text-black hover:from-green-500 hover:to-emerald-500 border border-green-500/30"
                   }`}
                 >
-                  <Edit size={18} />
-                  Edit Profile
+                  <Edit size={16} />
+                  <span className="hidden sm:inline">Edit</span>
                 </button>
               )}
             </div>
 
             {isEditing ? (
-              <div className="space-y-6">
-                <div className="flex items-center gap-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl">
-                  <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-lg group">
+              <div className="space-y-4">
+                <div className={`flex items-center gap-4 p-4 rounded-lg ${
+                  theme === "light" ? "bg-gradient-to-r from-blue-50 to-indigo-50" : "bg-gradient-to-r from-blue-900/20 to-indigo-900/20"
+                }`}>
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-lg group">
                     <img 
                       src={previewUrl || user.avatar} 
                       alt="Profile"
@@ -627,7 +593,7 @@ export default function OrbitProfile() {
                       }}
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                      <Camera className="text-white" size={20} />
+                      <Camera className="text-white" size={16} />
                       <input
                         type="file"
                         accept="image/*"
@@ -637,21 +603,18 @@ export default function OrbitProfile() {
                     </div>
                   </div>
                   <div>
-                    <h4 className={`font-semibold text-lg ${
+                    <h4 className={`font-semibold text-sm ${
                       theme === "light" ? "text-gray-900" : "text-white"
                     }`}>Profile Photo</h4>
-                    <p className={`text-sm ${
+                    <p className={`text-xs ${
                       theme === "light" ? "text-gray-600" : "text-gray-400"
-                    }`}>Click to update your picture</p>
-                    <p className={`text-xs mt-1 ${
-                      theme === "light" ? "text-gray-500" : "text-gray-500"
-                    }`}>JPG, PNG up to 5MB</p>
+                    }`}>Click to update</p>
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className={`block text-sm font-semibold mb-3 ${
+                    <label className={`block text-xs font-semibold mb-2 ${
                       theme === "light" ? "text-gray-700" : "text-gray-300"
                     }`}>Full Name</label>
                     <input
@@ -659,17 +622,17 @@ export default function OrbitProfile() {
                       name="name"
                       value={editData.name}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                      className={`w-full px-3 py-2 rounded-lg border transition-all duration-200 text-sm ${
                         theme === "light" 
-                          ? "border-gray-200 bg-white text-gray-900 focus:border-blue-500 focus:bg-blue-50" 
-                          : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:bg-gray-600"
+                          ? "border-gray-200 bg-white text-gray-900 focus:border-blue-500" 
+                          : "border-gray-600 bg-gray-700 text-white focus:border-blue-400"
                       } focus:outline-none`}
                       placeholder="Enter your full name"
                     />
                   </div>
                   
                   <div>
-                    <label className={`block text-sm font-semibold mb-3 ${
+                    <label className={`block text-xs font-semibold mb-2 ${
                       theme === "light" ? "text-gray-700" : "text-gray-300"
                     }`}>Phone Number</label>
                     <input
@@ -677,10 +640,10 @@ export default function OrbitProfile() {
                       name="phone"
                       value={profileData.phone}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                      className={`w-full px-3 py-2 rounded-lg border transition-all duration-200 text-sm ${
                         theme === "light" 
-                          ? "border-gray-200 bg-white text-gray-900 focus:border-blue-500 focus:bg-blue-50" 
-                          : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:bg-gray-600"
+                          ? "border-gray-200 bg-white text-gray-900 focus:border-blue-500" 
+                          : "border-gray-600 bg-gray-700 text-white focus:border-blue-400"
                       } focus:outline-none`}
                       placeholder="Enter phone number"
                     />
@@ -688,17 +651,17 @@ export default function OrbitProfile() {
                 </div>
                 
                 <div>
-                  <label className={`block text-sm font-semibold mb-3 ${
+                  <label className={`block text-xs font-semibold mb-2 ${
                     theme === "light" ? "text-gray-700" : "text-gray-300"
                   }`}>Gender</label>
                   <select
                     name="gender"
                     value={profileData.gender}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                    className={`w-full px-3 py-2 rounded-lg border transition-all duration-200 text-sm ${
                       theme === "light" 
-                        ? "border-gray-200 bg-white text-gray-900 focus:border-blue-500 focus:bg-blue-50" 
-                        : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:bg-gray-600"
+                        ? "border-gray-200 bg-white text-gray-900 focus:border-blue-500" 
+                        : "border-gray-600 bg-gray-700 text-white focus:border-blue-400"
                     } focus:outline-none`}
                   >
                     <option value="">Select Gender</option>
@@ -708,13 +671,13 @@ export default function OrbitProfile() {
                   </select>
                 </div>
                 
-                <div className="flex gap-4 pt-4">
+                <div className="flex gap-3 pt-3">
                   <button
                     onClick={handleProfileUpdate}
                     disabled={isProcessing}
-                    className="flex-1 py-3 px-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg font-semibold disabled:opacity-50"
+                    className="flex-1 py-2 px-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 font-semibold disabled:opacity-50 text-sm"
                   >
-                    {isProcessing ? "Saving..." : "Save Changes"}
+                    {isProcessing ? "Saving..." : "Save"}
                   </button>
                   <button
                     onClick={() => {
@@ -722,7 +685,7 @@ export default function OrbitProfile() {
                       setSelectedFile(null);
                       setPreviewUrl(null);
                     }}
-                    className={`px-6 py-3 rounded-xl border-2 transition-all duration-200 font-semibold ${
+                    className={`px-4 py-2 rounded-lg border transition-all duration-200 font-semibold text-sm ${
                       theme === "light" 
                         ? "border-gray-300 text-gray-700 hover:bg-gray-50" 
                         : "border-gray-600 text-gray-300 hover:bg-gray-700"
@@ -733,33 +696,33 @@ export default function OrbitProfile() {
                 </div>
               </div>
             ) : (
-              <div className="space-y-6">
-                <div className={`p-6 rounded-xl border ${
+              <div className="space-y-4">
+                <div className={`p-4 rounded-lg border ${
                   theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700/50 border-gray-600"
                 }`}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <p className={`text-sm font-medium ${
+                      <p className={`text-xs font-medium ${
                         theme === "light" ? "text-gray-500" : "text-gray-400"
                       }`}>Phone Number</p>
-                      <p className={`text-lg font-semibold mt-1 ${
+                      <p className={`text-sm font-semibold mt-1 ${
                         theme === "light" ? "text-gray-900" : "text-white"
                       }`}>{user.phone || "Not provided"}</p>
                     </div>
                     <div>
-                      <p className={`text-sm font-medium ${
+                      <p className={`text-xs font-medium ${
                         theme === "light" ? "text-gray-500" : "text-gray-400"
                       }`}>Gender</p>
-                      <p className={`text-lg font-semibold mt-1 ${
+                      <p className={`text-sm font-semibold mt-1 ${
                         theme === "light" ? "text-gray-900" : "text-white"
                       }`}>{user.gender || "Not specified"}</p>
                     </div>
                   </div>
-                  <div className="mt-6">
-                    <p className={`text-sm font-medium ${
+                  <div className="mt-4">
+                    <p className={`text-xs font-medium ${
                       theme === "light" ? "text-gray-500" : "text-gray-400"
                     }`}>Email Address</p>
-                    <p className={`text-lg font-semibold mt-1 ${
+                    <p className={`text-sm font-semibold mt-1 ${
                       theme === "light" ? "text-gray-900" : "text-white"
                     }`}>{user.email}</p>
                   </div>
@@ -769,125 +732,118 @@ export default function OrbitProfile() {
           </div>
 
           {/* TRADING STATS */}
-          <div className={`p-8 rounded-2xl shadow-2xl border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-black border-green-500/20 shadow-green-500/10"
+          <div className={`p-4 sm:p-6 rounded-xl border ${
+            theme === "light" ? "bg-white border-gray-200" : "bg-black border-green-500/20"
           }`}>
-            <div className="flex items-center gap-4 mb-8">
-              <div className={`p-4 rounded-xl ${
+            <div className="flex items-center gap-3 mb-4 sm:mb-6">
+              <div className={`p-2 sm:p-3 rounded-lg ${
                 theme === "light" ? "bg-green-100" : "bg-green-500/10 border border-green-500/30"
               }`}>
-                <TrendingUp className={theme === "light" ? "text-green-600" : "text-green-400"} size={28} />
+                <TrendingUp className={theme === "light" ? "text-green-600" : "text-green-400"} size={20} />
               </div>
               <div>
-                <h3 className={`text-2xl font-bold ${
+                <h3 className={`text-lg sm:text-xl font-bold ${
                   theme === "light" ? "text-gray-900" : "text-white"
                 }`}>Trading Performance</h3>
-                <p className={theme === "light" ? "text-gray-500" : "text-green-400"}>Your market metrics</p>
+                <p className={`text-xs sm:text-sm ${theme === "light" ? "text-gray-500" : "text-green-400"}`}>Market metrics</p>
               </div>
             </div>
 
-            <div className="space-y-6">
-              <div className={`p-5 rounded-xl border-2 ${
+            <div className="space-y-3 sm:space-y-4">
+              <div className={`p-3 sm:p-4 rounded-lg border ${
                 theme === "light" ? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-200" : "bg-gradient-to-r from-green-900/20 to-emerald-900/20 border-green-500/30"
               }`}>
                 <div className="flex justify-between items-center">
-                  <span className={theme === "light" ? "text-green-700 font-semibold" : "text-green-300 font-semibold"}>Risk Level</span>
-                  <span className={`font-bold text-lg ${theme === "light" ? "text-green-800" : "text-green-200"}`}>Conservative</span>
+                  <span className={`text-sm font-semibold ${theme === "light" ? "text-green-700" : "text-green-300"}`}>Risk Level</span>
+                  <span className={`font-bold text-sm ${theme === "light" ? "text-green-800" : "text-green-200"}`}>Conservative</span>
                 </div>
-                <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-green-500 h-2 rounded-full w-3/5"></div>
+                <div className="mt-2 w-full bg-gray-200 rounded-full h-1.5">
+                  <div className="bg-green-500 h-1.5 rounded-full w-3/5"></div>
                 </div>
               </div>
               
-              <div className={`p-5 rounded-xl border-2 ${
+              <div className={`p-3 sm:p-4 rounded-lg border ${
                 theme === "light" ? "bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200" : "bg-gradient-to-r from-gray-900/50 to-black border-gray-700/50"
               }`}>
                 <div className="flex justify-between items-center">
-                  <span className={theme === "light" ? "text-blue-700 font-semibold" : "text-gray-300 font-semibold"}>Max Drawdown</span>
-                  <span className={`font-bold text-lg ${theme === "light" ? "text-blue-800" : "text-gray-200"}`}>-2.1%</span>
+                  <span className={`text-sm font-semibold ${theme === "light" ? "text-blue-700" : "text-gray-300"}`}>Max Drawdown</span>
+                  <span className={`font-bold text-sm ${theme === "light" ? "text-blue-800" : "text-gray-200"}`}>-2.1%</span>
                 </div>
               </div>
               
-              <div className={`p-5 rounded-xl border-2 ${
+              <div className={`p-3 sm:p-4 rounded-lg border ${
                 theme === "light" ? "bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200" : "bg-gradient-to-r from-green-900/30 to-emerald-900/30 border-green-500/20"
               }`}>
                 <div className="flex justify-between items-center">
-                  <span className={theme === "light" ? "text-purple-700 font-semibold" : "text-green-400 font-semibold"}>Win Rate</span>
-                  <span className={`font-bold text-lg ${theme === "light" ? "text-purple-800" : "text-green-200"}`}>87%</span>
+                  <span className={`text-sm font-semibold ${theme === "light" ? "text-purple-700" : "text-green-400"}`}>Win Rate</span>
+                  <span className={`font-bold text-sm ${theme === "light" ? "text-purple-800" : "text-green-200"}`}>87%</span>
                 </div>
-                <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-green-500 h-2 rounded-full w-5/6"></div>
+                <div className="mt-2 w-full bg-gray-200 rounded-full h-1.5">
+                  <div className="bg-green-500 h-1.5 rounded-full w-5/6"></div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <span className={`px-4 py-2 rounded-full text-sm font-medium border ${
+            <div className="mt-4 sm:mt-6 flex flex-wrap gap-2">
+              <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
                 theme === "light" ? "bg-blue-100 text-blue-700 border-blue-200" : "bg-green-500/10 text-green-300 border-green-500/30"
-              }`}>🚀 Scalping Expert</span>
-              <span className={`px-4 py-2 rounded-full text-sm font-medium border ${
+              }`}>🚀 Scalping</span>
+              <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
                 theme === "light" ? "bg-green-100 text-green-700 border-green-200" : "bg-green-500/10 text-green-300 border-green-500/30"
               }`}>🎯 Risk Manager</span>
-              <span className={`px-4 py-2 rounded-full text-sm font-medium border ${
+              <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
                 theme === "light" ? "bg-purple-100 text-purple-700 border-purple-200" : "bg-green-500/10 text-green-300 border-green-500/30"
               }`}>⚡ Day Trader</span>
             </div>
 
-            {/* Trading Hours */}
-            <div className={`mt-6 p-4 rounded-xl border ${
+            {/* Market Status */}
+            <div className={`mt-4 p-3 rounded-lg border ${
               theme === "light" ? "bg-gray-50 border-gray-200" : "bg-green-500/5 border-green-500/20"
             }`}>
-              <h4 className={`font-semibold mb-2 ${theme === "light" ? "text-gray-700" : "text-green-400"}`}>Active Trading Hours</h4>
-              <div className="text-sm space-y-1">
-                <div className="flex justify-between">
-                  <span className={theme === "light" ? "text-gray-600" : "text-green-300"}>Pre-Market:</span>
-                  <span className={theme === "light" ? "text-gray-800" : "text-white"}>09:00 - 09:15</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className={theme === "light" ? "text-gray-600" : "text-green-300"}>Regular:</span>
-                  <span className={theme === "light" ? "text-gray-800" : "text-white"}>09:15 - 15:30</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className={theme === "light" ? "text-gray-600" : "text-green-300"}>Post-Market:</span>
-                  <span className={theme === "light" ? "text-gray-800" : "text-white"}>15:40 - 16:00</span>
+              <div className="flex items-center justify-between mb-2">
+                <span className={`text-sm font-semibold ${theme === "light" ? "text-gray-700" : "text-green-400"}`}>Market Status</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-green-500 font-semibold text-sm">OPEN</span>
                 </div>
               </div>
+              <p className={`text-xs ${theme === "light" ? "text-gray-500" : "text-green-300"}`}>NSE: 09:15 - 15:30 IST</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* DANGER ZONE */}
-      <div className="px-8 pb-8">
-        <div className={`p-8 rounded-2xl border-2 shadow-xl ${
+      <div className="px-4 sm:px-6 lg:px-8 pb-6">
+        <div className={`p-4 sm:p-6 rounded-xl border ${
           theme === "light" ? "bg-gradient-to-r from-red-50 to-pink-50 border-red-200" : "bg-gradient-to-r from-red-900/20 to-pink-900/20 border-red-800"
         }`}>
-          <div className="flex items-center gap-4 mb-6">
-            <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-xl">
-              <Shield className="text-red-600 dark:text-red-400" size={24} />
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
+              <Shield className="text-red-600 dark:text-red-400" size={20} />
             </div>
             <div>
-              <h3 className="text-2xl font-bold text-red-600 dark:text-red-400">⚠️ Danger Zone</h3>
-              <p className={`text-sm ${
+              <h3 className="text-lg font-bold text-red-600 dark:text-red-400">⚠️ Danger Zone</h3>
+              <p className={`text-xs ${
                 theme === "light" ? "text-red-600" : "text-red-400"
-              }`}>Irreversible actions that will permanently affect your account</p>
+              }`}>Irreversible actions</p>
             </div>
           </div>
           
-          <div className={`p-6 rounded-xl border ${
+          <div className={`p-4 rounded-lg border ${
             theme === "light" ? "bg-white border-red-200" : "bg-gray-800 border-red-800"
           }`}>
-            <h4 className={`font-semibold mb-2 ${
+            <h4 className={`font-semibold mb-2 text-sm ${
               theme === "light" ? "text-red-800" : "text-red-300"
             }`}>Delete Account</h4>
-            <p className={`text-sm mb-4 ${
+            <p className={`text-xs mb-3 ${
               theme === "light" ? "text-red-600" : "text-red-400"
             }`}>
-              Once you delete your account, there is no going back. All your data, transactions, and settings will be permanently removed.
+              Permanently remove all data and settings.
             </p>
             <button
               onClick={() => setShowDeleteModal(true)}
-              className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-lg font-semibold"
+              className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 font-semibold text-sm"
             >
               Delete Account
             </button>

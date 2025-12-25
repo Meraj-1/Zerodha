@@ -59,27 +59,27 @@ const Summary = () => {
   return (
     <div className={`transition-colors ${theme === "dark" ? "text-white" : ""}`}>
       <div className="username">
-        <h6 className={theme === "dark" ? "text-white" : ""}>Hi, {user?.name || 'User'}!</h6>
+        <h6 className={`text-responsive-base ${theme === "dark" ? "text-white" : ""}`}>Hi, {user?.name || 'User'}!</h6>
         <hr className={`divider ${theme === "dark" ? "border-gray-600" : ""}`} />
       </div>
 
       {/* Portfolio Overview */}
       <div className="section">
         <span>
-          <p className={theme === "dark" ? "text-green-400" : ""}>Portfolio Overview</p>
+          <p className={`text-responsive-sm ${theme === "dark" ? "text-green-400" : ""}`}>Portfolio Overview</p>
         </span>
         <div className="data">
           <div className="first">
-            <h3 className={theme === "dark" ? "text-white" : ""}>₹{user?.balance || 0}</h3>
-            <p>Available Balance</p>
+            <h3 className={`text-responsive-lg ${theme === "dark" ? "text-white" : ""}`}>₹{user?.balance || 0}</h3>
+            <p className="text-responsive-xs">Available Balance</p>
           </div>
-          <hr className={theme === "dark" ? "border-gray-600" : ""} />
+          <hr className={`${theme === "dark" ? "border-gray-600" : ""} mobile-hidden`} />
           <div className="second">
-            <p className={theme === "dark" ? "text-gray-300" : ""}>
-              Total Holdings <span className={theme === "dark" ? "text-white" : ""}>₹{currentValue.toFixed(0)}</span>
+            <p className={`text-responsive-xs ${theme === "dark" ? "text-gray-300" : ""}`}>
+              Total Holdings <span className={`text-responsive-sm ${theme === "dark" ? "text-white" : ""}`}>₹{currentValue.toFixed(0)}</span>
             </p>
-            <p className={theme === "dark" ? "text-gray-300" : ""}>
-              Total Orders <span className={theme === "dark" ? "text-white" : ""}>{orders.length}</span>
+            <p className={`text-responsive-xs ${theme === "dark" ? "text-gray-300" : ""}`}>
+              Total Orders <span className={`text-responsive-sm ${theme === "dark" ? "text-white" : ""}`}>{orders.length}</span>
             </p>
           </div>
         </div>
@@ -89,25 +89,25 @@ const Summary = () => {
       {/* Holdings Summary */}
       <div className="section">
         <span>
-          <p className={theme === "dark" ? "text-green-400" : ""}>Holdings ({holdings.length})</p>
+          <p className={`text-responsive-sm ${theme === "dark" ? "text-green-400" : ""}`}>Holdings ({holdings.length})</p>
         </span>
         <div className="data">
           <div className="first">
-            <h3 className={`${totalPnL >= 0 ? 'profit text-green-500' : 'loss text-red-500'}`}>
+            <h3 className={`text-responsive-lg ${totalPnL >= 0 ? 'profit text-green-500' : 'loss text-red-500'}`}>
               ₹{Math.abs(totalPnL).toFixed(0)} 
-              <small className={totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}>
+              <small className={`text-responsive-xs ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {totalPnL >= 0 ? '+' : '-'}{Math.abs(pnlPercentage).toFixed(2)}%
               </small>
             </h3>
-            <p>P&L</p>
+            <p className="text-responsive-xs">P&L</p>
           </div>
-          <hr className={theme === "dark" ? "border-gray-600" : ""} />
+          <hr className={`${theme === "dark" ? "border-gray-600" : ""} mobile-hidden`} />
           <div className="second">
-            <p className={theme === "dark" ? "text-gray-300" : ""}>
-              Current Value <span className={theme === "dark" ? "text-white" : ""}>₹{currentValue.toFixed(0)}</span>
+            <p className={`text-responsive-xs ${theme === "dark" ? "text-gray-300" : ""}`}>
+              Current Value <span className={`text-responsive-sm ${theme === "dark" ? "text-white" : ""}`}>₹{currentValue.toFixed(0)}</span>
             </p>
-            <p className={theme === "dark" ? "text-gray-300" : ""}>
-              Investment <span className={theme === "dark" ? "text-white" : ""}>₹{totalInvestment.toFixed(0)}</span>
+            <p className={`text-responsive-xs ${theme === "dark" ? "text-gray-300" : ""}`}>
+              Investment <span className={`text-responsive-sm ${theme === "dark" ? "text-white" : ""}`}>₹{totalInvestment.toFixed(0)}</span>
             </p>
           </div>
         </div>
@@ -118,9 +118,9 @@ const Summary = () => {
       {holdings.length > 0 && (
         <div className="section">
           <span>
-            <p className={theme === "dark" ? "text-green-400" : ""}>Portfolio Distribution</p>
+            <p className={`text-responsive-sm ${theme === "dark" ? "text-green-400" : ""}`}>Portfolio Distribution</p>
           </span>
-          <div className="mt-4" style={{ maxWidth: '400px', margin: '0 auto' }}>
+          <div className="w-full max-w-[180px] mx-auto chart-container">
             <DoughnutChart data={chartData} />
           </div>
           <hr className={`divider ${theme === "dark" ? "border-gray-600" : ""}`} />
@@ -130,20 +130,20 @@ const Summary = () => {
       {/* Quick Stats */}
       <div className="section">
         <span>
-          <p className={theme === "dark" ? "text-green-400" : ""}>Today's Activity</p>
+          <p className={`text-responsive-sm ${theme === "dark" ? "text-green-400" : ""}`}>Today's Activity</p>
         </span>
-        <div className="grid grid-cols-3 gap-4 mt-4">
-          <div className={`p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
-            <h4 className={`text-2xl font-bold ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>{orders.filter(o => o.side === 'BUY').length}</h4>
-            <p className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Buy Orders</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mt-3">
+          <div className={`p-2 sm:p-3 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
+            <h4 className={`text-base sm:text-lg font-bold ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>{orders.filter(o => o.side === 'BUY').length}</h4>
+            <p className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Buy Orders</p>
           </div>
-          <div className={`p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
-            <h4 className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}>{holdings.length}</h4>
-            <p className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Holdings</p>
+          <div className={`p-2 sm:p-3 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
+            <h4 className={`text-base sm:text-lg font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}>{holdings.length}</h4>
+            <p className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Holdings</p>
           </div>
-          <div className={`p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
-            <h4 className={`text-2xl font-bold ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>87%</h4>
-            <p className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Success Rate</p>
+          <div className={`p-2 sm:p-3 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
+            <h4 className={`text-base sm:text-lg font-bold ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>87%</h4>
+            <p className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Success Rate</p>
           </div>
         </div>
       </div>
