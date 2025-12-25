@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default: function() {
-        return `https://ui-avatars.com/api/?name=${this.name}&background=random&color=fff&size=128`;
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(this.name)}&background=random&color=fff&size=128`;
       }
     },
     email: {
@@ -78,7 +78,8 @@ const userSchema = new mongoose.Schema(
 
     googleId: {
       type: String,
-      default: null
+      default: null,
+      sparse: true
     },
 
     isGoogleConnected: {
@@ -91,7 +92,11 @@ const userSchema = new mongoose.Schema(
       default: 0
     }
   },
-  { timestamps: true }
+  { 
+    timestamps: true,
+    bufferCommands: false,
+    bufferMaxEntries: 0
+  }
 );
 
 export default mongoose.model("User", userSchema);
