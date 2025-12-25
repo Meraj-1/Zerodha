@@ -93,9 +93,7 @@ const userSchema = new mongoose.Schema(
     }
   },
   { 
-    timestamps: true,
-    bufferCommands: false,
-    bufferMaxEntries: 0
+    timestamps: true
   }
 );
 

@@ -22,7 +22,6 @@ connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
   serverSelectionTimeoutMS: 30000,
   socketTimeoutMS: 45000,
-  bufferMaxEntries: 0,
   maxPoolSize: 10
 })
   .then(() => console.log("MongoDB connected successfully"))

@@ -17,7 +17,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         // First check by email
-        let user = await User.findOne({ email: profile.emails[0].value }).maxTimeMS(20000);
+        let user = await User.findOne({ email: profile.emails[0].value });
 
         if (user) {
           // Update existing user with Google info
