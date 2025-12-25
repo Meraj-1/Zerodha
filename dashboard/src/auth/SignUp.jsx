@@ -184,6 +184,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaUser, FaUserShield, FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
+import toast from 'react-hot-toast';
 
 export default function SignUp({ onSwitch, theme = "light" }) {
   const [formData, setFormData] = useState({
@@ -210,6 +211,53 @@ export default function SignUp({ onSwitch, theme = "light" }) {
     formData.password &&
     formData.confirmPassword &&
     formData.password === formData.confirmPassword;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.terms) {
+      toast.error("Please accept Terms & Conditions");
+      return;
+    }
+
+    if (!passwordMatch) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        toast.success("Account created successfully!");
+        // Store token if provided
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+        setTimeout(() => {
+          window.location.href = "/profile";
+        }, 1000);
+      } else {
+        toast.error(data.message || "Signup failed");
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      toast.error("Network error. Please try again.");
+    }
+  };
 
   // Theme classes
   const bgClass = theme === "light" ? "bg-white/80" : "bg-gray-900/80";
@@ -353,6 +401,7 @@ export default function SignUp({ onSwitch, theme = "light" }) {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
+          onClick={handleSubmit}
           className="w-full mt-6 py-3 rounded-md bg-blue-600 text-white text-sm font-semibold"
         >
           CREATE ACCOUNT

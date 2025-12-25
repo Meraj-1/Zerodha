@@ -1,13 +1,19 @@
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import { connect } from "mongoose";
 import passport from "passport";
 import session from "express-session";
 import cors from "cors";
 import isLoggedIn from "./middleware/isLoggedIn.js";
+import { errorHandler } from "./middleware/error.middleware.js";
 import "./config/passport.js";
-import authRoutes from "./routes/auth.js";
+import authRoutes from "./routes/auth.routes.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -16,9 +22,17 @@ connect(process.env.MONGO_URI)
   .catch((err) => console.log("MongoDB connection error:", err.message));
 
 app.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true
+  origin: ["http://localhost:3000", "http://localhost:3001"],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static files for uploaded avatars
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(
   session({
@@ -39,6 +53,9 @@ app.get("/dashboard", isLoggedIn, (req, res) => {
 app.get("/", (req, res) => {
   res.send("Server is running on port 8000");
 });
+
+// Error handling middleware
+app.use(errorHandler);
 
 app.listen(8000, () => {
   console.log("Server is running on port 8000");

@@ -1,63 +1,153 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useTheme } from '../context/ThemeContext';
+import { DoughnutChart } from "./DoughnoutChart";
 
 const Summary = () => {
+  const { theme } = useTheme();
+  const [user, setUser] = useState(null);
+  const [holdings, setHoldings] = useState([]);
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    // Fetch user data
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserProfile();
+    }
+    
+    // Load holdings and orders
+    const storedHoldings = JSON.parse(localStorage.getItem('holdings') || '[]');
+    const storedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+    setHoldings(storedHoldings);
+    setOrders(storedOrders);
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:8000/auth/me", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+
+  const totalInvestment = holdings.reduce((sum, stock) => sum + (stock.avg * stock.qty), 0);
+  const currentValue = holdings.reduce((sum, stock) => sum + (stock.price * stock.qty), 0);
+  const totalPnL = currentValue - totalInvestment;
+  const pnlPercentage = totalInvestment > 0 ? ((totalPnL / totalInvestment) * 100) : 0;
+
+  // Chart data for portfolio distribution
+  const chartData = {
+    labels: holdings.map(stock => stock.name),
+    datasets: [{
+      data: holdings.map(stock => stock.price * stock.qty),
+      backgroundColor: [
+        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
+        '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+      ],
+      borderWidth: 2,
+      borderColor: theme === 'dark' ? '#374151' : '#fff'
+    }]
+  };
+
   return (
-    <>
+    <div className={`transition-colors ${theme === "dark" ? "text-white" : ""}`}>
       <div className="username">
-        <h6>Hi, User!</h6>
-        <hr className="divider" />
+        <h6 className={theme === "dark" ? "text-white" : ""}>Hi, {user?.name || 'User'}!</h6>
+        <hr className={`divider ${theme === "dark" ? "border-gray-600" : ""}`} />
       </div>
 
+      {/* Portfolio Overview */}
       <div className="section">
         <span>
-          <p>Equity</p>
+          <p className={theme === "dark" ? "text-green-400" : ""}>Portfolio Overview</p>
         </span>
-
         <div className="data">
           <div className="first">
-            <h3>3.74k</h3>
-            <p>Margin available</p>
+            <h3 className={theme === "dark" ? "text-white" : ""}>₹{user?.balance || 0}</h3>
+            <p>Available Balance</p>
           </div>
-          <hr />
-
+          <hr className={theme === "dark" ? "border-gray-600" : ""} />
           <div className="second">
-            <p>
-              Margins used <span>0</span>{" "}
+            <p className={theme === "dark" ? "text-gray-300" : ""}>
+              Total Holdings <span className={theme === "dark" ? "text-white" : ""}>₹{currentValue.toFixed(0)}</span>
             </p>
-            <p>
-              Opening balance <span>3.74k</span>{" "}
+            <p className={theme === "dark" ? "text-gray-300" : ""}>
+              Total Orders <span className={theme === "dark" ? "text-white" : ""}>{orders.length}</span>
             </p>
           </div>
         </div>
-        <hr className="divider" />
+        <hr className={`divider ${theme === "dark" ? "border-gray-600" : ""}`} />
       </div>
 
+      {/* Holdings Summary */}
       <div className="section">
         <span>
-          <p>Holdings (13)</p>
+          <p className={theme === "dark" ? "text-green-400" : ""}>Holdings ({holdings.length})</p>
         </span>
-
         <div className="data">
           <div className="first">
-            <h3 className="profit">
-              1.55k <small>+5.20%</small>{" "}
+            <h3 className={`${totalPnL >= 0 ? 'profit text-green-500' : 'loss text-red-500'}`}>
+              ₹{Math.abs(totalPnL).toFixed(0)} 
+              <small className={totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}>
+                {totalPnL >= 0 ? '+' : '-'}{Math.abs(pnlPercentage).toFixed(2)}%
+              </small>
             </h3>
             <p>P&L</p>
           </div>
-          <hr />
-
+          <hr className={theme === "dark" ? "border-gray-600" : ""} />
           <div className="second">
-            <p>
-              Current Value <span>31.43k</span>{" "}
+            <p className={theme === "dark" ? "text-gray-300" : ""}>
+              Current Value <span className={theme === "dark" ? "text-white" : ""}>₹{currentValue.toFixed(0)}</span>
             </p>
-            <p>
-              Investment <span>29.88k</span>{" "}
+            <p className={theme === "dark" ? "text-gray-300" : ""}>
+              Investment <span className={theme === "dark" ? "text-white" : ""}>₹{totalInvestment.toFixed(0)}</span>
             </p>
           </div>
         </div>
-        <hr className="divider" />
+        <hr className={`divider ${theme === "dark" ? "border-gray-600" : ""}`} />
       </div>
-    </>
+
+      {/* Portfolio Distribution Chart */}
+      {holdings.length > 0 && (
+        <div className="section">
+          <span>
+            <p className={theme === "dark" ? "text-green-400" : ""}>Portfolio Distribution</p>
+          </span>
+          <div className="mt-4" style={{ maxWidth: '400px', margin: '0 auto' }}>
+            <DoughnutChart data={chartData} />
+          </div>
+          <hr className={`divider ${theme === "dark" ? "border-gray-600" : ""}`} />
+        </div>
+      )}
+
+      {/* Quick Stats */}
+      <div className="section">
+        <span>
+          <p className={theme === "dark" ? "text-green-400" : ""}>Today's Activity</p>
+        </span>
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          <div className={`p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
+            <h4 className={`text-2xl font-bold ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>{orders.filter(o => o.side === 'BUY').length}</h4>
+            <p className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Buy Orders</p>
+          </div>
+          <div className={`p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
+            <h4 className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}>{holdings.length}</h4>
+            <p className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Holdings</p>
+          </div>
+          <div className={`p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
+            <h4 className={`text-2xl font-bold ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>87%</h4>
+            <p className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Success Rate</p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

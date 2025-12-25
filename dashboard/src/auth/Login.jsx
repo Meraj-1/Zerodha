@@ -1,13 +1,45 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaGoogle } from "react-icons/fa";
+import toast from 'react-hot-toast';
 
 export default function Login({ onSwitch, theme = "light" }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8000/auth/google";
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch("http://localhost:8000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Store token if provided
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+        toast.success("Login successful!");
+        setTimeout(() => {
+          window.location.href = "/profile";
+        }, 1000);
+      } else {
+        toast.error(data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Network error. Please try again.");
+    }
   };
 
   // Theme classes
@@ -19,6 +51,10 @@ export default function Login({ onSwitch, theme = "light" }) {
       : "border-gray-700 placeholder-gray-400 text-white bg-gray-800";
   const dividerText = theme === "light" ? "text-gray-400" : "text-gray-300";
   const smallText = theme === "light" ? "text-gray-500" : "text-gray-300";
+
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:8000/auth/google";
+  };
 
   return (
     <motion.div
@@ -34,6 +70,8 @@ export default function Login({ onSwitch, theme = "light" }) {
       <p className={`text-center text-sm mt-2 ${smallText}`}>
         Login to continue trading and managing payments
       </p>
+
+      <form onSubmit={handleSubmit}>
 
       {/* Email */}
       <div className="mt-6">
@@ -63,10 +101,12 @@ export default function Login({ onSwitch, theme = "light" }) {
       <motion.button
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
+        type="submit"
         className="w-full mt-6 py-3 rounded-md bg-blue-600 text-white text-sm font-semibold"
       >
         LOG IN
       </motion.button>
+      </form>
 
       {/* Divider */}
       <div className={`text-center text-xs my-4 ${dividerText}`}>

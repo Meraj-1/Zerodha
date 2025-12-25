@@ -12,6 +12,30 @@
     border-radius: var(--radius);
     border: 1px solid rgb(238, 238, 238);
   }
+
+.container.dark-theme {
+    background: rgb(31, 41, 55);
+    border: 1px solid rgb(75, 85, 99);
+    color: white;
+}
+
+.dark-fieldset {
+    border-color: rgb(75, 85, 99) !important;
+}
+
+.dark-legend {
+    color: rgb(209, 213, 219) !important;
+}
+
+.dark-input {
+    background: rgb(55, 65, 81) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.dark-text {
+    color: rgb(209, 213, 219) !important;
+}
   
   .dragging {
     opacity: 0;

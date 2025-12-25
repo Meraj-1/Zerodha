@@ -1,10 +1,9 @@
-import React from "react";
-import { BrowserRouter ,Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 
 import Apps from "./Apps";
 import Funds from "./Funds";
 import Holdings from "./Holdings";
-// import SignUp from "./SignUp";
 
 import Orders from "./Orders";
 import Positions from "./Positions";
@@ -14,6 +13,13 @@ import { GeneralContextProvider } from "./GeneralContext";
 import Profile from "./Profile";
 
 const Dashboard = () => {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "/auth";
+    }
+  }, []);
+
   return (
     <div className="dashboard-container">
       <GeneralContextProvider>
@@ -28,7 +34,6 @@ const Dashboard = () => {
           <Route path="/funds" element={<Funds />} />
           <Route path="/apps" element={<Apps />} />
           <Route path="/profile" element={<Profile />} />
-          {/* <Route path="/signup" element={<SignUp/>}/> */}
         </Routes>
     
       </div>

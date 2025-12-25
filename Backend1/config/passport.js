@@ -16,14 +16,25 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        let user = await User.findOne({ googleId: profile.id });
+        // First check by email
+        let user = await User.findOne({ email: profile.emails[0].value });
 
-        if (!user) {
+        if (user) {
+          // Update existing user with Google info
+          user.googleId = profile.id;
+          user.isGoogleConnected = true;
+          // Always update avatar from Google
+          user.avatar = profile.photos[0].value;
+          await user.save();
+        } else {
+          // Create new user
           user = await User.create({
             googleId: profile.id,
             name: profile.displayName,
             email: profile.emails[0].value,
             avatar: profile.photos[0].value,
+            authProvider: "google",
+            isGoogleConnected: true
           });
         }
         done(null, user);
