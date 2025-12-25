@@ -54,14 +54,14 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:3000/auth",
+    failureRedirect: "https://dashboardclone.vercel.app/auth",
   }),
   (req, res) => {
     // Generate JWT token for the user
     const token = generateToken(req.user._id);
     
     // Redirect to frontend with token
-    res.redirect(`http://localhost:3000/profile?token=${token}`);
+    res.redirect(`https://dashboardclone.vercel.app/profile?token=${token}`);
   }
 );
 
@@ -97,7 +97,7 @@ router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res)
     
     // If avatar file is uploaded, add it to update data
     if (req.file) {
-      updateData.avatar = `http://localhost:8000/uploads/avatars/${req.file.filename}`;
+      updateData.avatar = `https://kitebackend.vercel.app/uploads/avatars/${req.file.filename}`;
     }
     
     const updatedUser = await User.findByIdAndUpdate(

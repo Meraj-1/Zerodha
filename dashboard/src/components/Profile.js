@@ -61,7 +61,7 @@ export default function OrbitProfile() {
         return;
       }
 
-      const response = await fetch("http://localhost:8000/auth/me", {
+      const response = await fetch("https://kitebackend.vercel.app/auth/me", {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -94,7 +94,7 @@ export default function OrbitProfile() {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:8000/auth/logout", {
+      await fetch("https://kitebackend.vercel.app/auth/logout", {
         method: "GET",
         credentials: "include"
       });
@@ -120,7 +120,7 @@ export default function OrbitProfile() {
         formData.append('avatar', selectedFile);
       }
 
-      const response = await fetch("http://localhost:8000/auth/profile", {
+      const response = await fetch("https://kitebackend.vercel.app/auth/profile", {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -157,7 +157,7 @@ export default function OrbitProfile() {
       formData.append('phone', user.phone || '');
       formData.append('gender', user.gender || '');
 
-      const response = await fetch("http://localhost:8000/auth/profile", {
+      const response = await fetch("https://kitebackend.vercel.app/auth/profile", {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -218,7 +218,7 @@ export default function OrbitProfile() {
       const token = localStorage.getItem("token");
       const endpoint = fundType === "add" ? "/auth/add-funds" : "/auth/withdraw-funds";
       
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
+      const response = await fetch(`https://kitebackend.vercel.app${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -252,7 +252,7 @@ export default function OrbitProfile() {
   const fetchTransactionHistory = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/auth/transactions", {
+      const response = await fetch("https://kitebackend.vercel.app/auth/transactions", {
         headers: {
           "Authorization": `Bearer ${token}`
         }

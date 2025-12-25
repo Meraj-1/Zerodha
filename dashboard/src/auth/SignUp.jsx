@@ -226,7 +226,7 @@ export default function SignUp({ onSwitch, theme = "light" }) {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/auth/signup", {
+      const response = await fetch("https://kitebackend.vercel.app/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -273,7 +273,7 @@ export default function SignUp({ onSwitch, theme = "light" }) {
   const termsText = theme === "light" ? "text-gray-500" : "text-gray-300";
 
   const handleGoogleSignup = () => {
-    window.location.href = "http://localhost:8000/auth/google";
+    window.location.href = "https://kitebackend.vercel.app/auth/google";
   };
 
   return (
