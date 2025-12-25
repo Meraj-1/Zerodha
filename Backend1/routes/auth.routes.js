@@ -110,23 +110,44 @@ router.get("/google", (req, res) => {
 //google callback
 router.get(
   "/google/callback",
+  (req, res, next) => {
+    console.log('Google callback received:', {
+      query: req.query,
+      hasCode: !!req.query.code,
+      hasError: !!req.query.error
+    });
+    
+    if (req.query.error) {
+      console.error('Google OAuth error:', req.query.error);
+      return res.redirect('https://dashboardclone.vercel.app/auth?error=google_oauth_error');
+    }
+    
+    next();
+  },
   passport.authenticate("google", {
-    failureRedirect: "https://dashboardclone.vercel.app/auth?error=oauth_failed"
+    failureRedirect: "https://dashboardclone.vercel.app/auth?error=passport_failed"
   }),
   (req, res) => {
     try {
+      console.log('OAuth callback success, user:', req.user ? 'Found' : 'Not found');
+      
       if (!req.user) {
-        return res.redirect('https://dashboardclone.vercel.app/auth?error=no_user');
+        console.error('No user found after authentication');
+        return res.redirect('https://dashboardclone.vercel.app/auth?error=no_user_created');
       }
+      
+      console.log('Generating token for user:', req.user._id);
       
       // Generate JWT token for the user
       const token = generateToken(req.user._id);
       
+      console.log('Token generated, redirecting to profile');
+      
       // Redirect to frontend with token
       res.redirect(`https://dashboardclone.vercel.app/profile?token=${token}`);
     } catch (error) {
-      console.error('OAuth callback error:', error);
-      res.redirect('https://dashboardclone.vercel.app/auth?error=token_generation_failed');
+      console.error('OAuth callback processing error:', error);
+      res.redirect('https://dashboardclone.vercel.app/auth?error=callback_processing_failed');
     }
   }
 );
