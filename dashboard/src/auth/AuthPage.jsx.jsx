@@ -6,7 +6,7 @@ import { FaBolt, FaLock, FaChartLine, FaUsers, FaEllipsisV, FaMoon, FaSun } from
 
 export default function AuthPage() {
   const [authMode, setAuthMode] = useState("signup"); // login/signup
-  const [theme, setTheme] = useState("light"); // light/dark
+  const [theme, setTheme] = useState("light"); 
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleTheme = () => {

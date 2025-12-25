@@ -1,97 +1,8 @@
-// import { FaGoogle, FaApple, FaFacebookF } from "react-icons/fa";
-
-// export default function Login() {
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-300 via-green-200 to-yellow-200 relative">
-      
-//       {/* Top Bar */}
-//       <div className="absolute top-6 left-8 flex items-center gap-2">
-//         <div className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-semibold">
-//           Qp
-//         </div>
-//         <span className="font-semibold">QPAY</span>
-//       </div>
-
-//       <button className="absolute top-6 right-8 border px-4 py-1 text-sm font-medium">
-//         SIGN UP
-//       </button>
-
-//       {/* Card */}
-//       <div className="bg-white w-[400px] p-8 shadow-xl rounded-md">
-//         <h2 className="text-xl font-semibold text-center">
-//           Log In to <span className="font-bold">Qpay</span>
-//         </h2>
-//         <p className="text-center text-sm text-gray-500 mt-1">
-//           Quick & Simple way to Automate your payment
-//         </p>
-
-//         {/* Email */}
-//         <div className="mt-6">
-//           <label className="text-xs text-gray-500">EMAIL ADDRESS</label>
-//           <input
-//             type="email"
-//             placeholder="johndoe@example.com"
-//             className="w-full border px-3 py-2 mt-1 text-sm outline-none focus:ring-1"
-//           />
-//         </div>
-
-//         {/* Password */}
-//         <div className="mt-4">
-//           <label className="text-xs text-gray-500">PASSWORD</label>
-//           <input
-//             type="password"
-//             placeholder="********"
-//             className="w-full border px-3 py-2 mt-1 text-sm outline-none focus:ring-1"
-//           />
-//         </div>
-
-//         {/* Remember / Forgot */}
-//         <div className="flex justify-between items-center mt-4 text-sm">
-//           <label className="flex items-center gap-2">
-//             <input type="checkbox" />
-//             Remember Me
-//           </label>
-//           <a href="#" className="text-gray-500 hover:underline">
-//             Forgot Password?
-//           </a>
-//         </div>
-
-//         {/* Button */}
-//         <button className="w-full bg-black text-white py-3 mt-5 text-sm">
-//           PROCEED
-//         </button>
-
-//         {/* Divider */}
-//         <div className="text-center text-xs text-gray-400 my-4">
-//           OR USE
-//         </div>
-
-//         {/* Social */}
-//         <div className="flex justify-center gap-4">
-//           <button className="border p-2 rounded">
-//             <FaGoogle />
-//           </button>
-//           <button className="border p-2 rounded">
-//             <FaApple />
-//           </button>
-//           <button className="border p-2 rounded">
-//             <FaFacebookF />
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Footer */}
-//       <div className="absolute bottom-4 text-xs text-gray-400">
-//         © 2021 - 2025 All Rights Reserved. Qpay
-//       </div>
-//     </div>
-//   );
-// }
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaGoogle } from "react-icons/fa";
 
-export default function Login({ onSwitch }) {
+export default function Login({ onSwitch, theme = "light" }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -99,43 +10,51 @@ export default function Login({ onSwitch }) {
     window.location.href = "http://localhost:8000/auth/google";
   };
 
+  // Theme classes
+  const bgClass = theme === "light" ? "bg-white/80" : "bg-gray-900/80";
+  const textClass = theme === "light" ? "text-gray-900" : "text-white";
+  const inputClass =
+    theme === "light"
+      ? "border-gray-200 placeholder-gray-400 text-gray-900 bg-white"
+      : "border-gray-700 placeholder-gray-400 text-white bg-gray-800";
+  const dividerText = theme === "light" ? "text-gray-400" : "text-gray-300";
+  const smallText = theme === "light" ? "text-gray-500" : "text-gray-300";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-white/80 backdrop-blur-lg w-[420px] p-8 rounded-2xl shadow-xl border border-gray-200"
+      className={`${bgClass} backdrop-blur-lg w-[420px] p-8 rounded-2xl shadow-xl border ${theme === "light" ? "border-gray-200" : "border-gray-700"}`}
     >
       {/* Logo */}
-      <h2 className="text-2xl font-bold text-center">
+      <h2 className={`text-2xl font-bold text-center ${textClass}`}>
         Welcome back to <span className="text-blue-600">Kite X Pro</span>
       </h2>
-      <p className="text-center text-sm text-gray-500 mt-2">
+      <p className={`text-center text-sm mt-2 ${smallText}`}>
         Login to continue trading and managing payments
       </p>
 
       {/* Email */}
       <div className="mt-6">
-        <label className="text-xs text-gray-500">EMAIL</label>
+        <label className={`text-xs ${smallText}`}>EMAIL</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full mt-1 px-3 py-2 border rounded-md text-sm
-            focus:outline-none focus:ring-1 focus:ring-blue-500 transition"
+          className={`w-full mt-1 px-3 py-2 rounded-md border focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm transition ${inputClass}`}
           placeholder="you@example.com"
         />
       </div>
 
       {/* Password */}
       <div className="mt-4">
-        <label className="text-xs text-gray-500">PASSWORD</label>
+        <label className={`text-xs ${smallText}`}>PASSWORD</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full mt-1 px-3 py-2 border rounded-md text-sm
-            focus:outline-none focus:ring-1 focus:ring-blue-500 transition"
+          className={`w-full mt-1 px-3 py-2 rounded-md border focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm transition ${inputClass}`}
           placeholder="Enter your password"
         />
       </div>
@@ -150,7 +69,7 @@ export default function Login({ onSwitch }) {
       </motion.button>
 
       {/* Divider */}
-      <div className="text-center text-xs text-gray-400 my-4">
+      <div className={`text-center text-xs my-4 ${dividerText}`}>
         OR CONTINUE WITH
       </div>
 
@@ -158,15 +77,15 @@ export default function Login({ onSwitch }) {
       <motion.button
         whileHover={{ scale: 1.03 }}
         onClick={handleGoogleLogin}
-        className="w-full flex items-center justify-center gap-3 border py-2 rounded-md text-sm"
+        className={`w-full flex items-center justify-center gap-3 border py-2 rounded-md text-sm ${theme === "light" ? "border-gray-300 text-gray-700" : "border-gray-600 text-white"}`}
       >
         <FaGoogle /> Continue with Google
       </motion.button>
 
       {/* Switch to Signup */}
-      <p className="text-center text-sm mt-5 text-gray-500">
+      <p className={`text-center text-sm mt-5 ${smallText}`}>
         Don’t have an account?
-        <button onClick={onSwitch} className="ml-1 text-blue-600 font-medium">
+        <button onClick={onSwitch} className="ml-1 text-blue-500 font-medium">
           Create account
         </button>
       </p>
