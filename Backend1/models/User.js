@@ -28,6 +28,7 @@
 // export default mongoose.model('User', userSchema);
 import mongoose from "mongoose";
 
+// Remove buffering settings for serverless
 const userSchema = new mongoose.Schema(
   {
     name: {

@@ -3,7 +3,6 @@ dotenv.config();
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { connect } from "mongoose";
 import passport from "passport";
 import session from "express-session";
 import cors from "cors";
@@ -16,16 +15,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-
-connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 30000,
-  socketTimeoutMS: 45000,
-  maxPoolSize: 10
-})
-  .then(() => console.log("MongoDB connected successfully"))
-  .catch((err) => console.log("MongoDB connection error:", err.message));
 
 app.use(cors({
   origin: ["http://localhost:3000", "http://localhost:3001", "https://dashboardclone.vercel.app"],
@@ -42,15 +31,25 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(
   session({
-    secret: "secretKey",
+    secret: process.env.JWT_SECRET || "secretKey",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
   })
 );
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoutes);
+
+// Add error handling for OAuth
+app.use('/auth/google/callback', (err, req, res, next) => {
+  console.error('OAuth callback error:', err);
+  res.redirect('https://dashboardclone.vercel.app/auth?error=oauth_error');
+});
 
 app.get("/dashboard", isLoggedIn, (req, res) => {
   res.send(`Welcome ${req.user.name}`);

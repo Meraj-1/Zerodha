@@ -40,30 +40,116 @@ const upload = multer({
   }
 });
 
+// Test route to check if server is working
+router.get("/test", async (req, res) => {
+  let dbStatus = "Not tested";
+  let dbError = null;
+  
+  try {
+    // Test database connection
+    const { connectDB } = await import("../utils/db.js");
+    await connectDB();
+    
+    // Try to query database
+    const testUser = await User.findOne({}).limit(1);
+    dbStatus = testUser ? "Connected with data" : "Connected but no users";
+  } catch (error) {
+    dbStatus = "Connection failed";
+    dbError = error.message;
+  }
+  
+  res.json({ 
+    message: "Auth routes working", 
+    timestamp: new Date().toISOString(),
+    env: {
+      hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
+      hasGoogleSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+      hasMongoUri: !!process.env.MONGO_URI
+    },
+    database: {
+      status: dbStatus,
+      error: dbError
+    }
+  });
+});
+
 // Regular signup/login routes
 router.post("/signup", signup);
 router.post("/login", login);
 
-//start login
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+//start login - Manual OAuth URL
+// router.get("/google", (req, res) => {
+//   const googleAuthURL = `https://accounts.google.com/o/oauth2/v2/auth?` +
+//     `client_id=${process.env.GOOGLE_CLIENT_ID}&` +
+//     `redirect_uri=${encodeURIComponent('https://kitebackend.vercel.app/auth/google/callback')}&` +
+//     `response_type=code&` +
+//     `scope=${encodeURIComponent('openid profile email')}&` +
+//     `access_type=offline&` +
+//     `prompt=consent`;
+  
+//   console.log('Redirecting to Google OAuth:', googleAuthURL);
+//   res.redirect(googleAuthURL);
+// });
+
+router.get("/google", (req, res) => {
+  const googleAuthURL =
+    "https://accounts.google.com/o/oauth2/auth?" +
+    `client_id=${process.env.GOOGLE_CLIENT_ID}&` +
+    "response_type=code&" +
+    `redirect_uri=${encodeURIComponent(
+      "https://kitebackend.vercel.app/auth/google/callback"
+    )}&` +
+    "scope=openid%20email%20profile&" +
+    "access_type=offline&" +
+    "prompt=consent";
+
+  console.log("🔵 Google OAuth URL:", googleAuthURL);
+  res.redirect(googleAuthURL);
+});
 
 //google callback
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://dashboardclone.vercel.app/auth",
+    failureRedirect: "https://dashboardclone.vercel.app/auth?error=oauth_failed"
   }),
   (req, res) => {
-    // Generate JWT token for the user
-    const token = generateToken(req.user._id);
-    
-    // Redirect to frontend with token
-    res.redirect(`https://dashboardclone.vercel.app/profile?token=${token}`);
+    try {
+      if (!req.user) {
+        return res.redirect('https://dashboardclone.vercel.app/auth?error=no_user');
+      }
+      
+      // Generate JWT token for the user
+      const token = generateToken(req.user._id);
+      
+      // Redirect to frontend with token
+      res.redirect(`https://dashboardclone.vercel.app/profile?token=${token}`);
+    } catch (error) {
+      console.error('OAuth callback error:', error);
+      res.redirect('https://dashboardclone.vercel.app/auth?error=token_generation_failed');
+    }
   }
 );
+
+// Simple test callback without passport
+router.get("/google/test-callback", async (req, res) => {
+  try {
+    console.log('Test callback hit with code:', req.query.code ? 'YES' : 'NO');
+    
+    // Test database connection
+    const testUser = await User.findOne({}).limit(1);
+    console.log('Database test:', testUser ? 'Connected' : 'No users found');
+    
+    res.json({
+      message: 'Test callback working',
+      hasCode: !!req.query.code,
+      dbConnected: !!testUser || 'No users but connected'
+    });
+  } catch (error) {
+    console.error('Test callback error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
 //protected route
