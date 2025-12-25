@@ -90,7 +90,7 @@ export default function SignUp({ onSwitch, theme = "light" }) {
   const termsText = theme === "light" ? "text-gray-500" : "text-gray-300";
 
   const handleGoogleSignup = () => {
-    window.location.href = "https://kitebackend.vercel.app/auth/google/callback";
+    window.location.href = "https://kitebackend.vercel.app/auth/google";
   };
 
   return (
