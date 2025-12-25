@@ -25,7 +25,7 @@ const Summary = () => {
   const fetchUserProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/auth/me", {
+      const response = await fetch("https://kitebackend.vercel.app/auth/me", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (response.ok) {

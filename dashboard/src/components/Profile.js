@@ -271,7 +271,7 @@ export default function OrbitProfile() {
     setIsProcessing(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/auth/request-deletion-otp", {
+      const response = await fetch("https://kitebackend.vercel.app/auth/request-deletion-otp", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -299,7 +299,7 @@ export default function OrbitProfile() {
     setIsProcessing(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/auth/delete-account", {
+      const response = await fetch("https://kitebackend.vercel.app/auth/delete-account", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
