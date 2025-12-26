@@ -13,6 +13,7 @@ export const connectDB = async () => {
       maxPoolSize: 1,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 5000,
+      connectTimeoutMS: 5000,
     });
 
     isConnected = db.connections[0].readyState === 1;
