@@ -24,7 +24,7 @@ export const signup = async ({ name, email, password, role }) => {
       isGoogleConnected: false
     });
 
-    const token = generateToken(user._id);
+    const token = generateToken({ id: user._id.toString() });
 
     return { user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar, role: user.role }, token };
   } catch (error) {
@@ -33,7 +33,7 @@ export const signup = async ({ name, email, password, role }) => {
     // If database is unavailable, create demo user
     if (error.message.includes('Could not connect')) {
       const demoUserId = `demo_${Date.now()}`;
-      const token = generateToken(demoUserId);
+      const token = generateToken({ id: demoUserId });
       
       return { 
         user: { 
@@ -70,7 +70,7 @@ export const login = async ({ email, password }) => {
       throw new Error("Invalid credentials");
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken({ id: user._id.toString() });
     return { user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar, role: user.role }, token };
   } catch (error) {
     console.error('Login error:', error);
@@ -78,7 +78,7 @@ export const login = async ({ email, password }) => {
     // If database is unavailable, create demo login
     if (error.message.includes('Could not connect')) {
       const demoUserId = `demo_${Date.now()}`;
-      const token = generateToken(demoUserId);
+      const token = generateToken({ id: demoUserId });
       
       return { 
         user: { 
@@ -119,7 +119,7 @@ export const googleLogin = async (googleUser) => {
       await user.save();
     }
 
-    return generateToken(user._id);
+    return generateToken({ id: user._id.toString() });
   } catch (error) {
     console.error('Google login error:', error);
     throw error;
