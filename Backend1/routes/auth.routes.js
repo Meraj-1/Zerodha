@@ -11,6 +11,19 @@ import { sendOTP, sendDeletionConfirmation } from "../services/email.service.js"
 
 const router = express.Router();
 
+// In-memory balance storage for Google OAuth users (demo purposes)
+const googleUserBalances = new Map();
+
+// Helper function to get/set balance for Google users
+const getGoogleUserBalance = (userId) => {
+  return googleUserBalances.get(userId) || 0;
+};
+
+const setGoogleUserBalance = (userId, balance) => {
+  googleUserBalances.set(userId, Math.max(0, balance));
+  return googleUserBalances.get(userId);
+};
+
 // Configure multer for memory storage (serverless compatible)
 const upload = multer({ 
   storage: multer.memoryStorage(),
@@ -168,6 +181,13 @@ router.get("/google/test-callback", async (req, res) => {
 
 //protected route
 router.get("/me", authMiddleware, (req, res) => {
+  let balance = req.user.balance || 0;
+  
+  // For Google OAuth users, get balance from memory storage
+  if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+    balance = getGoogleUserBalance(req.user._id);
+  }
+  
   res.json({
     user: {
       _id: req.user._id,
@@ -178,7 +198,7 @@ router.get("/me", authMiddleware, (req, res) => {
       phone: req.user.phone,
       gender: req.user.gender,
       isGoogleConnected: req.user.isGoogleConnected,
-      balance: req.user.balance || 0
+      balance: balance
     }
   });
 });
@@ -258,10 +278,12 @@ router.post("/add-funds", authMiddleware, async (req, res) => {
 
     // Handle Google OAuth users (no database record)
     if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
-      // For demo purposes, just return the added amount as new balance
+      const currentBalance = getGoogleUserBalance(req.user._id);
+      const newBalance = setGoogleUserBalance(req.user._id, currentBalance + amount);
+      
       return res.json({
         message: "Funds added successfully",
-        balance: amount
+        balance: newBalance
       });
     }
 
@@ -314,11 +336,20 @@ router.post("/withdraw-funds", authMiddleware, async (req, res) => {
 
     // Handle Google OAuth users (no database record)
     if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
-      // For demo purposes, allow withdrawal if user has added funds before
-      // In real app, you'd store balance in a session or external store
-      return res.status(400).json({ 
-        message: "Please add funds first before withdrawing",
-        balance: 0
+      const currentBalance = getGoogleUserBalance(req.user._id);
+      
+      if (currentBalance < amount) {
+        return res.status(400).json({ 
+          message: "Insufficient balance. Please add funds first.",
+          balance: currentBalance
+        });
+      }
+      
+      const newBalance = setGoogleUserBalance(req.user._id, currentBalance - amount);
+      
+      return res.json({
+        message: "Funds withdrawn successfully",
+        balance: newBalance
       });
     }
 
