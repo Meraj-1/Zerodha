@@ -47,8 +47,12 @@ app.use("/auth", authRoutes);
 
 // Add error handling for OAuth
 app.use('/auth/google/callback', (err, req, res, next) => {
-  console.error('OAuth callback middleware error:', err);
-  res.redirect('https://dashboardclone.vercel.app/auth?error=middleware_error');
+  console.error('OAuth callback middleware error details:', {
+    message: err.message,
+    stack: err.stack,
+    name: err.name
+  });
+  res.redirect('https://dashboardclone.vercel.app/auth?error=detailed_middleware_error');
 });
 
 app.get("/dashboard", isLoggedIn, (req, res) => {

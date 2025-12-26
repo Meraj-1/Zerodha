@@ -42,27 +42,35 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    console.log('Serializing user:', user._id);
+    done(null, user._id);
 });
 
 passport.deserializeUser(async (id, done) => {
     try {
+        console.log('Deserializing user ID:', id);
+        
         // Skip database lookup for Google OAuth users
         if (typeof id === 'string' && id.startsWith('google_')) {
             const user = {
                 _id: id,
+                name: 'Google User',
+                email: 'user@gmail.com',
                 isGoogleUser: true,
-                balance: 0
+                balance: 0,
+                role: 'user'
             };
+            console.log('Returning Google user:', user._id);
             done(null, user);
             return;
         }
         
-        // For regular users, return minimal user object to avoid DB issues
-        done(null, { _id: id, isTemp: true });
+        // For regular users, return minimal user object
+        console.log('Returning regular user:', id);
+        done(null, { _id: id, isTemp: true, balance: 0 });
     } catch (error) {
         console.error('Deserialize user error:', error);
-        done(null, { _id: id, isTemp: true });
+        done(null, { _id: id, isTemp: true, balance: 0 });
     }
 });
 
