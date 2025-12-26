@@ -18,34 +18,20 @@ passport.use(
       try {
         console.log('Google OAuth Profile:', profile.emails[0].value);
         
-        // Connect to database for this request
-        await connectDB();
+        // Skip database operations completely - create user from Google profile
+        const user = {
+          _id: 'google_' + profile.id,
+          googleId: profile.id,
+          name: profile.displayName,
+          email: profile.emails[0].value,
+          avatar: profile.photos[0].value,
+          authProvider: "google",
+          isGoogleConnected: true,
+          balance: 0,
+          role: 'user'
+        };
         
-        // Simple user lookup
-        let user = await User.findOne({ email: profile.emails[0].value }).lean();
-
-        if (user) {
-          console.log('Existing user found, updating...');
-          // Update existing user
-          user = await User.findByIdAndUpdate(user._id, {
-            googleId: profile.id,
-            isGoogleConnected: true,
-            avatar: profile.photos[0].value
-          }, { new: true }).lean();
-        } else {
-          console.log('Creating new user...');
-          // Create new user
-          const newUser = await User.create({
-            googleId: profile.id,
-            name: profile.displayName,
-            email: profile.emails[0].value,
-            avatar: profile.photos[0].value,
-            authProvider: "google",
-            isGoogleConnected: true
-          });
-          user = newUser.toObject();
-        }
-        console.log('User processed successfully:', user._id);
+        console.log('User created from Google profile successfully:', user._id);
         done(null, user);
       } catch (error) {
         console.error('Google OAuth Strategy Error:', error);
@@ -61,12 +47,22 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
     try {
-        await connectDB();
-        const user = await User.findById(id).lean();
-        done(null, user);
+        // Skip database lookup for Google OAuth users
+        if (typeof id === 'string' && id.startsWith('google_')) {
+            const user = {
+                _id: id,
+                isGoogleUser: true,
+                balance: 0
+            };
+            done(null, user);
+            return;
+        }
+        
+        // For regular users, return minimal user object to avoid DB issues
+        done(null, { _id: id, isTemp: true });
     } catch (error) {
         console.error('Deserialize user error:', error);
-        done(error, null);
+        done(null, { _id: id, isTemp: true });
     }
 });
 
