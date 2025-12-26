@@ -138,10 +138,19 @@ router.get(
       
       console.log('Generating token for user:', req.user._id);
       
-      // Generate JWT token for the user
-      const token = generateToken(req.user._id);
+      // Generate JWT token with full user data
+      const tokenPayload = {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        avatar: req.user.avatar,
+        role: req.user.role || 'user',
+        isGoogleUser: true
+      };
       
-      console.log('Token generated, redirecting to profile');
+      const token = generateToken(tokenPayload);
+      
+      console.log('Token generated with user data, redirecting to profile');
       
       // Redirect to frontend with token
       res.redirect(`https://dashboardclone.vercel.app/profile?token=${token}`);

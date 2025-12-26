@@ -12,20 +12,20 @@ export const authMiddleware = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log('JWT decoded:', decoded);
 
-    // Handle Google OAuth users (they have google_ prefix)
-    if (decoded.id && decoded.id.startsWith('google_')) {
+    // Handle Google OAuth users (they have user data in token)
+    if (decoded.isGoogleUser || (decoded.id && decoded.id.startsWith('google_'))) {
       req.user = {
         _id: decoded.id,
-        name: 'Google User',
-        email: 'user@gmail.com',
-        avatar: 'https://ui-avatars.com/api/?name=Google+User&background=random&color=fff&size=128',
-        role: 'user',
+        name: decoded.name || 'Google User',
+        email: decoded.email || 'user@gmail.com',
+        avatar: decoded.avatar || 'https://ui-avatars.com/api/?name=Google+User&background=random&color=fff&size=128',
+        role: decoded.role || 'user',
         phone: null,
         gender: null,
         isGoogleConnected: true,
         balance: 0
       };
-      console.log('Google user authenticated:', req.user._id);
+      console.log('Google user authenticated:', req.user.name, req.user.email);
       return next();
     }
 
