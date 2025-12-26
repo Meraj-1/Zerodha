@@ -88,6 +88,9 @@ router.get("/test", async (req, res) => {
 });
 
 // Regular signup/login routes
+router.get("/signup", (req, res) => {
+  res.json({ message: "Signup endpoint - use POST method with name, email, password" });
+});
 router.post("/signup", signup);
 router.post("/login", login);
 
