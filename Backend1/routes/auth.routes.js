@@ -1,7 +1,5 @@
 import express from "express";
 import multer from "multer";
-import path from "path";
-import fs from "fs";
 import passport from "passport";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 import { signup, login } from "../controllers/auth.controller.js";
@@ -13,23 +11,9 @@ import { sendOTP, sendDeletionConfirmation } from "../services/email.service.js"
 
 const router = express.Router();
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = 'uploads/avatars';
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'avatar-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
+// Configure multer for memory storage (serverless compatible)
 const upload = multer({ 
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
@@ -204,6 +188,23 @@ router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res)
   try {
     const { phone, gender, name } = req.body;
     
+    // Handle Google OAuth users (no database record)
+    if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+      const updatedUser = {
+        _id: req.user._id,
+        name: name || req.user.name,
+        email: req.user.email,
+        avatar: req.file ? `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}` : req.user.avatar,
+        role: req.user.role,
+        phone: phone,
+        gender: gender,
+        isGoogleConnected: true,
+        balance: req.user.balance || 0
+      };
+      
+      return res.json({ user: updatedUser });
+    }
+    
     const updateData = { phone, gender };
     
     // Add name if provided
@@ -211,9 +212,9 @@ router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res)
       updateData.name = name;
     }
     
-    // If avatar file is uploaded, add it to update data
+    // Convert uploaded file to base64 for storage
     if (req.file) {
-      updateData.avatar = `https://kitebackend.vercel.app/uploads/avatars/${req.file.filename}`;
+      updateData.avatar = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
     }
     
     const updatedUser = await User.findByIdAndUpdate(
@@ -221,6 +222,10 @@ router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res)
       updateData,
       { new: true }
     ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.json({
       user: {
@@ -235,6 +240,7 @@ router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res)
       }
     });
   } catch (error) {
+    console.error('Profile update error:', error);
     res.status(500).json({ message: "Error updating profile" });
   }
 });
@@ -250,9 +256,10 @@ router.post("/add-funds", authMiddleware, async (req, res) => {
 
     // Handle Google OAuth users (no database record)
     if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+      const currentBalance = req.user.balance || 0;
       return res.json({
         message: "Funds added successfully",
-        balance: amount // For demo purposes
+        balance: currentBalance + amount
       });
     }
 
@@ -303,12 +310,13 @@ router.post("/withdraw-funds", authMiddleware, async (req, res) => {
 
     // Handle Google OAuth users (no database record)
     if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
-      if (req.user.balance < amount) {
+      const currentBalance = req.user.balance || 0;
+      if (currentBalance < amount) {
         return res.status(400).json({ message: "Insufficient balance" });
       }
       return res.json({
         message: "Funds withdrawn successfully",
-        balance: Math.max(0, req.user.balance - amount)
+        balance: Math.max(0, currentBalance - amount)
       });
     }
 
