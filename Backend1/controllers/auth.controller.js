@@ -5,6 +5,9 @@ export const signup = async (req, res, next) => {
     const user = await authService.signup(req.body);
     res.status(201).json(user);
   } catch (err) {
+    if (err.message === "User already exists") {
+      return res.status(409).json({ message: "User already exists" });
+    }
     next(err);
   }
 };
@@ -14,6 +17,12 @@ export const login = async (req, res, next) => {
     const data = await authService.login(req.body);
     res.json(data);
   } catch (err) {
+    if (err.message === "Invalid credentials") {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+    if (err.message === "Please login using Google") {
+      return res.status(400).json({ message: "Please login using Google" });
+    }
     next(err);
   }
 };

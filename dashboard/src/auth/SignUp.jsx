@@ -68,11 +68,16 @@ export default function SignUp({ onSwitch, theme = "light" }) {
           window.location.href = "/profile";
         }, 1000);
       } else {
-        toast.error(data.message || "Signup failed");
+        // Handle specific error cases
+        if (response.status === 409) {
+          toast.error("Email already registered. Please use a different email or try logging in.");
+        } else {
+          toast.error(data.message || "Signup failed. Please try again.");
+        }
       }
     } catch (error) {
       console.error("Signup error:", error);
-      toast.error("Network error. Please try again.");
+      toast.error("Network error. Please check your connection and try again.");
     }
   };
 
