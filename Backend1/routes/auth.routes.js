@@ -13,6 +13,7 @@ const router = express.Router();
 
 // In-memory balance storage for Google OAuth users (demo purposes)
 const googleUserBalances = new Map();
+const googleUserTransactions = new Map();
 
 // Helper function to get/set balance for Google users
 const getGoogleUserBalance = (userId) => {
@@ -22,6 +23,22 @@ const getGoogleUserBalance = (userId) => {
 const setGoogleUserBalance = (userId, balance) => {
   googleUserBalances.set(userId, Math.max(0, balance));
   return googleUserBalances.get(userId);
+};
+
+// Helper function to manage transactions for Google users
+const addGoogleUserTransaction = (userId, transaction) => {
+  if (!googleUserTransactions.has(userId)) {
+    googleUserTransactions.set(userId, []);
+  }
+  const transactions = googleUserTransactions.get(userId);
+  transactions.unshift(transaction); // Add to beginning
+  if (transactions.length > 50) {
+    transactions.pop(); // Keep only last 50
+  }
+};
+
+const getGoogleUserTransactions = (userId) => {
+  return googleUserTransactions.get(userId) || [];
 };
 
 // Configure multer for memory storage (serverless compatible)
@@ -281,6 +298,16 @@ router.post("/add-funds", authMiddleware, async (req, res) => {
       const currentBalance = getGoogleUserBalance(req.user._id);
       const newBalance = setGoogleUserBalance(req.user._id, currentBalance + amount);
       
+      // Add transaction to memory
+      addGoogleUserTransaction(req.user._id, {
+        _id: Date.now().toString(),
+        type: "credit",
+        amount: amount,
+        description: "Funds Added",
+        balanceAfter: newBalance,
+        createdAt: new Date()
+      });
+      
       return res.json({
         message: "Funds added successfully",
         balance: newBalance
@@ -347,6 +374,16 @@ router.post("/withdraw-funds", authMiddleware, async (req, res) => {
       
       const newBalance = setGoogleUserBalance(req.user._id, currentBalance - amount);
       
+      // Add transaction to memory
+      addGoogleUserTransaction(req.user._id, {
+        _id: Date.now().toString(),
+        type: "debit",
+        amount: amount,
+        description: "Funds Withdrawn",
+        balanceAfter: newBalance,
+        createdAt: new Date()
+      });
+      
       return res.json({
         message: "Funds withdrawn successfully",
         balance: newBalance
@@ -395,6 +432,12 @@ router.post("/withdraw-funds", authMiddleware, async (req, res) => {
 // Get transaction history
 router.get("/transactions", authMiddleware, async (req, res) => {
   try {
+    // Handle Google OAuth users (no database record)
+    if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+      const transactions = getGoogleUserTransactions(req.user._id);
+      return res.json({ transactions });
+    }
+    
     const transactions = await Transaction.find({ userId: req.user._id })
       .sort({ createdAt: -1 })
       .limit(50);
