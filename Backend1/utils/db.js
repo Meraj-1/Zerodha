@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 // Disable buffering for serverless
 mongoose.set('bufferCommands', false);
-mongoose.set('bufferMaxEntries', 0);
 
 let isConnected = false;
 
@@ -14,7 +13,6 @@ export const connectDB = async () => {
   try {
     const db = await mongoose.connect(process.env.MONGO_URI, {
       bufferCommands: false,
-      bufferMaxEntries: 0,
       maxPoolSize: 1,
       serverSelectionTimeoutMS: 3000,
       socketTimeoutMS: 3000,
