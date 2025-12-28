@@ -17,21 +17,30 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         console.log('Google OAuth Profile:', profile.emails[0].value);
+        await connectDB();
         
-        // Skip database operations completely - create user from Google profile
-        const user = {
-          _id: 'google_' + profile.id,
-          googleId: profile.id,
-          name: profile.displayName,
-          email: profile.emails[0].value,
-          avatar: profile.photos[0].value,
-          authProvider: "google",
-          isGoogleConnected: true,
-          balance: 0,
-          role: 'user'
-        };
+        let user = await User.findOne({ email: profile.emails[0].value });
         
-        console.log('User created from Google profile successfully:', user._id);
+        if (!user) {
+          user = await User.create({
+            googleId: profile.id,
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            avatar: profile.photos[0].value,
+            authProvider: "google",
+            isGoogleConnected: true,
+            balance: 0,
+            role: 'user'
+          });
+          console.log('New Google user created:', user._id);
+        } else {
+          user.googleId = profile.id;
+          user.isGoogleConnected = true;
+          user.avatar = profile.photos[0].value;
+          await user.save();
+          console.log('Existing user updated:', user._id);
+        }
+        
         done(null, user);
       } catch (error) {
         console.error('Google OAuth Strategy Error:', error);
@@ -49,28 +58,19 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
     try {
         console.log('Deserializing user ID:', id);
+        await connectDB();
         
-        // Skip database lookup for Google OAuth users
-        if (typeof id === 'string' && id.startsWith('google_')) {
-            const user = {
-                _id: id,
-                name: 'Google User',
-                email: 'user@gmail.com',
-                isGoogleUser: true,
-                balance: 0,
-                role: 'user'
-            };
-            console.log('Returning Google user:', user._id);
+        const user = await User.findById(id);
+        if (user) {
+            console.log('User found:', user._id);
             done(null, user);
-            return;
+        } else {
+            console.log('User not found:', id);
+            done(null, false);
         }
-        
-        // For regular users, return minimal user object
-        console.log('Returning regular user:', id);
-        done(null, { _id: id, isTemp: true, balance: 0 });
     } catch (error) {
         console.error('Deserialize user error:', error);
-        done(null, { _id: id, isTemp: true, balance: 0 });
+        done(error, null);
     }
 });
 
