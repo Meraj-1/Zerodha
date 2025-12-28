@@ -11,6 +11,7 @@ import { errorHandler } from "./middleware/error.middleware.js";
 import "./config/passport.js";
 import authRoutes from "./routes/auth.routes.js";
 import testRoutes from "./routes/test.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,6 +47,7 @@ app.use(passport.session());
 
 app.use("/auth", authRoutes);
 app.use("/test", testRoutes);
+app.use("/user", userRoutes);
 
 // Add error handling for OAuth
 app.use('/auth/google/callback', (err, req, res, next) => {
