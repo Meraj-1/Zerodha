@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "Backend1/index.js": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "MONGO_URI": "mongodb+srv://MERAJM10:MERAJM10@kite.2vosvhu.mongodb.net/kitedb?retryWrites=true&w=majority&appName=Kite",
+    "JWT_SECRET": "your-super-secret-jwt-key-here-make-it-long-and-secure"
+  }
+}
