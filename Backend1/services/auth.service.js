@@ -57,25 +57,7 @@ export const login = async ({ email, password }) => {
     const token = generateToken({ id: user._id.toString() });
     return { user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar, role: user.role }, token };
   } catch (error) {
-    console.error('Login error:', error);
-    
-    // If database is unavailable, create demo login
-    if (error.message.includes('Could not connect')) {
-      const demoUserId = `demo_${Date.now()}`;
-      const token = generateToken({ id: demoUserId });
-      
-      return { 
-        user: { 
-          _id: demoUserId, 
-          name: 'Demo User',
-          email, 
-          avatar: `https://ui-avatars.com/api/?name=Demo+User&background=random&color=fff&size=128`,
-          role: 'user'
-        }, 
-        token 
-      };
-    }
-    
+    console.error('Login error:', error.message);
     throw error;
   }
 };
@@ -93,7 +75,9 @@ export const googleLogin = async (googleUser) => {
         googleId: googleUser.googleId,
         authProvider: "google",
         avatar: googleUser.avatar,
-        isGoogleConnected: true
+        isGoogleConnected: true,
+        role: 'user',
+        balance: 0
       });
     } else {
       // Update existing user with Google connection
@@ -105,7 +89,7 @@ export const googleLogin = async (googleUser) => {
 
     return generateToken({ id: user._id.toString() });
   } catch (error) {
-    console.error('Google login error:', error);
+    console.error('Google login error:', error.message);
     throw error;
   }
 };
