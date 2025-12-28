@@ -37,7 +37,7 @@ export const verifyOTP = (phone, inputOTP) => {
   return { success: true, message: 'OTP verified successfully' };
 };
 
-import { sendSMSViaTextBelt, sendSMSViaMSG91 } from './sms.service.js';
+import { sendSMSViaTextBelt } from './sms.service.js';
 
 export const sendOTP = async (phone, otp) => {
   try {
@@ -62,12 +62,7 @@ export const sendOTP = async (phone, otp) => {
     }
     
     // Method 3: Try MSG91 (if API key is available)
-    if (process.env.MSG91_API_KEY && process.env.MSG91_API_KEY !== 'your-msg91-key') {
-      const msg91Result = await sendSMSViaMSG91(phone, otp);
-      if (msg91Result.success) {
-        return msg91Result;
-      }
-    }
+    // Removed MSG91 integration
     
     // Fallback: Demo mode
     console.log(`All SMS services failed. Demo OTP: ${otp} for ${phone}`);
