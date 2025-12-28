@@ -136,7 +136,11 @@ export default function OrbitProfile() {
         toast.success("OTP sent to your phone number");
         // Show demo OTP in development
         if (data.demoOTP) {
-          toast.info(`Demo OTP: ${data.demoOTP}`);
+          toast.success(`Demo OTP: ${data.demoOTP}`, { duration: 10000 });
+          console.log('Demo OTP for testing:', data.demoOTP);
+        }
+        if (data.note) {
+          toast.info(data.note, { duration: 5000 });
         }
       } else {
         toast.error(data.message || "Failed to send OTP");
