@@ -111,21 +111,17 @@ export default function OrbitProfile() {
     try {
       const token = localStorage.getItem("token");
       
-      // Create FormData for file upload
-      const formData = new FormData();
-      formData.append('name', editData.name);
-      formData.append('phone', profileData.phone);
-      formData.append('gender', profileData.gender);
-      if (selectedFile) {
-        formData.append('avatar', selectedFile);
-      }
-
       const response = await fetch("https://kitebackend.vercel.app/user/profile", {
         method: "PUT",
         headers: {
+          "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: formData
+        body: JSON.stringify({
+          name: editData.name,
+          phone: profileData.phone,
+          gender: profileData.gender
+        })
       });
 
       if (response.ok) {
@@ -148,36 +144,7 @@ export default function OrbitProfile() {
 
   const handleAvatarUpload = async (file) => {
     if (!file) return;
-    
-    setIsProcessing(true);
-    try {
-      const token = localStorage.getItem("token");
-      const formData = new FormData();
-      formData.append('avatar', file);
-      formData.append('phone', user.phone || '');
-      formData.append('gender', user.gender || '');
-
-      const response = await fetch("https://kitebackend.vercel.app/user/profile", {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
-        body: formData
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-        toast.success("Profile photo updated!");
-      } else {
-        toast.error("Failed to update photo");
-      }
-    } catch (error) {
-      console.error("Error updating photo:", error);
-      toast.error("Error updating photo");
-    } finally {
-      setIsProcessing(false);
-    }
+    toast.info("Avatar upload not available in current version");
   };
 
   const handleContactClick = () => {
