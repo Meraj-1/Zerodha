@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { sendSMSViaTextBelt } from './sms.service.js';
 
 // In-memory OTP storage (in production, use Redis or database)
 const otpStore = new Map();
@@ -40,7 +39,6 @@ export const verifyOTP = (phone, inputOTP) => {
 
 export const sendOTP = async (phone, otp) => {
   try {
-    // Try multiple SMS services in order
     console.log(`Attempting to send OTP ${otp} to ${phone}`);
     
     // Method 1: Try TextBelt (free service)
@@ -59,9 +57,6 @@ export const sendOTP = async (phone, otp) => {
         return fast2smsResult;
       }
     }
-    
-    // Method 3: Try MSG91 (if API key is available)
-    // Removed MSG91 integration
     
     // Fallback: Demo mode
     console.log(`All SMS services failed. Demo OTP: ${otp} for ${phone}`);
@@ -82,6 +77,36 @@ export const sendOTP = async (phone, otp) => {
       demoOTP: otp,
       note: 'SMS service error, using demo mode'
     };
+  }
+};
+
+// TextBelt SMS service
+const sendSMSViaTextBelt = async (phone, otp) => {
+  try {
+    const response = await fetch('https://textbelt.com/text', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        phone: phone,
+        message: `Your verification OTP is: ${otp}. Valid for 10 minutes.`,
+        key: 'textbelt' // Free quota key
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      console.log(`SMS sent successfully to ${phone} via TextBelt`);
+      return { success: true, message: `OTP sent to ${phone}` };
+    } else {
+      console.error('TextBelt SMS failed:', result.error);
+      return { success: false, error: result.error };
+    }
+  } catch (error) {
+    console.error('TextBelt service error:', error);
+    return { success: false, error: error.message };
   }
 };
 
