@@ -25,6 +25,9 @@ export default function OrbitProfile() {
   const [showTransactionHistory, setShowTransactionHistory] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showOTPModal, setShowOTPModal] = useState(false);
+  const [phoneOTP, setPhoneOTP] = useState("");
+  const [tempPhone, setTempPhone] = useState("");
+  const [isVerifyingPhone, setIsVerifyingPhone] = useState(false);
   const [showMenuModal, setShowMenuModal] = useState(false);
   const [otp, setOtp] = useState("");
   const [transactions, setTransactions] = useState([]);
@@ -106,6 +109,81 @@ export default function OrbitProfile() {
     }
   };
 
+  const handlePhoneUpdate = async () => {
+    if (!profileData.phone || profileData.phone.length < 10) {
+      toast.error("Please enter a valid phone number");
+      return;
+    }
+    
+    setIsVerifyingPhone(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("https://kitebackend.vercel.app/user/send-phone-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ phone: profileData.phone })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setTempPhone(profileData.phone);
+        setShowOTPModal(true);
+        toast.success("OTP sent to your phone number");
+        // Show demo OTP in development
+        if (data.demoOTP) {
+          toast.info(`Demo OTP: ${data.demoOTP}`);
+        }
+      } else {
+        toast.error(data.message || "Failed to send OTP");
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      toast.error("Error sending OTP");
+    } finally {
+      setIsVerifyingPhone(false);
+    }
+  };
+  
+  const handleVerifyPhoneOTP = async () => {
+    if (phoneOTP.length !== 6) {
+      toast.error("Please enter 6-digit OTP");
+      return;
+    }
+    
+    setIsVerifyingPhone(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("https://kitebackend.vercel.app/user/verify-phone-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ phone: tempPhone, otp: phoneOTP })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setUser(data.user);
+        setShowOTPModal(false);
+        setPhoneOTP("");
+        setTempPhone("");
+        toast.success("Phone number verified successfully!");
+      } else {
+        toast.error(data.message || "Invalid OTP");
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      toast.error("Error verifying OTP");
+    } finally {
+      setIsVerifyingPhone(false);
+    }
+  };
   const handleProfileUpdate = async () => {
     setIsProcessing(true);
     try {
@@ -119,8 +197,8 @@ export default function OrbitProfile() {
         },
         body: JSON.stringify({
           name: editData.name,
-          phone: profileData.phone,
           gender: profileData.gender
+          // Phone is updated separately via OTP verification
         })
       });
 
@@ -603,18 +681,34 @@ export default function OrbitProfile() {
                       <label className={`block text-sm font-medium mb-2 ${
                         theme === "light" ? "text-gray-700" : "text-gray-300"
                       }`}>Phone Number</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={profileData.phone}
-                        onChange={handleInputChange}
-                        className={`w-full px-3 py-2 rounded-lg border transition-colors text-sm ${
-                          theme === "light" 
-                            ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
-                            : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
-                        } focus:outline-none`}
-                        placeholder="Enter phone number"
-                      />
+                      <div className="flex gap-2">
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={profileData.phone}
+                          onChange={handleInputChange}
+                          className={`flex-1 px-3 py-2 rounded-lg border transition-colors text-sm ${
+                            theme === "light" 
+                              ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
+                              : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+                          } focus:outline-none`}
+                          placeholder="Enter phone number"
+                        />
+                        <button
+                          type="button"
+                          onClick={handlePhoneUpdate}
+                          disabled={isVerifyingPhone || !profileData.phone}
+                          className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium disabled:opacity-50"
+                        >
+                          {isVerifyingPhone ? "Sending..." : "Verify"}
+                        </button>
+                      </div>
+                      {user.isPhoneVerified && (
+                        <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+                          <span className="w-1 h-1 bg-green-500 rounded-full"></span>
+                          Phone verified
+                        </p>
+                      )}
                     </div>
                     
                     <div>
@@ -720,9 +814,16 @@ export default function OrbitProfile() {
                       <p className={`text-sm font-medium ${
                         theme === "light" ? "text-gray-700" : "text-gray-300"
                       }`}>Phone Number</p>
-                      <p className={`text-sm mt-1 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}>{user.phone || "Not provided"}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className={`text-sm ${
+                          theme === "light" ? "text-gray-900" : "text-white"
+                        }`}>{user.phone || "Not provided"}</p>
+                        {user.isPhoneVerified && (
+                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">
+                            Verified
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <div>
                       <p className={`text-sm font-medium ${
@@ -1093,8 +1194,62 @@ export default function OrbitProfile() {
         </div>
       )}
 
-      {/* OTP Verification Modal */}
+      {/* Phone OTP Verification Modal */}
       {showOTPModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className={`p-6 rounded-lg w-96 ${
+            theme === "light" ? "bg-white" : "bg-gray-800"
+          }`}>
+            <h3 className="text-lg font-semibold mb-4">Verify Phone Number</h3>
+            <p className={`text-sm mb-4 ${
+              theme === "light" ? "text-gray-600" : "text-gray-300"
+            }`}>
+              We've sent a 6-digit OTP to {tempPhone}. Please enter it below to verify your phone number.
+            </p>
+            <div className="mb-4">
+              <label className={`block text-sm font-medium mb-2 ${
+                theme === "light" ? "text-gray-700" : "text-gray-300"
+              }`}>Enter OTP</label>
+              <input
+                type="text"
+                value={phoneOTP}
+                onChange={(e) => setPhoneOTP(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${
+                  theme === "light" 
+                    ? "border-gray-300 bg-white text-gray-900" 
+                    : "border-gray-600 bg-gray-700 text-white"
+                }`}
+                placeholder="000000"
+                maxLength="6"
+              />
+            </div>
+            <p className={`text-xs mb-4 ${
+              theme === "light" ? "text-gray-500" : "text-gray-400"
+            }`}>
+              OTP is valid for 10 minutes only.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={handleVerifyPhoneOTP}
+                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                disabled={phoneOTP.length !== 6 || isVerifyingPhone}
+              >
+                {isVerifyingPhone ? "Verifying..." : "Verify Phone"}
+              </button>
+              <button
+                onClick={() => { 
+                  setShowOTPModal(false); 
+                  setPhoneOTP(""); 
+                  setTempPhone("");
+                }}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className={`p-6 rounded-lg w-96 ${
             theme === "light" ? "bg-white" : "bg-gray-800"
