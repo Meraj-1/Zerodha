@@ -349,14 +349,8 @@ export default function OrbitProfile() {
 
       {/* HERO HEADER */}
       <div className={`relative overflow-hidden ${
-        theme === "light" ? "bg-gradient-to-r from-blue-600 to-purple-600" : "bg-gradient-to-r from-black via-gray-900 to-black border-b border-green-500/20"
+        theme === "light" ? "bg-white border-b border-gray-200" : "bg-gray-900 border-b border-gray-700"
       }`}>
-        <div className="absolute inset-0 bg-black opacity-10"></div>
-        {/* Trading Pattern Background */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="h-full w-full bg-gradient-to-r from-green-500/10 via-transparent to-green-500/10"></div>
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-500 to-transparent animate-pulse"></div>
-        </div>
         
         <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {/* Row 1: Avatar + Name + Menu */}
@@ -364,8 +358,7 @@ export default function OrbitProfile() {
             {/* Avatar and Name */}
             <div className="flex items-center gap-4 sm:gap-6">
               <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full overflow-hidden border-4 border-green-500 shadow-2xl shadow-green-500/20">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full overflow-hidden border-2 border-gray-300 shadow-lg">
                   <img 
                     src={user.avatar} 
                     alt={user.name}
@@ -375,7 +368,7 @@ export default function OrbitProfile() {
                     }}
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                    <Camera className="text-green-400" size={16} />
+                    <Camera className="text-white" size={16} />
                     <input
                       type="file"
                       accept="image/*"
@@ -386,13 +379,12 @@ export default function OrbitProfile() {
                 </div>
               </div>
 
-              <div className="text-white">
-                <h1 className="text-xl sm:text-2xl lg:text-4xl font-bold bg-gradient-to-r from-white to-green-400 bg-clip-text text-transparent">
+              <div className={theme === "light" ? "text-gray-900" : "text-white"}>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold">
                   {user.name}
                 </h1>
-                <p className="text-green-100 text-xs sm:text-sm flex items-center gap-2 mt-1">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                  Live Trading • Market Hours
+                <p className={`text-sm mt-1 ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>
+                  {user.email}
                 </p>
               </div>
             </div>
@@ -400,32 +392,34 @@ export default function OrbitProfile() {
             {/* Menu Button */}
             <button
               onClick={() => setShowMenuModal(true)}
-              className="p-3 sm:p-4 rounded-full bg-black/30 backdrop-blur-sm hover:bg-green-500/20 transition-all duration-200 border border-green-500/30"
+              className={`p-3 rounded-lg transition-colors ${
+                theme === "light" ? "hover:bg-gray-100" : "hover:bg-gray-800"
+              }`}
             >
-              <MoreVertical className="text-green-400" size={20} />
+              <MoreVertical className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={20} />
             </button>
           </div>
 
-          {/* Row 2: Two Components */}
+          {/* Row 2: Balance and Role */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-            {/* Component 1: Balance */}
-            <div className="text-center sm:text-left text-white">
-              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-400">₹{user.balance || 0}</p>
-              <p className="text-green-200 text-sm sm:text-base">Available Balance</p>
-              <div className="flex items-center justify-center sm:justify-start gap-2 mt-1">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-xs text-green-300">Real-time</span>
-              </div>
+            {/* Balance */}
+            <div className={`text-center sm:text-left ${theme === "light" ? "text-gray-900" : "text-white"}`}>
+              <p className="text-2xl sm:text-3xl font-bold">₹{user.balance || 0}</p>
+              <p className={`text-sm ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>Available Balance</p>
             </div>
 
-            {/* Component 2: Role & Status */}
-            <div className="text-center sm:text-right text-white">
+            {/* Role & Status */}
+            <div className="text-center sm:text-right">
               <div className="flex flex-col sm:items-end gap-2">
-                <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-green-500/20 backdrop-blur-sm rounded-full text-xs sm:text-sm font-medium border border-green-500/30 text-green-400 inline-block">
-                  {user.role === 'admin' ? '👑 Administrator' : '📈 Professional Trader'}
+                <span className={`px-3 py-1 rounded-full text-xs font-medium inline-block ${
+                  theme === "light" ? "bg-blue-100 text-blue-800" : "bg-blue-900 text-blue-300"
+                }`}>
+                  {user.role === 'admin' ? 'Administrator' : 'User'}
                 </span>
-                <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-emerald-500/90 backdrop-blur-sm rounded-full text-xs sm:text-sm font-medium text-black inline-block">
-                  ✅ Verified Account
+                <span className={`px-3 py-1 rounded-full text-xs font-medium inline-block ${
+                  theme === "light" ? "bg-green-100 text-green-800" : "bg-green-900 text-green-300"
+                }`}>
+                  Verified Account
                 </span>
               </div>
             </div>
@@ -437,56 +431,55 @@ export default function OrbitProfile() {
       <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         {/* Portfolio Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-          <div className={`p-3 sm:p-4 rounded-xl border ${
-            theme === "light" ? "bg-gradient-to-br from-green-50 to-emerald-50 border-green-200" : "bg-gradient-to-br from-green-900/20 to-emerald-900/20 border-green-500/30"
+          <div className={`p-3 sm:p-4 rounded-lg border ${
+            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
           }`}>
             <div className="flex items-center justify-between mb-2">
-              <Wallet className={theme === "light" ? "text-green-600" : "text-green-400"} size={18} />
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <Wallet className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={18} />
             </div>
-            <p className={`text-lg sm:text-xl font-bold ${
-              theme === "light" ? "text-green-700" : "text-green-300"
+            <p className={`text-lg sm:text-xl font-semibold ${
+              theme === "light" ? "text-gray-900" : "text-white"
             }`}>₹{user.balance || 0}</p>
-            <p className={`text-xs ${theme === "light" ? "text-green-600" : "text-green-400"}`}>Available Funds</p>
+            <p className={`text-xs ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>Available Funds</p>
           </div>
 
-          <div className={`p-3 sm:p-4 rounded-xl border ${
-            theme === "light" ? "bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200" : "bg-gradient-to-br from-gray-900/50 to-black border-gray-700/50"
+          <div className={`p-3 sm:p-4 rounded-lg border ${
+            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
           }`}>
             <div className="flex items-center justify-between mb-2">
-              <Shield className={theme === "light" ? "text-blue-600" : "text-gray-400"} size={18} />
+              <Shield className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={18} />
             </div>
-            <p className={`text-lg sm:text-xl font-bold ${
-              theme === "light" ? "text-blue-700" : "text-gray-300"
+            <p className={`text-lg sm:text-xl font-semibold ${
+              theme === "light" ? "text-gray-900" : "text-white"
             }`}>₹0</p>
-            <p className={`text-xs ${theme === "light" ? "text-blue-600" : "text-gray-400"}`}>Used Margin</p>
+            <p className={`text-xs ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>Used Margin</p>
           </div>
 
-          <div className={`p-3 sm:p-4 rounded-xl border ${
-            theme === "light" ? "bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200" : "bg-gradient-to-br from-green-900/30 to-emerald-900/30 border-green-500/20"
+          <div className={`p-3 sm:p-4 rounded-lg border ${
+            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
           }`}>
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className={theme === "light" ? "text-purple-600" : "text-green-400"} size={18} />
-              <span className="text-xs text-green-500">+2.8%</span>
+              <TrendingUp className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={18} />
+              <span className="text-xs text-green-600">+2.8%</span>
             </div>
-            <p className={`text-lg sm:text-xl font-bold ${
-              theme === "light" ? "text-purple-700" : "text-green-300"
+            <p className={`text-lg sm:text-xl font-semibold ${
+              theme === "light" ? "text-gray-900" : "text-white"
             }`}>+₹1,550</p>
-            <p className={`text-xs ${theme === "light" ? "text-purple-600" : "text-green-400"}`}>Today's P&L</p>
+            <p className={`text-xs ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>Today's P&L</p>
           </div>
 
-          <div className={`p-3 sm:p-4 rounded-xl border ${
-            theme === "light" ? "bg-gradient-to-br from-orange-50 to-red-50 border-orange-200" : "bg-gradient-to-br from-orange-900/20 to-red-900/20 border-orange-500/30"
+          <div className={`p-3 sm:p-4 rounded-lg border ${
+            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
           }`}>
             <div className="flex items-center justify-between mb-2">
               <span className={`text-xs font-medium ${
-                theme === "light" ? "text-orange-600" : "text-orange-400"
+                theme === "light" ? "text-gray-600" : "text-gray-400"
               }`}>87%</span>
             </div>
-            <p className={`text-lg sm:text-xl font-bold ${
-              theme === "light" ? "text-orange-700" : "text-orange-300"
+            <p className={`text-lg sm:text-xl font-semibold ${
+              theme === "light" ? "text-gray-900" : "text-white"
             }`}>Win Rate</p>
-            <p className={`text-xs ${theme === "light" ? "text-orange-600" : "text-orange-400"}`}>Success Rate</p>
+            <p className={`text-xs ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>Success Rate</p>
           </div>
         </div>
 
@@ -494,10 +487,10 @@ export default function OrbitProfile() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
           <button
             onClick={() => { setFundType("add"); setShowFundModal(true); }}
-            className={`p-3 sm:p-4 rounded-xl font-semibold transition-all duration-200 flex flex-col items-center gap-2 ${
+            className={`p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 ${
               theme === "light" 
-                ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600" 
-                : "bg-gradient-to-r from-green-600 to-emerald-600 text-black hover:from-green-500 hover:to-emerald-500 border border-green-500/30"
+                ? "bg-blue-600 text-white hover:bg-blue-700" 
+                : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
           >
             <Wallet size={20} />
@@ -506,10 +499,10 @@ export default function OrbitProfile() {
           
           <button
             onClick={() => { setFundType("withdraw"); setShowFundModal(true); }}
-            className={`p-3 sm:p-4 rounded-xl font-semibold transition-all duration-200 flex flex-col items-center gap-2 ${
+            className={`p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 ${
               theme === "light" 
-                ? "bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600" 
-                : "bg-gradient-to-r from-gray-700 to-gray-800 text-white hover:from-gray-600 hover:to-gray-700 border border-gray-600"
+                ? "bg-gray-600 text-white hover:bg-gray-700" 
+                : "bg-gray-600 text-white hover:bg-gray-700"
             }`}
           >
             <TrendingUp size={20} />
@@ -521,10 +514,10 @@ export default function OrbitProfile() {
               setShowTransactionHistory(true);
               fetchTransactionHistory();
             }}
-            className={`p-3 sm:p-4 rounded-xl font-semibold transition-all duration-200 flex flex-col items-center gap-2 ${
+            className={`p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 ${
               theme === "light" 
-                ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600" 
-                : "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500 border border-blue-500/30"
+                ? "bg-indigo-600 text-white hover:bg-indigo-700" 
+                : "bg-indigo-600 text-white hover:bg-indigo-700"
             }`}
           >
             <TrendingUp size={20} />
@@ -533,10 +526,10 @@ export default function OrbitProfile() {
           
           <button 
             onClick={handleLogout} 
-            className={`p-3 sm:p-4 rounded-xl font-semibold transition-all duration-200 flex flex-col items-center gap-2 ${
+            className={`p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 ${
               theme === "light" 
-                ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white hover:from-gray-700 hover:to-gray-800" 
-                : "bg-gradient-to-r from-red-600/20 to-red-700/20 text-red-400 hover:from-red-600/30 hover:to-red-700/30 border border-red-500/30"
+                ? "bg-red-600 text-white hover:bg-red-700" 
+                : "bg-red-600 text-white hover:bg-red-700"
             }`}
           >
             <LogOut size={20} />
