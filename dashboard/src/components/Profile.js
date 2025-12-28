@@ -120,7 +120,7 @@ export default function OrbitProfile() {
         formData.append('avatar', selectedFile);
       }
 
-      const response = await fetch("https://kitebackend.vercel.app/auth/profile", {
+      const response = await fetch("https://kitebackend.vercel.app/user/profile", {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -157,7 +157,7 @@ export default function OrbitProfile() {
       formData.append('phone', user.phone || '');
       formData.append('gender', user.gender || '');
 
-      const response = await fetch("https://kitebackend.vercel.app/auth/profile", {
+      const response = await fetch("https://kitebackend.vercel.app/user/profile", {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`
