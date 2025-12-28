@@ -539,30 +539,30 @@ export default function OrbitProfile() {
 
         {/* PERSONAL INFO & SETTINGS */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          <div className={`p-4 sm:p-6 rounded-xl border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-black border-green-500/20"
+          <div className={`p-4 sm:p-6 rounded-lg border ${
+            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
           }`}>
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-3">
                 <div className={`p-2 sm:p-3 rounded-lg ${
-                  theme === "light" ? "bg-indigo-100" : "bg-green-500/10 border border-green-500/30"
+                  theme === "light" ? "bg-gray-100" : "bg-gray-700"
                 }`}>
-                  <Sliders className={theme === "light" ? "text-indigo-600" : "text-green-400"} size={20} />
+                  <Sliders className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={20} />
                 </div>
                 <div>
-                  <h3 className={`text-lg sm:text-xl font-bold ${
+                  <h3 className={`text-lg sm:text-xl font-semibold ${
                     theme === "light" ? "text-gray-900" : "text-white"
-                  }`}>Account Details</h3>
-                  <p className={`text-xs sm:text-sm ${theme === "light" ? "text-gray-500" : "text-green-400"}`}>Manage information</p>
+                  }`}>Profile Information</h3>
+                  <p className={`text-xs sm:text-sm ${theme === "light" ? "text-gray-500" : "text-gray-400"}`}>Manage your account details</p>
                 </div>
               </div>
               {!isEditing && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className={`px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 text-sm ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm ${
                     theme === "light" 
-                      ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700" 
-                      : "bg-gradient-to-r from-green-600 to-emerald-600 text-black hover:from-green-500 hover:to-emerald-500 border border-green-500/30"
+                      ? "bg-blue-600 text-white hover:bg-blue-700" 
+                      : "bg-blue-600 text-white hover:bg-blue-700"
                   }`}
                 >
                   <Edit size={16} />
@@ -573,41 +573,48 @@ export default function OrbitProfile() {
 
             {isEditing ? (
               <div className="space-y-4">
-                <div className={`flex items-center gap-4 p-4 rounded-lg ${
-                  theme === "light" ? "bg-gradient-to-r from-blue-50 to-indigo-50" : "bg-gradient-to-r from-blue-900/20 to-indigo-900/20"
+                {/* Profile Photo Section */}
+                <div className={`p-4 rounded-lg border ${
+                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700 border-gray-600"
                 }`}>
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-lg group">
-                    <img 
-                      src={previewUrl || user.avatar} 
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random&color=fff&size=128`;
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                      <Camera className="text-white" size={16} />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-gray-300 group cursor-pointer">
+                      <img 
+                        src={previewUrl || user.avatar} 
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random&color=fff&size=128`;
+                        }}
                       />
+                      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Camera className="text-white" size={20} />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          className="absolute inset-0 opacity-0 cursor-pointer"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <h4 className={`font-semibold text-sm ${
-                      theme === "light" ? "text-gray-900" : "text-white"
-                    }`}>Profile Photo</h4>
-                    <p className={`text-xs ${
-                      theme === "light" ? "text-gray-600" : "text-gray-400"
-                    }`}>Click to update</p>
+                    <div>
+                      <h4 className={`font-medium text-sm mb-1 ${
+                        theme === "light" ? "text-gray-900" : "text-white"
+                      }`}>Profile Photo</h4>
+                      <p className={`text-xs ${
+                        theme === "light" ? "text-gray-600" : "text-gray-400"
+                      }`}>Click to change your profile picture</p>
+                      <p className={`text-xs mt-1 ${
+                        theme === "light" ? "text-gray-500" : "text-gray-500"
+                      }`}>JPG, PNG or GIF (max. 5MB)</p>
+                    </div>
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Form Fields */}
+                <div className="space-y-4">
                   <div>
-                    <label className={`block text-xs font-semibold mb-2 ${
+                    <label className={`block text-sm font-medium mb-2 ${
                       theme === "light" ? "text-gray-700" : "text-gray-300"
                     }`}>Full Name</label>
                     <input
@@ -615,70 +622,101 @@ export default function OrbitProfile() {
                       name="name"
                       value={editData.name}
                       onChange={handleInputChange}
-                      className={`w-full px-3 py-2 rounded-lg border transition-all duration-200 text-sm ${
+                      className={`w-full px-3 py-2 rounded-lg border transition-colors text-sm ${
                         theme === "light" 
-                          ? "border-gray-200 bg-white text-gray-900 focus:border-blue-500" 
-                          : "border-gray-600 bg-gray-700 text-white focus:border-blue-400"
+                          ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
+                          : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
                       } focus:outline-none`}
                       placeholder="Enter your full name"
                     />
                   </div>
                   
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${
+                        theme === "light" ? "text-gray-700" : "text-gray-300"
+                      }`}>Phone Number</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={profileData.phone}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-2 rounded-lg border transition-colors text-sm ${
+                          theme === "light" 
+                            ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
+                            : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+                        } focus:outline-none`}
+                        placeholder="Enter phone number"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${
+                        theme === "light" ? "text-gray-700" : "text-gray-300"
+                      }`}>Gender</label>
+                      <select
+                        name="gender"
+                        value={profileData.gender}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-2 rounded-lg border transition-colors text-sm ${
+                          theme === "light" 
+                            ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
+                            : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+                        } focus:outline-none`}
+                      >
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+                  
                   <div>
-                    <label className={`block text-xs font-semibold mb-2 ${
+                    <label className={`block text-sm font-medium mb-2 ${
                       theme === "light" ? "text-gray-700" : "text-gray-300"
-                    }`}>Phone Number</label>
+                    }`}>Email Address</label>
                     <input
-                      type="tel"
-                      name="phone"
-                      value={profileData.phone}
-                      onChange={handleInputChange}
-                      className={`w-full px-3 py-2 rounded-lg border transition-all duration-200 text-sm ${
+                      type="email"
+                      value={user.email}
+                      disabled
+                      className={`w-full px-3 py-2 rounded-lg border text-sm ${
                         theme === "light" 
-                          ? "border-gray-200 bg-white text-gray-900 focus:border-blue-500" 
-                          : "border-gray-600 bg-gray-700 text-white focus:border-blue-400"
-                      } focus:outline-none`}
-                      placeholder="Enter phone number"
+                          ? "border-gray-200 bg-gray-50 text-gray-500" 
+                          : "border-gray-600 bg-gray-600 text-gray-400"
+                      }`}
                     />
+                    <p className={`text-xs mt-1 ${
+                      theme === "light" ? "text-gray-500" : "text-gray-400"
+                    }`}>Email cannot be changed</p>
                   </div>
                 </div>
                 
-                <div>
-                  <label className={`block text-xs font-semibold mb-2 ${
-                    theme === "light" ? "text-gray-700" : "text-gray-300"
-                  }`}>Gender</label>
-                  <select
-                    name="gender"
-                    value={profileData.gender}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 rounded-lg border transition-all duration-200 text-sm ${
-                      theme === "light" 
-                        ? "border-gray-200 bg-white text-gray-900 focus:border-blue-500" 
-                        : "border-gray-600 bg-gray-700 text-white focus:border-blue-400"
-                    } focus:outline-none`}
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                
-                <div className="flex gap-3 pt-3">
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
                   <button
                     onClick={handleProfileUpdate}
                     disabled={isProcessing}
-                    className="flex-1 py-2 px-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 font-semibold disabled:opacity-50 text-sm"
+                    className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 text-sm"
                   >
-                    {isProcessing ? "Saving..." : "Save"}
+                    {isProcessing ? "Saving..." : "Save Changes"}
                   </button>
                   <button
                     onClick={() => {
                       setIsEditing(false);
                       setSelectedFile(null);
                       setPreviewUrl(null);
+                      setEditData({
+                        name: user.name || "",
+                        phone: user.phone || "",
+                        gender: user.gender || ""
+                      });
+                      setProfileData({
+                        phone: user.phone || "",
+                        gender: user.gender || ""
+                      });
                     }}
-                    className={`px-4 py-2 rounded-lg border transition-all duration-200 font-semibold text-sm ${
+                    className={`px-4 py-2 rounded-lg border transition-colors font-medium text-sm ${
                       theme === "light" 
                         ? "border-gray-300 text-gray-700 hover:bg-gray-50" 
                         : "border-gray-600 text-gray-300 hover:bg-gray-700"
@@ -690,117 +728,196 @@ export default function OrbitProfile() {
               </div>
             ) : (
               <div className="space-y-4">
+                {/* Display Mode */}
                 <div className={`p-4 rounded-lg border ${
-                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700/50 border-gray-600"
+                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700 border-gray-600"
                 }`}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <p className={`text-xs font-medium ${
-                        theme === "light" ? "text-gray-500" : "text-gray-400"
+                      <p className={`text-sm font-medium ${
+                        theme === "light" ? "text-gray-700" : "text-gray-300"
+                      }`}>Full Name</p>
+                      <p className={`text-sm mt-1 ${
+                        theme === "light" ? "text-gray-900" : "text-white"
+                      }`}>{user.name}</p>
+                    </div>
+                    <div>
+                      <p className={`text-sm font-medium ${
+                        theme === "light" ? "text-gray-700" : "text-gray-300"
+                      }`}>Email Address</p>
+                      <p className={`text-sm mt-1 ${
+                        theme === "light" ? "text-gray-900" : "text-white"
+                      }`}>{user.email}</p>
+                    </div>
+                    <div>
+                      <p className={`text-sm font-medium ${
+                        theme === "light" ? "text-gray-700" : "text-gray-300"
                       }`}>Phone Number</p>
-                      <p className={`text-sm font-semibold mt-1 ${
+                      <p className={`text-sm mt-1 ${
                         theme === "light" ? "text-gray-900" : "text-white"
                       }`}>{user.phone || "Not provided"}</p>
                     </div>
                     <div>
-                      <p className={`text-xs font-medium ${
-                        theme === "light" ? "text-gray-500" : "text-gray-400"
+                      <p className={`text-sm font-medium ${
+                        theme === "light" ? "text-gray-700" : "text-gray-300"
                       }`}>Gender</p>
-                      <p className={`text-sm font-semibold mt-1 ${
+                      <p className={`text-sm mt-1 ${
                         theme === "light" ? "text-gray-900" : "text-white"
-                      }`}>{user.gender || "Not specified"}</p>
+                      }`}>{user.gender ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1) : "Not specified"}</p>
                     </div>
                   </div>
-                  <div className="mt-4">
-                    <p className={`text-xs font-medium ${
-                      theme === "light" ? "text-gray-500" : "text-gray-400"
-                    }`}>Email Address</p>
-                    <p className={`text-sm font-semibold mt-1 ${
-                      theme === "light" ? "text-gray-900" : "text-white"
-                    }`}>{user.email}</p>
+                </div>
+                
+                {/* Account Status */}
+                <div className={`p-4 rounded-lg border ${
+                  theme === "light" ? "bg-green-50 border-green-200" : "bg-green-900/20 border-green-800"
+                }`}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <div>
+                      <p className={`text-sm font-medium ${
+                        theme === "light" ? "text-green-800" : "text-green-300"
+                      }`}>Account Status: Active</p>
+                      <p className={`text-xs ${
+                        theme === "light" ? "text-green-600" : "text-green-400"
+                      }`}>Your account is verified and active</p>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
           </div>
 
-          {/* TRADING STATS */}
-          <div className={`p-4 sm:p-6 rounded-xl border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-black border-green-500/20"
+          {/* ACCOUNT SETTINGS */}
+          <div className={`p-4 sm:p-6 rounded-lg border ${
+            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
           }`}>
             <div className="flex items-center gap-3 mb-4 sm:mb-6">
               <div className={`p-2 sm:p-3 rounded-lg ${
-                theme === "light" ? "bg-green-100" : "bg-green-500/10 border border-green-500/30"
+                theme === "light" ? "bg-gray-100" : "bg-gray-700"
               }`}>
-                <TrendingUp className={theme === "light" ? "text-green-600" : "text-green-400"} size={20} />
+                <TrendingUp className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={20} />
               </div>
               <div>
-                <h3 className={`text-lg sm:text-xl font-bold ${
+                <h3 className={`text-lg sm:text-xl font-semibold ${
                   theme === "light" ? "text-gray-900" : "text-white"
-                }`}>Trading Performance</h3>
-                <p className={`text-xs sm:text-sm ${theme === "light" ? "text-gray-500" : "text-green-400"}`}>Market metrics</p>
+                }`}>Account Settings</h3>
+                <p className={`text-xs sm:text-sm ${theme === "light" ? "text-gray-500" : "text-gray-400"}`}>Security and preferences</p>
               </div>
             </div>
 
-            <div className="space-y-3 sm:space-y-4">
-              <div className={`p-3 sm:p-4 rounded-lg border ${
-                theme === "light" ? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-200" : "bg-gradient-to-r from-green-900/20 to-emerald-900/20 border-green-500/30"
+            <div className="space-y-4">
+              <div className={`p-4 rounded-lg border ${
+                theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700 border-gray-600"
               }`}>
                 <div className="flex justify-between items-center">
-                  <span className={`text-sm font-semibold ${theme === "light" ? "text-green-700" : "text-green-300"}`}>Risk Level</span>
-                  <span className={`font-bold text-sm ${theme === "light" ? "text-green-800" : "text-green-200"}`}>Conservative</span>
-                </div>
-                <div className="mt-2 w-full bg-gray-200 rounded-full h-1.5">
-                  <div className="bg-green-500 h-1.5 rounded-full w-3/5"></div>
+                  <div>
+                    <p className={`text-sm font-medium ${
+                      theme === "light" ? "text-gray-900" : "text-white"
+                    }`}>Account Type</p>
+                    <p className={`text-xs ${
+                      theme === "light" ? "text-gray-600" : "text-gray-400"
+                    }`}>{user.role === 'admin' ? 'Administrator' : 'Standard User'}</p>
+                  </div>
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${
+                    user.role === 'admin' 
+                      ? theme === "light" ? "bg-purple-100 text-purple-800" : "bg-purple-900 text-purple-300"
+                      : theme === "light" ? "bg-blue-100 text-blue-800" : "bg-blue-900 text-blue-300"
+                  }`}>
+                    {user.role === 'admin' ? 'Admin' : 'User'}
+                  </span>
                 </div>
               </div>
               
-              <div className={`p-3 sm:p-4 rounded-lg border ${
-                theme === "light" ? "bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200" : "bg-gradient-to-r from-gray-900/50 to-black border-gray-700/50"
+              <div className={`p-4 rounded-lg border ${
+                theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700 border-gray-600"
               }`}>
                 <div className="flex justify-between items-center">
-                  <span className={`text-sm font-semibold ${theme === "light" ? "text-blue-700" : "text-gray-300"}`}>Max Drawdown</span>
-                  <span className={`font-bold text-sm ${theme === "light" ? "text-blue-800" : "text-gray-200"}`}>-2.1%</span>
+                  <div>
+                    <p className={`text-sm font-medium ${
+                      theme === "light" ? "text-gray-900" : "text-white"
+                    }`}>Authentication</p>
+                    <p className={`text-xs ${
+                      theme === "light" ? "text-gray-600" : "text-gray-400"
+                    }`}>{user.authProvider === 'google' ? 'Google OAuth' : 'Email & Password'}</p>
+                  </div>
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${
+                    theme === "light" ? "bg-green-100 text-green-800" : "bg-green-900 text-green-300"
+                  }`}>
+                    Secure
+                  </span>
                 </div>
               </div>
               
-              <div className={`p-3 sm:p-4 rounded-lg border ${
-                theme === "light" ? "bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200" : "bg-gradient-to-r from-green-900/30 to-emerald-900/30 border-green-500/20"
+              <div className={`p-4 rounded-lg border ${
+                theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700 border-gray-600"
               }`}>
                 <div className="flex justify-between items-center">
-                  <span className={`text-sm font-semibold ${theme === "light" ? "text-purple-700" : "text-green-400"}`}>Win Rate</span>
-                  <span className={`font-bold text-sm ${theme === "light" ? "text-purple-800" : "text-green-200"}`}>87%</span>
-                </div>
-                <div className="mt-2 w-full bg-gray-200 rounded-full h-1.5">
-                  <div className="bg-green-500 h-1.5 rounded-full w-5/6"></div>
+                  <div>
+                    <p className={`text-sm font-medium ${
+                      theme === "light" ? "text-gray-900" : "text-white"
+                    }`}>Account Balance</p>
+                    <p className={`text-xs ${
+                      theme === "light" ? "text-gray-600" : "text-gray-400"
+                    }`}>Current available funds</p>
+                  </div>
+                  <span className={`text-lg font-semibold ${
+                    theme === "light" ? "text-gray-900" : "text-white"
+                  }`}>
+                    ₹{user.balance || 0}
+                  </span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-4 sm:mt-6 flex flex-wrap gap-2">
-              <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
-                theme === "light" ? "bg-blue-100 text-blue-700 border-blue-200" : "bg-green-500/10 text-green-300 border-green-500/30"
-              }`}>🚀 Scalping</span>
-              <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
-                theme === "light" ? "bg-green-100 text-green-700 border-green-200" : "bg-green-500/10 text-green-300 border-green-500/30"
-              }`}>🎯 Risk Manager</span>
-              <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
-                theme === "light" ? "bg-purple-100 text-purple-700 border-purple-200" : "bg-green-500/10 text-green-300 border-green-500/30"
-              }`}>⚡ Day Trader</span>
-            </div>
-
-            {/* Market Status */}
-            <div className={`mt-4 p-3 rounded-lg border ${
-              theme === "light" ? "bg-gray-50 border-gray-200" : "bg-green-500/5 border-green-500/20"
-            }`}>
-              <div className="flex items-center justify-between mb-2">
-                <span className={`text-sm font-semibold ${theme === "light" ? "text-gray-700" : "text-green-400"}`}>Market Status</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-green-500 font-semibold text-sm">OPEN</span>
-                </div>
+            {/* Quick Settings */}
+            <div className="mt-6 space-y-3">
+              <h4 className={`text-sm font-medium ${
+                theme === "light" ? "text-gray-900" : "text-white"
+              }`}>Quick Actions</h4>
+              
+              <div className="grid grid-cols-1 gap-2">
+                <button
+                  onClick={() => { setFundType("add"); setShowFundModal(true); }}
+                  className={`p-3 rounded-lg text-left transition-colors ${
+                    theme === "light" ? "hover:bg-gray-100" : "hover:bg-gray-700"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Wallet className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={16} />
+                    <div>
+                      <p className={`text-sm font-medium ${
+                        theme === "light" ? "text-gray-900" : "text-white"
+                      }`}>Add Funds</p>
+                      <p className={`text-xs ${
+                        theme === "light" ? "text-gray-600" : "text-gray-400"
+                      }`}>Deposit money to your account</p>
+                    </div>
+                  </div>
+                </button>
+                
+                <button
+                  onClick={() => {
+                    setShowTransactionHistory(true);
+                    fetchTransactionHistory();
+                  }}
+                  className={`p-3 rounded-lg text-left transition-colors ${
+                    theme === "light" ? "hover:bg-gray-100" : "hover:bg-gray-700"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <TrendingUp className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={16} />
+                    <div>
+                      <p className={`text-sm font-medium ${
+                        theme === "light" ? "text-gray-900" : "text-white"
+                      }`}>Transaction History</p>
+                      <p className={`text-xs ${
+                        theme === "light" ? "text-gray-600" : "text-gray-400"
+                      }`}>View your transaction records</p>
+                    </div>
+                  </div>
+                </button>
               </div>
-              <p className={`text-xs ${theme === "light" ? "text-gray-500" : "text-green-300"}`}>NSE: 09:15 - 15:30 IST</p>
             </div>
           </div>
         </div>
