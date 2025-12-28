@@ -5,15 +5,19 @@ import { connectDB } from "../utils/db.js";
 
 export const signup = async ({ name, email, password, role }) => {
   try {
+    console.log('Starting signup process for:', email);
     await connectDB();
+    console.log('Database connected successfully');
     
     const userExist = await User.findOne({ email });
+    console.log('User existence check:', userExist ? 'User exists' : 'User does not exist');
 
     if (userExist) {
       throw new Error("User already exists");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log('Password hashed successfully');
 
     const user = await User.create({
       name,
@@ -23,15 +27,18 @@ export const signup = async ({ name, email, password, role }) => {
       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128`,
       isGoogleConnected: false
     });
+    console.log('User created successfully:', user._id);
 
     const token = generateToken({ id: user._id.toString() });
 
     return { user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar, role: user.role }, token };
   } catch (error) {
-    console.error('Signup error:', error);
+    console.error('Signup error details:', error.message);
+    console.error('Full error:', error);
     
     // If database is unavailable, create demo user
-    if (error.message.includes('Could not connect')) {
+    if (error.message.includes('Could not connect') || error.message.includes('buffering timed out')) {
+      console.log('Creating demo user due to DB connection issue');
       const demoUserId = `demo_${Date.now()}`;
       const token = generateToken({ id: demoUserId });
       
