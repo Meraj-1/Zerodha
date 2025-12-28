@@ -52,15 +52,21 @@ export const sendPhoneOTP = async (req, res) => {
       return res.status(400).json({ message: 'Valid phone number required' });
     }
     
+    console.log('Sending OTP to phone:', phone);
     const otp = generateOTP();
+    console.log('Generated OTP:', otp);
+    
     storeOTP(phone, otp);
     
     const smsResult = await sendOTP(phone, otp);
+    console.log('SMS Result:', smsResult);
     
     res.json({
       message: 'OTP sent successfully',
-      // In demo mode, return OTP for testing
-      ...(process.env.NODE_ENV !== 'production' && { demoOTP: otp })
+      success: smsResult.success,
+      // Always return OTP in response for testing
+      demoOTP: otp,
+      note: smsResult.note || 'Check your phone for SMS'
     });
   } catch (error) {
     console.error('Send OTP error:', error);
