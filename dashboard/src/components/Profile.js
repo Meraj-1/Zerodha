@@ -24,12 +24,13 @@ export default function OrbitProfile() {
   const [showFundModal, setShowFundModal] = useState(false);
   const [showTransactionHistory, setShowTransactionHistory] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showOTPModal, setShowOTPModal] = useState(false);
+  const [showDeleteOTPModal, setShowDeleteOTPModal] = useState(false);
+  const [showPhoneOTPModal, setShowPhoneOTPModal] = useState(false);
+  const [showMenuModal, setShowMenuModal] = useState(false);
+  const [otp, setOtp] = useState("");
   const [phoneOTP, setPhoneOTP] = useState("");
   const [tempPhone, setTempPhone] = useState("");
   const [isVerifyingPhone, setIsVerifyingPhone] = useState(false);
-  const [showMenuModal, setShowMenuModal] = useState(false);
-  const [otp, setOtp] = useState("");
   const [transactions, setTransactions] = useState([]);
   const [fundAmount, setFundAmount] = useState("");
   const [fundType, setFundType] = useState("add"); // "add" or "withdraw"
@@ -131,7 +132,7 @@ export default function OrbitProfile() {
       
       if (response.ok) {
         setTempPhone(profileData.phone);
-        setShowOTPModal(true);
+        setShowPhoneOTPModal(true);
         toast.success("OTP sent to your phone number");
         // Show demo OTP in development
         if (data.demoOTP) {
@@ -170,7 +171,7 @@ export default function OrbitProfile() {
       
       if (response.ok) {
         setUser(data.user);
-        setShowOTPModal(false);
+        setShowPhoneOTPModal(false);
         setPhoneOTP("");
         setTempPhone("");
         toast.success("Phone number verified successfully!");
@@ -327,7 +328,7 @@ export default function OrbitProfile() {
       
       if (response.ok) {
         setShowDeleteModal(false);
-        setShowOTPModal(true);
+        setShowDeleteOTPModal(true);
         toast.success("OTP sent to your email address");
       } else {
         toast.error(data.message || "Error sending OTP");
@@ -1195,7 +1196,7 @@ export default function OrbitProfile() {
       )}
 
       {/* Phone OTP Verification Modal */}
-      {showOTPModal && (
+      {showPhoneOTPModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className={`p-6 rounded-lg w-96 ${
             theme === "light" ? "bg-white" : "bg-gray-800"
@@ -1238,7 +1239,7 @@ export default function OrbitProfile() {
               </button>
               <button
                 onClick={() => { 
-                  setShowOTPModal(false); 
+                  setShowPhoneOTPModal(false); 
                   setPhoneOTP(""); 
                   setTempPhone("");
                 }}
@@ -1250,6 +1251,8 @@ export default function OrbitProfile() {
           </div>
         </div>
       )}
+      {/* Delete Account OTP Verification Modal */}
+      {showDeleteOTPModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className={`p-6 rounded-lg w-96 ${
             theme === "light" ? "bg-white" : "bg-gray-800"
@@ -1291,7 +1294,7 @@ export default function OrbitProfile() {
                 {isProcessing ? "Deleting..." : "Delete Account"}
               </button>
               <button
-                onClick={() => { setShowOTPModal(false); setOtp(""); }}
+                onClick={() => { setShowDeleteOTPModal(false); setOtp(""); }}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
               >
                 Cancel
