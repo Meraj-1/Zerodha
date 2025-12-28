@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { sendSMSViaTextBelt } from './sms.service.js';
 
 // In-memory OTP storage (in production, use Redis or database)
 const otpStore = new Map();
@@ -36,8 +37,6 @@ export const verifyOTP = (phone, inputOTP) => {
   otpStore.delete(phone);
   return { success: true, message: 'OTP verified successfully' };
 };
-
-import { sendSMSViaTextBelt } from './sms.service.js';
 
 export const sendOTP = async (phone, otp) => {
   try {
