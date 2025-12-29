@@ -177,6 +177,29 @@ export default function OrbitProfile() {
     }
   };
 
+  const handleVerifyPhoneOTP = async () => {
+    setIsVerifyingPhone(true);
+    try {
+      // Simulate OTP verification for now
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      if (phoneOTP === "123456") { // Demo OTP
+        setUser(prev => ({ ...prev, phone: tempPhone, isPhoneVerified: true }));
+        setShowPhoneOTPModal(false);
+        setPhoneOTP("");
+        setTempPhone("");
+        toast.success("Phone number verified successfully!");
+      } else {
+        toast.error("Invalid OTP. Please try again.");
+      }
+    } catch (error) {
+      console.error("Phone verification error:", error);
+      toast.error("Error verifying phone number");
+    } finally {
+      setIsVerifyingPhone(false);
+    }
+  };
+
   const handleAvatarUpload = async (file) => {
     if (!file) return;
     toast.info("Avatar upload not available in current version");
