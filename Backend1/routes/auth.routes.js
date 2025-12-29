@@ -11,9 +11,10 @@ import { sendOTP, sendDeletionConfirmation } from "../services/email.service.js"
 
 const router = express.Router();
 
-// In-memory balance storage for Google OAuth users (demo purposes)
+// In-memory storage for Google OAuth users (demo purposes)
 const googleUserBalances = new Map();
 const googleUserTransactions = new Map();
+const googleUserProfiles = new Map(); // Store profile data for Google users
 
 // Helper function to get/set balance for Google users
 const getGoogleUserBalance = (userId) => {
@@ -23,6 +24,18 @@ const getGoogleUserBalance = (userId) => {
 const setGoogleUserBalance = (userId, balance) => {
   googleUserBalances.set(userId, Math.max(0, balance));
   return googleUserBalances.get(userId);
+};
+
+// Helper functions for Google user profiles
+const getGoogleUserProfile = (userId) => {
+  return googleUserProfiles.get(userId) || {};
+};
+
+const setGoogleUserProfile = (userId, profileData) => {
+  const existing = googleUserProfiles.get(userId) || {};
+  const updated = { ...existing, ...profileData };
+  googleUserProfiles.set(userId, updated);
+  return updated;
 };
 
 // Helper function to manage transactions for Google users
@@ -204,9 +217,10 @@ router.get("/me", authMiddleware, async (req, res) => {
   try {
     let balance = req.user.balance || 0;
     
-    // For Google OAuth users, get balance from memory storage
+    // For Google OAuth users, get data from memory storage
     if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
       balance = getGoogleUserBalance(req.user._id);
+      const profile = getGoogleUserProfile(req.user._id);
       
       return res.json({
         user: {
@@ -215,11 +229,11 @@ router.get("/me", authMiddleware, async (req, res) => {
           email: req.user.email,
           avatar: req.user.avatar,
           role: req.user.role,
-          phone: req.user.phone,
-          gender: req.user.gender,
+          phone: profile.phone || null,
+          gender: profile.gender || null,
           isGoogleConnected: req.user.isGoogleConnected,
           balance: balance,
-          isPhoneVerified: !!req.user.phone
+          isPhoneVerified: !!profile.phone
         }
       });
     }
@@ -262,11 +276,20 @@ router.put("/set-phone", authMiddleware, async (req, res) => {
       return res.status(400).json({ message: "Phone number is required" });
     }
     
-    // Handle Google OAuth users
+    // Handle Google OAuth users - store in memory
     if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+      const updatedProfile = setGoogleUserProfile(req.user._id, { 
+        phone, 
+        isPhoneVerified: true 
+      });
+      
       return res.json({ 
-        message: "Phone number updated successfully",
-        user: { ...req.user, phone }
+        message: "Phone number saved successfully",
+        user: { 
+          ...req.user, 
+          phone: updatedProfile.phone,
+          isPhoneVerified: updatedProfile.isPhoneVerified
+        }
       });
     }
     
@@ -305,18 +328,25 @@ router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res)
   try {
     const { phone, gender, name } = req.body;
     
-    // Handle Google OAuth users (no database record)
+    // Handle Google OAuth users (store in memory)
     if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+      const profileUpdate = {};
+      if (phone) profileUpdate.phone = phone;
+      if (gender) profileUpdate.gender = gender;
+      
+      const updatedProfile = setGoogleUserProfile(req.user._id, profileUpdate);
+      
       const updatedUser = {
         _id: req.user._id,
         name: name || req.user.name,
         email: req.user.email,
         avatar: req.file ? `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}` : req.user.avatar,
         role: req.user.role,
-        phone: phone,
-        gender: gender,
+        phone: updatedProfile.phone || null,
+        gender: updatedProfile.gender || null,
         isGoogleConnected: true,
-        balance: req.user.balance || 0
+        balance: req.user.balance || 0,
+        isPhoneVerified: !!updatedProfile.phone
       };
       
       return res.json({ user: updatedUser });
