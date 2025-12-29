@@ -335,6 +335,7 @@ router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res)
       if (gender) profileUpdate.gender = gender;
       
       const updatedProfile = setGoogleUserProfile(req.user._id, profileUpdate);
+      const currentBalance = getGoogleUserBalance(req.user._id);
       
       const updatedUser = {
         _id: req.user._id,
@@ -345,7 +346,7 @@ router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res)
         phone: updatedProfile.phone || null,
         gender: updatedProfile.gender || null,
         isGoogleConnected: true,
-        balance: req.user.balance || 0,
+        balance: currentBalance, // Use current balance from memory
         isPhoneVerified: !!updatedProfile.phone
       };
       
@@ -383,7 +384,8 @@ router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res)
         role: updatedUser.role,
         phone: updatedUser.phone,
         gender: updatedUser.gender,
-        balance: updatedUser.balance
+        balance: updatedUser.balance, // Return actual balance from database
+        isPhoneVerified: updatedUser.isPhoneVerified
       }
     });
   } catch (error) {

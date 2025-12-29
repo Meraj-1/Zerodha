@@ -130,7 +130,11 @@ export default function OrbitProfile() {
 
       if (response.ok) {
         const data = await response.json();
-        setUser(data.user);
+        // Preserve the current balance when updating user data
+        setUser(prev => ({ 
+          ...data.user, 
+          balance: prev.balance // Keep the existing balance
+        }));
         setIsEditing(false);
         setSelectedFile(null);
         setPreviewUrl(null);
