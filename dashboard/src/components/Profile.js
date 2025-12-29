@@ -110,86 +110,6 @@ export default function OrbitProfile() {
     }
   };
 
-  const handlePhoneUpdate = async () => {
-    if (!profileData.phone || profileData.phone.length < 10) {
-      toast.error("Please enter a valid phone number");
-      return;
-    }
-    
-    setIsVerifyingPhone(true);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("https://kitebackend.vercel.app/user/send-phone-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({ phone: profileData.phone })
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        setTempPhone(profileData.phone);
-        setShowPhoneOTPModal(true);
-        toast.success("OTP sent to your phone number");
-        // Show demo OTP in development
-        if (data.demoOTP) {
-          toast.success(`OTP: ${data.demoOTP}`, { duration: 15000 });
-          console.log('OTP for testing:', data.demoOTP);
-        }
-        if (data.note) {
-          toast.info(data.note, { duration: 8000 });
-        }
-        console.log('Full response:', data);
-      } else {
-        toast.error(data.message || "Failed to send OTP");
-      }
-    } catch (error) {
-      console.error("Error sending OTP:", error);
-      toast.error("Error sending OTP");
-    } finally {
-      setIsVerifyingPhone(false);
-    }
-  };
-  
-  const handleVerifyPhoneOTP = async () => {
-    if (phoneOTP.length !== 6) {
-      toast.error("Please enter 6-digit OTP");
-      return;
-    }
-    
-    setIsVerifyingPhone(true);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("https://kitebackend.vercel.app/user/verify-phone-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({ phone: tempPhone, otp: phoneOTP })
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        setUser(data.user);
-        setShowPhoneOTPModal(false);
-        setPhoneOTP("");
-        setTempPhone("");
-        toast.success("Phone number verified successfully!");
-      } else {
-        toast.error(data.message || "Invalid OTP");
-      }
-    } catch (error) {
-      console.error("Error verifying OTP:", error);
-      toast.error("Error verifying OTP");
-    } finally {
-      setIsVerifyingPhone(false);
-    }
-  };
   const handleProfileUpdate = async () => {
     setIsProcessing(true);
     try {
@@ -203,8 +123,8 @@ export default function OrbitProfile() {
         },
         body: JSON.stringify({
           name: editData.name,
+          phone: profileData.phone,
           gender: profileData.gender
-          // Phone is updated separately via OTP verification
         })
       });
 
@@ -687,34 +607,18 @@ export default function OrbitProfile() {
                       <label className={`block text-sm font-medium mb-2 ${
                         theme === "light" ? "text-gray-700" : "text-gray-300"
                       }`}>Phone Number</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={profileData.phone}
-                          onChange={handleInputChange}
-                          className={`flex-1 px-3 py-2 rounded-lg border transition-colors text-sm ${
-                            theme === "light" 
-                              ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
-                              : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
-                          } focus:outline-none`}
-                          placeholder="Enter phone number"
-                        />
-                        <button
-                          type="button"
-                          onClick={handlePhoneUpdate}
-                          disabled={isVerifyingPhone || !profileData.phone}
-                          className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium disabled:opacity-50"
-                        >
-                          {isVerifyingPhone ? "Sending..." : "Verify"}
-                        </button>
-                      </div>
-                      {user.isPhoneVerified && (
-                        <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
-                          <span className="w-1 h-1 bg-green-500 rounded-full"></span>
-                          Phone verified
-                        </p>
-                      )}
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={profileData.phone}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-2 rounded-lg border transition-colors text-sm ${
+                          theme === "light" 
+                            ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
+                            : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+                        } focus:outline-none`}
+                        placeholder="Enter phone number"
+                      />
                     </div>
                     
                     <div>
@@ -820,16 +724,9 @@ export default function OrbitProfile() {
                       <p className={`text-sm font-medium ${
                         theme === "light" ? "text-gray-700" : "text-gray-300"
                       }`}>Phone Number</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <p className={`text-sm ${
-                          theme === "light" ? "text-gray-900" : "text-white"
-                        }`}>{user.phone || "Not provided"}</p>
-                        {user.isPhoneVerified && (
-                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">
-                            Verified
-                          </span>
-                        )}
-                      </div>
+                      <p className={`text-sm mt-1 ${
+                        theme === "light" ? "text-gray-900" : "text-white"
+                      }`}>{user.phone || "Not provided"}</p>
                     </div>
                     <div>
                       <p className={`text-sm font-medium ${
