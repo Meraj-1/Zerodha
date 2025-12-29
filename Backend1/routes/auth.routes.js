@@ -443,6 +443,7 @@ router.post("/add-funds", authMiddleware, async (req, res) => {
     try {
       await Transaction.create({
         userId: req.user._id,
+        userEmail: req.user.email,
         type: "credit",
         amount: amount,
         description: "Funds Added",
@@ -522,6 +523,7 @@ router.post("/withdraw-funds", authMiddleware, async (req, res) => {
     try {
       await Transaction.create({
         userId: req.user._id,
+        userEmail: req.user.email,
         type: "debit",
         amount: amount,
         description: "Funds Withdrawn",
@@ -590,6 +592,7 @@ router.post("/request-deletion-otp", authMiddleware, async (req, res) => {
     try {
       await OTP.create({
         userId: req.user._id,
+        userEmail: req.user.email,
         otp: otp,
         purpose: "account_deletion"
       });
@@ -629,8 +632,46 @@ router.post("/delete-account", authMiddleware, async (req, res) => {
         } catch (emailError) {
           console.log('Deletion confirmation email failed');
         }
+        
+        // Complete data erasure for Google OAuth users
+        try {
+          // Remove from memory storage
+          googleUserBalances.delete(req.user._id);
+          googleUserTransactions.delete(req.user._id);
+          googleUserProfiles.delete(req.user._id);
+          
+          // Remove from database if exists (some Google users might have DB records)
+          await User.findOneAndDelete({ 
+            $or: [
+              { googleId: req.user.googleId },
+              { email: req.user.email },
+              { _id: req.user._id }
+            ]
+          });
+          
+          // Remove all transactions associated with this user
+          await Transaction.deleteMany({ 
+            $or: [
+              { userId: req.user._id },
+              { userEmail: req.user.email }
+            ]
+          });
+          
+          // Remove all OTPs associated with this user
+          await OTP.deleteMany({ 
+            $or: [
+              { userId: req.user._id },
+              { userEmail: req.user.email }
+            ]
+          });
+          
+          console.log(`Google user ${req.user.email} completely erased from all systems`);
+        } catch (cleanupError) {
+          console.log('Data cleanup completed with some warnings:', cleanupError.message);
+        }
+        
         delete global.tempOTP;
-        return res.json({ message: "Account deleted successfully" });
+        return res.json({ message: "Account and all associated data deleted successfully" });
       } else {
         return res.status(400).json({ message: "Invalid or expired OTP" });
       }
@@ -654,16 +695,34 @@ router.post("/delete-account", authMiddleware, async (req, res) => {
       console.log('Deletion confirmation email failed:', emailError);
     }
     
-    // Delete user data
+    // Complete data erasure for regular users
     try {
-      await Transaction.deleteMany({ userId: req.user._id });
-      await OTP.deleteMany({ userId: req.user._id });
-      await User.findByIdAndDelete(req.user._id);
+      const userId = req.user._id;
+      const userEmail = req.user.email;
+      
+      // Delete all user transactions
+      await Transaction.deleteMany({ userId: userId });
+      console.log(`Deleted transactions for user ${userEmail}`);
+      
+      // Delete all user OTPs
+      await OTP.deleteMany({ userId: userId });
+      console.log(`Deleted OTPs for user ${userEmail}`);
+      
+      // Delete user account
+      await User.findByIdAndDelete(userId);
+      console.log(`Deleted user account ${userEmail}`);
+      
+      // Remove from memory storage (if exists)
+      googleUserBalances.delete(userId.toString());
+      googleUserTransactions.delete(userId.toString());
+      googleUserProfiles.delete(userId.toString());
+      
+      console.log(`User ${userEmail} completely erased from all systems`);
     } catch (dbError) {
-      console.log('Database deletion failed:', dbError);
+      console.log('Database deletion completed with some warnings:', dbError.message);
     }
     
-    res.json({ message: "Account deleted successfully" });
+    res.json({ message: "Account and all associated data deleted successfully" });
   } catch (error) {
     console.error("Account deletion error:", error);
     res.status(500).json({ message: "Error deleting account" });

@@ -7,6 +7,10 @@ const transactionSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
+    userEmail: {
+      type: String,
+      required: false // Optional for backward compatibility
+    },
     type: {
       type: String,
       enum: ["credit", "debit"],
