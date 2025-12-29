@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import passport from "passport";
 import { authMiddleware } from "../middleware/auth.middleware.js";
+import { adminOnly, userOrAdmin } from "../middleware/roleAuth.middleware.js";
 import { signup, login } from "../controllers/auth.controller.js";
 import { generateToken } from "../utils/jwt.js";
 import User from "../models/User.js";
@@ -15,6 +16,23 @@ const router = express.Router();
 const googleUserBalances = new Map();
 const googleUserTransactions = new Map();
 const googleUserProfiles = new Map(); // Store profile data for Google users
+const blacklistedTokens = new Set(); // Store invalidated tokens
+
+// Helper function to blacklist a token
+const blacklistToken = (token) => {
+  if (token) {
+    // Extract token without 'Bearer ' prefix
+    const cleanToken = token.startsWith('Bearer ') ? token.slice(7) : token;
+    blacklistedTokens.add(cleanToken);
+    console.log('Token blacklisted:', cleanToken.substring(0, 20) + '...');
+  }
+};
+
+// Helper function to check if token is blacklisted
+const isTokenBlacklisted = (token) => {
+  const cleanToken = token.startsWith('Bearer ') ? token.slice(7) : token;
+  return blacklistedTokens.has(cleanToken);
+};
 
 // Helper function to get/set balance for Google users
 const getGoogleUserBalance = (userId) => {
@@ -213,7 +231,7 @@ router.get("/google/test-callback", async (req, res) => {
 
 
 //protected route - Get user details after login
-router.get("/me", authMiddleware, async (req, res) => {
+router.get("/me", authMiddleware, userOrAdmin, async (req, res) => {
   try {
     let balance = req.user.balance || 0;
     
@@ -267,8 +285,8 @@ router.get("/me", authMiddleware, async (req, res) => {
   }
 });
 
-// Set phone number route
-router.put("/set-phone", authMiddleware, async (req, res) => {
+// Set phone number route (User or Admin only)
+router.put("/set-phone", authMiddleware, userOrAdmin, async (req, res) => {
   try {
     const { phone } = req.body;
     
@@ -323,8 +341,8 @@ router.put("/set-phone", authMiddleware, async (req, res) => {
   }
 });
 
-// Update profile route
-router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res) => {
+// Update profile route (User or Admin only)
+router.put("/profile", authMiddleware, userOrAdmin, upload.single('avatar'), async (req, res) => {
   try {
     const { phone, gender, name } = req.body;
     
@@ -394,8 +412,8 @@ router.put("/profile", authMiddleware, upload.single('avatar'), async (req, res)
   }
 });
 
-// Add funds route
-router.post("/add-funds", authMiddleware, async (req, res) => {
+// Add funds route (User or Admin only)
+router.post("/add-funds", authMiddleware, userOrAdmin, async (req, res) => {
   try {
     const { amount } = req.body;
     
@@ -463,8 +481,8 @@ router.post("/add-funds", authMiddleware, async (req, res) => {
   }
 });
 
-// Withdraw funds route
-router.post("/withdraw-funds", authMiddleware, async (req, res) => {
+// Withdraw funds route (User or Admin only)
+router.post("/withdraw-funds", authMiddleware, userOrAdmin, async (req, res) => {
   try {
     const { amount } = req.body;
     
@@ -543,8 +561,8 @@ router.post("/withdraw-funds", authMiddleware, async (req, res) => {
   }
 });
 
-// Get transaction history
-router.get("/transactions", authMiddleware, async (req, res) => {
+// Get transaction history (User or Admin only)
+router.get("/transactions", authMiddleware, userOrAdmin, async (req, res) => {
   try {
     // Handle Google OAuth users (no database record)
     if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
@@ -562,8 +580,8 @@ router.get("/transactions", authMiddleware, async (req, res) => {
   }
 });
 
-// Request account deletion OTP
-router.post("/request-deletion-otp", authMiddleware, async (req, res) => {
+// Request account deletion OTP (User or Admin only)
+router.post("/request-deletion-otp", authMiddleware, userOrAdmin, async (req, res) => {
   try {
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -614,14 +632,17 @@ router.post("/request-deletion-otp", authMiddleware, async (req, res) => {
   }
 });
 
-// Verify OTP and delete account
-router.post("/delete-account", authMiddleware, async (req, res) => {
+// Verify OTP and delete account (User or Admin only)
+router.post("/delete-account", authMiddleware, userOrAdmin, async (req, res) => {
   try {
     const { otp } = req.body;
     
     if (!otp) {
       return res.status(400).json({ message: "OTP is required" });
     }
+    
+    // Get user's current token for blacklisting
+    const userToken = req.headers.authorization;
     
     // Handle Google OAuth users
     if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
@@ -631,6 +652,11 @@ router.post("/delete-account", authMiddleware, async (req, res) => {
           await sendDeletionConfirmation(req.user.email, req.user.name);
         } catch (emailError) {
           console.log('Deletion confirmation email failed');
+        }
+        
+        // Blacklist current token to logout user from all sessions
+        if (userToken) {
+          blacklistToken(userToken);
         }
         
         // Complete data erasure for Google OAuth users
@@ -671,7 +697,10 @@ router.post("/delete-account", authMiddleware, async (req, res) => {
         }
         
         delete global.tempOTP;
-        return res.json({ message: "Account and all associated data deleted successfully" });
+        return res.json({ 
+          message: "Account and all associated data deleted successfully. You have been logged out from all devices.",
+          logout: true 
+        });
       } else {
         return res.status(400).json({ message: "Invalid or expired OTP" });
       }
@@ -686,6 +715,11 @@ router.post("/delete-account", authMiddleware, async (req, res) => {
     
     if (!validOTP) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+    
+    // Blacklist current token to logout user from all sessions
+    if (userToken) {
+      blacklistToken(userToken);
     }
     
     // Send confirmation email before deletion
@@ -722,10 +756,117 @@ router.post("/delete-account", authMiddleware, async (req, res) => {
       console.log('Database deletion completed with some warnings:', dbError.message);
     }
     
-    res.json({ message: "Account and all associated data deleted successfully" });
+    res.json({ 
+      message: "Account and all associated data deleted successfully. You have been logged out from all devices.",
+      logout: true 
+    });
   } catch (error) {
     console.error("Account deletion error:", error);
     res.status(500).json({ message: "Error deleting account" });
+  }
+});
+
+// Make blacklist functions globally available
+global.isTokenBlacklisted = isTokenBlacklisted;
+global.blacklistToken = blacklistToken;
+
+// Admin-only routes
+
+// Get all users (Admin only)
+router.get("/admin/users", authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const users = await User.find({}).select("-password").limit(100);
+    res.json({ 
+      users,
+      total: users.length,
+      message: "Users retrieved successfully"
+    });
+  } catch (error) {
+    console.error('Get users error:', error);
+    res.status(500).json({ message: "Error fetching users" });
+  }
+});
+
+// Get user by ID (Admin only)
+router.get("/admin/user/:id", authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    // Get user transactions
+    const transactions = await Transaction.find({ userId: req.params.id })
+      .sort({ createdAt: -1 })
+      .limit(10);
+    
+    res.json({ 
+      user,
+      recentTransactions: transactions,
+      message: "User details retrieved successfully"
+    });
+  } catch (error) {
+    console.error('Get user error:', error);
+    res.status(500).json({ message: "Error fetching user details" });
+  }
+});
+
+// Update user role (Admin only)
+router.put("/admin/user/:id/role", authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const { role } = req.body;
+    
+    if (!['user', 'admin'].includes(role)) {
+      return res.status(400).json({ message: "Invalid role. Must be 'user' or 'admin'" });
+    }
+    
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { role },
+      { new: true }
+    ).select("-password");
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    res.json({ 
+      user,
+      message: `User role updated to ${role} successfully`
+    });
+  } catch (error) {
+    console.error('Update role error:', error);
+    res.status(500).json({ message: "Error updating user role" });
+  }
+});
+
+// Get system stats (Admin only)
+router.get("/admin/stats", authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalTransactions = await Transaction.countDocuments();
+    const totalBalance = await User.aggregate([
+      { $group: { _id: null, total: { $sum: "$balance" } } }
+    ]);
+    
+    const recentUsers = await User.find({})
+      .select("-password")
+      .sort({ createdAt: -1 })
+      .limit(5);
+    
+    res.json({
+      stats: {
+        totalUsers,
+        totalTransactions,
+        totalBalance: totalBalance[0]?.total || 0,
+        blacklistedTokens: blacklistedTokens.size
+      },
+      recentUsers,
+      message: "System stats retrieved successfully"
+    });
+  } catch (error) {
+    console.error('Get stats error:', error);
+    res.status(500).json({ message: "Error fetching system stats" });
   }
 });
 

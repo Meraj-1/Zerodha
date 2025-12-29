@@ -16,7 +16,7 @@ function SignUp() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.  
     });
     setError(''); // Clear error when user types
   };
