@@ -57,16 +57,18 @@ export default function SignUp({ onSwitch, theme = "light" }) {
       });
 
       const data = await response.json();
+      console.log('Signup response:', data); // Debug log
       
       if (response.ok) {
         toast.success("Account created successfully!");
         // Store token if provided
         if (data.token) {
           localStorage.setItem("token", data.token);
+          console.log('Token stored:', data.token.substring(0, 20) + '...'); // Debug log
         }
-        setTimeout(() => {
-          window.location.href = "/profile";
-        }, 1000);
+        // Immediate redirect to profile
+        console.log('Redirecting to dashboard...'); // Debug log
+        window.location.href = "https://dashboardclone.vercel.app/profile";
       } else {
         // Handle specific error cases
         if (response.status === 409) {

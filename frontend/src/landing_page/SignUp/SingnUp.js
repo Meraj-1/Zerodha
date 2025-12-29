@@ -53,10 +53,13 @@ function SignUp() {
       });
 
       const data = await response.json();
+      console.log('Frontend signup response:', data); // Debug log
 
       if (response.ok) {
+        console.log('Signup successful, storing token and redirecting...'); // Debug log
         // Store token and redirect to dashboard
         localStorage.setItem('token', data.token);
+        // Immediate redirect without delay
         window.location.href = 'https://dashboardclone.vercel.app/profile';
       } else {
         setError(data.message || 'Signup failed');
