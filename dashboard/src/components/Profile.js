@@ -115,7 +115,7 @@ export default function OrbitProfile() {
     try {
       const token = localStorage.getItem("token");
       
-      const response = await fetch("https://kitebackend.vercel.app/user/profile", {
+      const response = await fetch("https://kitebackend.vercel.app/auth/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -143,6 +143,37 @@ export default function OrbitProfile() {
       toast.error("Error updating profile");
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  // Dedicated function for setting phone number
+  const handleSetPhone = async (phoneNumber) => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      const response = await fetch("https://kitebackend.vercel.app/auth/set-phone", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ phone: phoneNumber })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(prev => ({ ...prev, phone: phoneNumber, isPhoneVerified: true }));
+        toast.success("Phone number saved successfully!");
+        return true;
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.message || "Failed to save phone number");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error setting phone:", error);
+      toast.error("Error saving phone number");
+      return false;
     }
   };
 
@@ -607,18 +638,34 @@ export default function OrbitProfile() {
                       <label className={`block text-sm font-medium mb-2 ${
                         theme === "light" ? "text-gray-700" : "text-gray-300"
                       }`}>Phone Number</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={profileData.phone}
-                        onChange={handleInputChange}
-                        className={`w-full px-3 py-2 rounded-lg border transition-colors text-sm ${
-                          theme === "light" 
-                            ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
-                            : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
-                        } focus:outline-none`}
-                        placeholder="Enter phone number"
-                      />
+                      <div className="flex gap-2">
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={profileData.phone}
+                          onChange={handleInputChange}
+                          className={`flex-1 px-3 py-2 rounded-lg border transition-colors text-sm ${
+                            theme === "light" 
+                              ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
+                              : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+                          } focus:outline-none`}
+                          placeholder="Enter phone number"
+                        />
+                        {profileData.phone && profileData.phone !== user.phone && (
+                          <button
+                            onClick={() => handleSetPhone(profileData.phone)}
+                            className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                          >
+                            Save
+                          </button>
+                        )}
+                      </div>
+                      {user.isPhoneVerified && (
+                        <p className="text-xs mt-1 text-green-600 flex items-center gap-1">
+                          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                          Phone verified
+                        </p>
+                      )}
                     </div>
                     
                     <div>
@@ -724,9 +771,17 @@ export default function OrbitProfile() {
                       <p className={`text-sm font-medium ${
                         theme === "light" ? "text-gray-700" : "text-gray-300"
                       }`}>Phone Number</p>
-                      <p className={`text-sm mt-1 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}>{user.phone || "Not provided"}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className={`text-sm ${
+                          theme === "light" ? "text-gray-900" : "text-white"
+                        }`}>{user.phone || "Not provided"}</p>
+                        {user.isPhoneVerified && (
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                            Verified
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <div>
                       <p className={`text-sm font-medium ${

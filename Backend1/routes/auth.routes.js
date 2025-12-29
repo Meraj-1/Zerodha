@@ -199,28 +199,105 @@ router.get("/google/test-callback", async (req, res) => {
 });
 
 
-//protected route
-router.get("/me", authMiddleware, (req, res) => {
-  let balance = req.user.balance || 0;
-  
-  // For Google OAuth users, get balance from memory storage
-  if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
-    balance = getGoogleUserBalance(req.user._id);
-  }
-  
-  res.json({
-    user: {
-      _id: req.user._id,
-      name: req.user.name,
-      email: req.user.email,
-      avatar: req.user.avatar,
-      role: req.user.role,
-      phone: req.user.phone,
-      gender: req.user.gender,
-      isGoogleConnected: req.user.isGoogleConnected,
-      balance: balance
+//protected route - Get user details after login
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    let balance = req.user.balance || 0;
+    
+    // For Google OAuth users, get balance from memory storage
+    if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+      balance = getGoogleUserBalance(req.user._id);
+      
+      return res.json({
+        user: {
+          _id: req.user._id,
+          name: req.user.name,
+          email: req.user.email,
+          avatar: req.user.avatar,
+          role: req.user.role,
+          phone: req.user.phone,
+          gender: req.user.gender,
+          isGoogleConnected: req.user.isGoogleConnected,
+          balance: balance,
+          isPhoneVerified: !!req.user.phone
+        }
+      });
     }
-  });
+    
+    // For regular users, fetch complete details from database
+    const user = await User.findById(req.user._id).select("-password");
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    res.json({
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+        role: user.role,
+        phone: user.phone,
+        gender: user.gender,
+        isGoogleConnected: user.isGoogleConnected,
+        balance: user.balance,
+        isPhoneVerified: user.isPhoneVerified,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
+      }
+    });
+  } catch (error) {
+    console.error('Get user details error:', error);
+    res.status(500).json({ message: "Error fetching user details" });
+  }
+});
+
+// Set phone number route
+router.put("/set-phone", authMiddleware, async (req, res) => {
+  try {
+    const { phone } = req.body;
+    
+    if (!phone) {
+      return res.status(400).json({ message: "Phone number is required" });
+    }
+    
+    // Handle Google OAuth users
+    if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+      return res.json({ 
+        message: "Phone number updated successfully",
+        user: { ...req.user, phone }
+      });
+    }
+    
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { phone, isPhoneVerified: true },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "Phone number saved successfully",
+      user: {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        avatar: updatedUser.avatar,
+        role: updatedUser.role,
+        phone: updatedUser.phone,
+        gender: updatedUser.gender,
+        balance: updatedUser.balance,
+        isPhoneVerified: updatedUser.isPhoneVerified
+      }
+    });
+  } catch (error) {
+    console.error('Phone update error:', error);
+    res.status(500).json({ message: "Error updating phone number" });
+  }
 });
 
 // Update profile route
