@@ -71,10 +71,17 @@ export default function SignUp({ onSwitch, theme = "light" }) {
         window.location.href = "https://dashboardclone.vercel.app/profile";
       } else {
         // Handle specific error cases
-        if (response.status === 409) {
-          toast.error("Email already registered. Please use a different email or try logging in.");
-        } else if (data.message === "User already exists") {
-          toast.error("This email is already registered. Please login instead or use a different email.");
+        if (response.status === 409 || data.message === "User already exists") {
+          toast.error(
+            <div>
+              <strong>Account Already Exists!</strong>
+              <br />This email is already registered in our system.
+              <br />• Please login with your existing account
+              <br />• Or use a different email address
+              <br />• Check if you signed up with Google
+            </div>,
+            { duration: 6000 }
+          );
         } else {
           toast.error(data.message || "Signup failed. Please try again.");
         }

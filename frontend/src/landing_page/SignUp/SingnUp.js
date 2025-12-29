@@ -64,7 +64,15 @@ function SignUp() {
       } else {
         console.log('Signup failed:', response.status, data.message); // Debug log
         if (response.status === 409 || data.message === "User already exists") {
-          setError("This email is already registered. Please login instead or use a different email.");
+          setError(
+            "🚫 Account Already Exists!\n\n" +
+            "This email is already registered in our system.\n\n" +
+            "What you can do:\n" +
+            "• Login with your existing account\n" +
+            "• Use a different email address\n" +
+            "• Check if you signed up with Google\n" +
+            "• Contact support if you forgot your password"
+          );
         } else {
           setError(data.message || 'Signup failed');
         }
@@ -98,7 +106,7 @@ function SignUp() {
           
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
+              <div className="whitespace-pre-line text-sm">{error}</div>
             </div>
           )}
 
