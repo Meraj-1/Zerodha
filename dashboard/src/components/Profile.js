@@ -340,9 +340,23 @@ export default function OrbitProfile() {
       const data = await response.json();
       
       if (response.ok) {
-        toast.success("Account deleted successfully. Redirecting to login page...");
+        toast.success("Account deleted successfully. You have been logged out from all devices.");
+        
+        // Clear all local storage and session data
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // Clear any cached data
+        if ('caches' in window) {
+          caches.keys().then(names => {
+            names.forEach(name => {
+              caches.delete(name);
+            });
+          });
+        }
+        
         setTimeout(() => {
-          localStorage.removeItem("token");
+          // Force redirect to login page
           window.location.href = "/auth";
         }, 2000);
       } else {
