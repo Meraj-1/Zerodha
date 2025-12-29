@@ -62,7 +62,12 @@ function SignUp() {
         // Immediate redirect without delay
         window.location.href = 'https://dashboardclone.vercel.app/profile';
       } else {
-        setError(data.message || 'Signup failed');
+        console.log('Signup failed:', response.status, data.message); // Debug log
+        if (response.status === 409 || data.message === "User already exists") {
+          setError("This email is already registered. Please login instead or use a different email.");
+        } else {
+          setError(data.message || 'Signup failed');
+        }
       }
     } catch (error) {
       console.error('Signup error:', error);

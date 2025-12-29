@@ -236,7 +236,7 @@ router.get("/me", authMiddleware, userOrAdmin, async (req, res) => {
     let balance = req.user.balance || 0;
     
     // For Google OAuth users, get data from memory storage
-    if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+    if (req.user.isGoogleConnected || req.user._id.toString().startsWith('google_')) {
       balance = getGoogleUserBalance(req.user._id);
       const profile = getGoogleUserProfile(req.user._id);
       
@@ -295,7 +295,7 @@ router.put("/set-phone", authMiddleware, userOrAdmin, async (req, res) => {
     }
     
     // Handle Google OAuth users - store in memory
-    if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+    if (req.user.isGoogleConnected || req.user._id.toString().startsWith('google_')) {
       const updatedProfile = setGoogleUserProfile(req.user._id, { 
         phone, 
         isPhoneVerified: true 
@@ -347,7 +347,7 @@ router.put("/profile", authMiddleware, userOrAdmin, upload.single('avatar'), asy
     const { phone, gender, name } = req.body;
     
     // Handle Google OAuth users (store in memory)
-    if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+    if (req.user.isGoogleConnected || req.user._id.toString().startsWith('google_')) {
       const profileUpdate = {};
       if (phone) profileUpdate.phone = phone;
       if (gender) profileUpdate.gender = gender;

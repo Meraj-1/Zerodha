@@ -5,8 +5,13 @@ export const signup = async (req, res, next) => {
     const user = await authService.signup(req.body);
     res.status(201).json(user);
   } catch (err) {
+    console.error('Signup controller error:', err.message);
     if (err.message === "User already exists") {
-      return res.status(409).json({ message: "User already exists" });
+      return res.status(409).json({ 
+        message: "User already exists",
+        error: "EMAIL_ALREADY_REGISTERED",
+        suggestion: "Please login with this email or use a different email address."
+      });
     }
     next(err);
   }

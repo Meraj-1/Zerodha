@@ -73,6 +73,8 @@ export default function SignUp({ onSwitch, theme = "light" }) {
         // Handle specific error cases
         if (response.status === 409) {
           toast.error("Email already registered. Please use a different email or try logging in.");
+        } else if (data.message === "User already exists") {
+          toast.error("This email is already registered. Please login instead or use a different email.");
         } else {
           toast.error(data.message || "Signup failed. Please try again.");
         }
