@@ -88,6 +88,11 @@ const userSchema = new mongoose.Schema(
       default: false
     },
 
+    isAccountVerified: {
+      type: Boolean,
+      default: false
+    },
+
     isPhoneVerified: {
       type: Boolean,
       default: false

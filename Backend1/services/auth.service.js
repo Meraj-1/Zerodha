@@ -22,7 +22,8 @@ export const signup = async ({ name, email, password, role }) => {
       authProvider: "local",
       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128`,
       isGoogleConnected: false,
-      role: role || 'user',
+      isAccountVerified: false, // Account not verified initially
+      role: 'user', // Default role
       balance: 0
     });
 
@@ -76,6 +77,7 @@ export const googleLogin = async (googleUser) => {
         authProvider: "google",
         avatar: googleUser.avatar,
         isGoogleConnected: true,
+        isAccountVerified: true, // Google users are automatically verified
         role: 'user',
         balance: 0
       });
@@ -83,6 +85,7 @@ export const googleLogin = async (googleUser) => {
       // Update existing user with Google connection
       user.googleId = googleUser.googleId;
       user.isGoogleConnected = true;
+      user.isAccountVerified = true; // Google users are automatically verified
       user.avatar = googleUser.avatar;
       await user.save();
     }

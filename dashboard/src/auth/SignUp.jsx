@@ -9,7 +9,6 @@ export default function SignUp({ onSwitch, theme = "light" }) {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "user",
     terms: false,
   });
 
@@ -51,8 +50,7 @@ export default function SignUp({ onSwitch, theme = "light" }) {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          password: formData.password,
-          role: formData.role
+          password: formData.password
         }),
       });
 
@@ -122,36 +120,8 @@ export default function SignUp({ onSwitch, theme = "light" }) {
           Q<span className="text-blue-600">pay</span>
         </h2>
         <p className={`text-center text-sm mt-1 ${termsText}`}>
-          Smart payments for modern trading
+          Create your account to get started
         </p>
-
-        {/* Role Selector */}
-        <div className="mt-6">
-          <label className={`text-xs ${termsText}`}>SELECT ROLE</label>
-          <div className="grid grid-cols-2 gap-3 mt-2">
-            {[
-              { label: "User", value: "user", icon: <FaUser /> },
-              { label: "Admin", value: "admin", icon: <FaUserShield /> },
-            ].map((role) => (
-              <motion.button
-                type="button"
-                key={role.value}
-                whileHover={{ scale: 1.03 }}
-                onClick={() =>
-                  setFormData((prev) => ({ ...prev, role: role.value }))
-                }
-                className={`flex items-center gap-2 justify-center border rounded-lg py-3 text-sm ${
-                  formData.role === role.value
-                    ? roleSelectedClass
-                    : roleUnselectedClass
-                }`}
-              >
-                {role.icon}
-                {role.label}
-              </motion.button>
-            ))}
-          </div>
-        </div>
 
         {/* Inputs */}
         {[
@@ -185,7 +155,7 @@ export default function SignUp({ onSwitch, theme = "light" }) {
             key={field.name}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 + i * 0.1 }}
+            transition={{ delay: 0.3 + i * 0.1 }}
             className="mt-4 relative"
           >
             <label className={`text-xs ${termsText}`}>{field.label}</label>

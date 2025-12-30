@@ -837,17 +837,40 @@ export default function OrbitProfile() {
                 
                 {/* Account Status */}
                 <div className={`p-4 rounded-lg border ${
-                  theme === "light" ? "bg-green-50 border-green-200" : "bg-green-900/20 border-green-800"
+                  user.isAccountVerified 
+                    ? theme === "light" ? "bg-green-50 border-green-200" : "bg-green-900/20 border-green-800"
+                    : theme === "light" ? "bg-yellow-50 border-yellow-200" : "bg-yellow-900/20 border-yellow-800"
                 }`}>
                   <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <div className={`w-2 h-2 rounded-full ${
+                      user.isAccountVerified ? "bg-green-500" : "bg-yellow-500"
+                    }`}></div>
                     <div>
                       <p className={`text-sm font-medium ${
-                        theme === "light" ? "text-green-800" : "text-green-300"
-                      }`}>Account Status: Active</p>
+                        user.isAccountVerified 
+                          ? theme === "light" ? "text-green-800" : "text-green-300"
+                          : theme === "light" ? "text-yellow-800" : "text-yellow-300"
+                      }`}>
+                        Account Status: {user.isAccountVerified ? "Verified" : "Not Verified"}
+                      </p>
                       <p className={`text-xs ${
-                        theme === "light" ? "text-green-600" : "text-green-400"
-                      }`}>Your account is verified and active</p>
+                        user.isAccountVerified 
+                          ? theme === "light" ? "text-green-600" : "text-green-400"
+                          : theme === "light" ? "text-yellow-600" : "text-yellow-400"
+                      }`}>
+                        {user.isAccountVerified 
+                          ? "Your account is verified and active"
+                          : "Connect with Google to verify your account"
+                        }
+                      </p>
+                      {!user.isAccountVerified && (
+                        <a 
+                          href="https://kitebackend.vercel.app/auth/google"
+                          className="inline-block mt-2 px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
+                        >
+                          Verify with Google
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>

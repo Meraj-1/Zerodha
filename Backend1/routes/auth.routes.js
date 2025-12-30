@@ -273,6 +273,7 @@ router.get("/me", authMiddleware, userOrAdmin, async (req, res) => {
         phone: user.phone,
         gender: user.gender,
         isGoogleConnected: user.isGoogleConnected,
+        isAccountVerified: user.isAccountVerified,
         balance: user.balance,
         isPhoneVerified: user.isPhoneVerified,
         createdAt: user.createdAt,
