@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useTheme } from '../context/ThemeContext';
 
 import GeneralContext from "./GeneralContext";
 
@@ -20,6 +21,8 @@ import { DoughnutChart } from "./DoughnoutChart";
 const labels = watchlist.map((subArray) => subArray["name"]);
 
 const WatchList = () => {
+  const { theme } = useTheme();
+  
   const data = {
     labels,
     datasets: [
@@ -47,40 +50,13 @@ const WatchList = () => {
     ],
   };
 
-  // export const data = {
-  //   labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-  // datasets: [
-  //   {
-  //     label: "# of Votes",
-  //     data: [12, 19, 3, 5, 2, 3],
-  //     backgroundColor: [
-  //       "rgba(255, 99, 132, 0.2)",
-  //       "rgba(54, 162, 235, 0.2)",
-  //       "rgba(255, 206, 86, 0.2)",
-  //       "rgba(75, 192, 192, 0.2)",
-  //       "rgba(153, 102, 255, 0.2)",
-  //       "rgba(255, 159, 64, 0.2)",
-  //     ],
-  //     borderColor: [
-  //       "rgba(255, 99, 132, 1)",
-  //       "rgba(54, 162, 235, 1)",
-  //       "rgba(255, 206, 86, 1)",
-  //       "rgba(75, 192, 192, 1)",
-  //       "rgba(153, 102, 255, 1)",
-  //       "rgba(255, 159, 64, 1)",
-  //     ],
-  //     borderWidth: 1,
-  //   },
-  // ],
-  // };
-
   const upCount = watchlist.filter(stock => !stock.isDown).length;
   const downCount = watchlist.filter(stock => stock.isDown).length;
 
   return (
-    <div className="watchlist-container">
+    <div className={`watchlist-container ${theme === 'dark' ? 'dark' : ''}`}>
       {/* Enhanced Header */}
-      <div className="watchlist-header">
+      <div className={`watchlist-header ${theme === 'dark' ? 'bg-gray-900' : ''}`}>
         <div className="watchlist-title">
           <ShowChart style={{ fontSize: '18px' }} />
           <span>Watchlist</span>
@@ -92,21 +68,21 @@ const WatchList = () => {
       </div>
 
       {/* Enhanced Search */}
-      <div className="search-container">
-        <Search className="search-icon" />
+      <div className={`search-container ${theme === 'dark' ? 'border-gray-700' : ''}`}>
+        <Search className={`search-icon ${theme === 'dark' ? 'text-gray-400' : ''}`} />
         <input
           type="text"
           name="search"
           id="search"
           placeholder="Search stocks, indices..."
-          className="search"
+          className={`search ${theme === 'dark' ? 'bg-black text-white placeholder-gray-400' : ''}`}
         />
-        <span className="counts">{watchlist.length}/50</span>
+        <span className={`counts ${theme === 'dark' ? 'bg-gray-800 text-gray-300' : ''}`}>{watchlist.length}/50</span>
       </div>
 
-      <ul className="list">
+      <ul className={`list ${theme === 'dark' ? 'dark' : ''}`}>
         {watchlist.map((stock, index) => {
-          return <WatchListItem stock={stock} key={index} />;
+          return <WatchListItem stock={stock} key={index} theme={theme} />;
         })}
       </ul>
 
@@ -116,7 +92,7 @@ const WatchList = () => {
       </div>
 
       {/* Enhanced Footer */}
-      <div className="watchlist-footer">
+      <div className={`watchlist-footer ${theme === 'dark' ? 'bg-gray-900 border-gray-700 text-gray-300' : ''}`}>
         <div className="footer-stats">
           <div className="stat-item">
             <div className="stat-dot up"></div>
@@ -135,7 +111,7 @@ const WatchList = () => {
 
 export default WatchList;
 
-const WatchListItem = ({ stock }) => {
+const WatchListItem = ({ stock, theme }) => {
   const [showWatchlistActions, setShowWatchlistActions] = useState(false);
 
   const handleMouseEnter = (e) => {
@@ -149,13 +125,13 @@ const WatchListItem = ({ stock }) => {
   return (
     <li onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="item">
-        <p className={stock.isDown ? "down" : "up"}>{stock.name}</p>
+        <p className={`${stock.isDown ? "down" : "up"} ${theme === 'dark' ? 'text-white' : ''}`}>{stock.name}</p>
         <div className="itemInfo">
           <span className={`percent ${stock.isDown ? 'negative' : 'positive'}`}>
             {stock.percent}
           </span>
           <div className="price-change-indicator">
-            <span className="price">₹{stock.price}</span>
+            <span className={`price ${theme === 'dark' ? 'text-white' : ''}`}>₹{stock.price}</span>
             {stock.isDown ? (
               <KeyboardArrowDown className="down trend-arrow" />
             ) : (

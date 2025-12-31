@@ -9,6 +9,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark theme styles */
+.dark body {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.dark {
+  background-color: #000000;
+  color: #ffffff;
 }
 
 code {
@@ -23,6 +35,12 @@ code {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  transition: background-color 0.3s ease;
+}
+
+.dark .dashboard-container {
+  background-color: #000000;
+  color: #ffffff;
 }
 
 @media (min-width: 768px) {
@@ -38,6 +56,12 @@ code {
   box-sizing: border-box;
   overflow-y: auto;
   padding: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.dark .content {
+  background-color: #000000;
+  color: #ffffff;
 }
 
 @media (min-width: 768px) {
@@ -59,6 +83,13 @@ code {
   box-shadow: 0px 0px 4px 2px rgb(236, 235, 235);
   box-sizing: border-box;
   z-index: 9;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .topbar-container {
+  background-color: #000000;
+  box-shadow: 0px 0px 4px 2px rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 @media (min-width: 768px) {
@@ -261,6 +292,13 @@ code {
   position: relative;
   order: -1;
   background: #fff;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .watchlist-container {
+  background: #000000;
+  box-shadow: 0px 0px 4px 1px rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 @media (min-width: 768px) {
@@ -394,6 +432,11 @@ code {
   font-weight: 300;
   font-size: 0.7rem;
   white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.dark .order-table th {
+  color: #ffffff;
 }
 
 @media (min-width: 768px) {
@@ -410,6 +453,11 @@ code {
   font-size: 0.8rem;
   color: rgb(73, 73, 73);
   white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.dark .order-table td {
+  color: #ffffff;
 }
 
 @media (min-width: 768px) {
@@ -674,6 +722,11 @@ code {
   padding: 0;
   margin: 0;
   background: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.dark .list {
+  background: #000000;
 }
 
 .list li {
@@ -683,9 +736,18 @@ code {
   transition: all 0.2s ease;
 }
 
+.dark .list li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
 .list li:hover {
   background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
   cursor: pointer;
+}
+
+.dark .list li:hover {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.1) 100%);
 }
 
 @media (min-width: 768px) {
@@ -930,7 +992,7 @@ code {
   width: 100% !important;
 }
 .btn-green {
-  background: #4caf50;
+  background: #22c55e; /* Consistent green for growth/add actions */
 }
 
 .btn-blue {
@@ -942,37 +1004,208 @@ code {
   color: #666666;
 }
 
+/* Dark theme button styles */
+.dark .btn-grey {
+  background: #374151;
+  color: #ffffff;
+}
+
+.dark .btn-grey:hover {
+  background: #4b5563;
+}
+
 .section-icon {
   transform: scale(0.8);
   color: rgb(66, 56, 56);
   padding: 0;
   margin: 0;
   margin-right: 10px;
+  transition: color 0.3s ease;
+}
+
+.dark .section-icon {
+  color: #ffffff;
 }
 
 .imp {
   font-size: 1.5rem;
   color: #313131;
+  transition: color 0.3s ease;
+}
+
+.dark .imp {
+  color: #ffffff;
 }
 
 .colored {
   color: #4184f3;
 }
 
+/* Theme toggle button */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: #4184f3;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark .theme-toggle {
+  background: #fbbf24;
+  color: #000000;
+}
+
 .profit {
-  color: rgb(72, 194, 55);
+  color: #22c55e !important; /* Green for profits/gains */
 }
 
 .loss {
-  color: rgb(250, 118, 78);
+  color: #ef4444 !important; /* Red for losses */
 }
 
 .up {
-  color: rgb(103, 201, 136);
+  color: #22c55e !important; /* Green for up movements */
 }
 
 .down {
-  color: rgb(223, 73, 73);
+  color: #ef4444 !important; /* Red for down movements */
+}
+
+/* Dark theme specific profit/loss colors */
+.dark .profit {
+  color: #22c55e !important;
+}
+
+.dark .loss {
+  color: #ef4444 !important;
+}
+
+.dark .up {
+  color: #22c55e !important;
+}
+
+.dark .down {
+  color: #ef4444 !important;
+}
+
+/* Additional dark theme improvements */
+.dark .table {
+  background-color: #000000;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.dark .data p {
+  color: #ffffff;
+}
+
+.dark .data .imp {
+  color: #ffffff;
+}
+
+.dark .title {
+  color: #ffffff;
+}
+
+.dark .username h6 {
+  color: #ffffff;
+}
+
+.dark .divider {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .menu-container {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.dark .indices-container {
+  background-color: #000000;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .search {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .search:focus {
+  background-color: #000000;
+  box-shadow: inset 0 0 0 2px #22c55e;
+}
+
+.dark .watchlist-footer {
+  background-color: #000000;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .actions {
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.95) 30%, rgba(0, 0, 0, 1) 100%);
+}
+
+/* Ensure proper contrast for all text elements */
+.dark * {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .item p {
+  color: #ffffff;
+}
+
+.dark .itemInfo .price {
+  color: #ffffff;
+}
+
+/* Fix for any remaining light backgrounds */
+.dark .bg-white {
+  background-color: #000000 !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #000000 !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #111111 !important;
+}
+
+/* Ensure buttons maintain their colors in dark theme */
+.dark .btn-green {
+  background: #22c55e !important;
+  color: #ffffff !important;
+}
+
+.dark .btn-blue {
+  background: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+.dark .buy {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  color: #ffffff !important;
+}
+
+.dark .sell {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: #ffffff !important;
 }
 
 /* Hover effects */
@@ -1000,6 +1233,23 @@ code {
 .profile:hover .username {
   cursor: pointer;
   color: rgb(223, 91, 43);
+}
+
+/* Dark theme hover effects */
+.dark .btn-green:hover {
+  background: #16a34a !important;
+}
+
+.dark .btn-blue:hover {
+  background: #2563eb !important;
+}
+
+.dark .menu:hover {
+  color: #22c55e;
+}
+
+.dark .profile:hover .username {
+  color: #22c55e;
 }
 
 

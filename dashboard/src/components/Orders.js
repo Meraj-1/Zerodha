@@ -66,13 +66,17 @@ const Orders = () => {
                     <td>₹{order.price.toFixed(2)}</td>
                     <td>
                       <span className={`px-2 py-1 rounded text-xs ${
-                        order.side === 'BUY' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        order.side === 'BUY' 
+                          ? (theme === 'dark' ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-800')
+                          : (theme === 'dark' ? 'bg-red-900 text-red-300' : 'bg-red-100 text-red-800')
                       }`}>
                         {order.side}
                       </span>
                     </td>
                     <td>
-                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
+                      <span className={`px-2 py-1 rounded text-xs ${
+                        theme === 'dark' ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-800'
+                      }`}>
                         {order.status}
                       </span>
                     </td>
