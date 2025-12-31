@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useTheme } from '../context/ThemeContext';
-import ThemeToggle from './ThemeToggle';
+// import ThemeToggle from './ThemeToggle';
 
 import Dashboard from "./Dashboard";
 import TopBar from "./TopBar";
@@ -19,7 +19,7 @@ const Home = () => {
     <div className={`min-h-screen transition-colors ${
       theme === "light" ? "bg-white" : "bg-black"
     }`}>
-      <ThemeToggle />
+      {/* <ThemeToggle /> */}
       <TopBar />
       <Dashboard />
     </div>
