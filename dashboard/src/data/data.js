@@ -158,7 +158,7 @@ export const holdings = [
     day: "-0.25%",
     isLoss: true,
   },
-  {
+  {   
     name: "WIPRO",
     qty: 4,
     avg: 489.3,

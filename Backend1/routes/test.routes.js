@@ -1,8 +1,8 @@
-import express from 'express';
-import { testDB } from '../controllers/test.controller.js';
+// import express from 'express';
+// import { testDB } from '../controllers/test.controller.js';
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get('/db-test', testDB);
+// router.get('/db-test', testDB);
 
-export default router;
+// export default router;

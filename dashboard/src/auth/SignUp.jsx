@@ -95,13 +95,13 @@ export default function SignUp({ onSwitch, theme = "light" }) {
   const textClass = theme === "light" ? "text-gray-900" : "text-white";
   const inputClass =
     theme === "light"
-      ? "border-gray-200 placeholder-gray-400 text-gray-900 bg-white"
-      : "border-gray-700 placeholder-gray-400 text-white bg-gray-800";
+      ? "text-black bg-gray-200"
+      : "text-white bg-gray-800";
   const roleSelectedClass = "border-blue-600 bg-blue-50 text-blue-600";
   const roleUnselectedClass =
     theme === "light" ? "border-gray-200 text-gray-600" : "border-gray-700 text-gray-300";
   const dividerText = theme === "light" ? "text-gray-400" : "text-gray-300";
-  const termsText = theme === "light" ? "text-gray-500" : "text-gray-300";
+  const termsText = theme === "light" ? "text-black" : "text-white";
 
   const handleGoogleSignup = () => {
     window.location.href = "https://kitebackend.vercel.app/auth/google";
@@ -188,14 +188,14 @@ export default function SignUp({ onSwitch, theme = "light" }) {
         )}
 
         {/* Terms */}
-        <div className="flex items-center gap-2 mt-4 text-sm">
+        <div className="flex items-center  gap-2 mt-4 text-sm">
           <input
             type="checkbox"
             name="terms"
             onChange={handleChange}
-            className="accent-blue-600"
+            className="accent-blue-600 cursor-pointer "
           />
-          <span className={termsText}>
+          <span className={`${termsText} cursor-pointer`}>
             I agree to <b className={`text-black dark:text-white`}>Terms & Conditions</b>
           </span>
         </div>

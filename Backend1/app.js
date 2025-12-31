@@ -10,7 +10,7 @@ import isLoggedIn from "./middleware/isLoggedIn.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import "./config/passport.js";
 import authRoutes from "./routes/auth.routes.js";
-import testRoutes from "./routes/test.routes.js";
+// import testRoutes from "./routes/test.routes.js";
 import userRoutes from "./routes/user.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001", "https://dashboardclone.vercel.app"],
+  origin: ["http://localhost:3000","https://dashboardclone.vercel.app"],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -46,7 +46,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoutes);
-app.use("/test", testRoutes);
+// app.use("/test", testRoutes);
 app.use("/user", userRoutes);
 
 // Add error handling for OAuth
