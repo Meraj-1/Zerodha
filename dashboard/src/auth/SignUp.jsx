@@ -107,13 +107,55 @@ export default function SignUp({ onSwitch, theme = "light" }) {
     window.location.href = "https://kitebackend.vercel.app/auth/google";
   };
 
-  return (
-    <div className={`min-h-screen flex items-center justify-center px-4`}>
+return (
+  <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-50 to-blue-100">
+    <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl">
+
+      {/* LEFT PANEL */}
+      <motion.div
+        initial={{ opacity: 0, x: -40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7 }}
+        className="hidden md:flex flex-col justify-between p-10
+                   bg-gradient-to-br from-blue-600 to-indigo-700 text-white"
+      >
+        <div>
+          <h2 className="text-3xl font-bold">
+            Q<span className="text-blue-200">pay</span>
+          </h2>
+
+          <p className="mt-4 text-blue-100 text-sm leading-relaxed">
+            Fast, secure and modern payments platform designed to simplify
+            your financial journey.
+          </p>
+
+          <ul className="mt-8 space-y-4 text-sm">
+            <li className="flex items-center gap-2">
+              <FaUserShield className="text-blue-200" />
+              Secure account protection
+            </li>
+            <li className="flex items-center gap-2">
+              <FaUser className="text-blue-200" />
+              Easy onboarding experience
+            </li>
+            <li className="flex items-center gap-2">
+              <FaGoogle className="text-blue-200" />
+              One-click Google signup
+            </li>
+          </ul>
+        </div>
+
+        <p className="text-xs text-blue-200">
+          © {new Date().getFullYear()} Qpay. All rights reserved.
+        </p>
+      </motion.div>
+
+      {/* RIGHT PANEL (YOUR FORM) */}
       <motion.form
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className={`${bgClass} w-[440px] rounded-2xl shadow-xl p-8 border`}
+        className={`${bgClass} w-full rounded-none md:rounded-none p-8`}
       >
         {/* Logo */}
         <h2 className={`text-2xl font-bold text-center ${textClass}`}>
@@ -124,7 +166,7 @@ export default function SignUp({ onSwitch, theme = "light" }) {
         </p>
 
         {/* Inputs */}
-        {[
+        {[ 
           { label: "FULL NAME", name: "name", type: "text" },
           { label: "EMAIL ADDRESS", name: "email", type: "email" },
         ].map((field, i) => (
@@ -140,14 +182,16 @@ export default function SignUp({ onSwitch, theme = "light" }) {
               type={field.type}
               name={field.name}
               onChange={handleChange}
-              className={`w-full mt-1 px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${inputClass}`}
+              className={`w-full mt-1 px-3 py-2 border rounded-md text-sm
+                          focus:outline-none focus:ring-2 focus:ring-blue-500
+                          transition ${inputClass}`}
               required
             />
           </motion.div>
         ))}
 
-        {/* Password & Confirm Password */}
-        {[
+        {/* Passwords */}
+        {[ 
           { label: "PASSWORD", name: "password", show: showPassword, toggle: setShowPassword },
           { label: "CONFIRM PASSWORD", name: "confirmPassword", show: showConfirmPassword, toggle: setShowConfirmPassword },
         ].map((field, i) => (
@@ -163,13 +207,15 @@ export default function SignUp({ onSwitch, theme = "light" }) {
               type={field.show ? "text" : "password"}
               name={field.name}
               onChange={handleChange}
-              className={`w-full mt-1 px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${inputClass}`}
+              className={`w-full mt-1 px-3 py-2 border rounded-md text-sm
+                          focus:outline-none focus:ring-2 focus:ring-blue-500
+                          transition ${inputClass}`}
               required
             />
             <button
               type="button"
               onClick={() => field.toggle(!field.show)}
-              className="absolute top-9 right-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              className="absolute top-9 right-3 text-gray-500"
             >
               {field.show ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -178,25 +224,16 @@ export default function SignUp({ onSwitch, theme = "light" }) {
 
         {/* Password match */}
         {formData.confirmPassword && (
-          <p
-            className={`text-xs mt-1 ${
-              passwordMatch ? "text-green-600" : "text-red-500"
-            }`}
-          >
+          <p className={`text-xs mt-1 ${passwordMatch ? "text-green-600" : "text-red-500"}`}>
             {passwordMatch ? "Passwords match ✓" : "Passwords do not match"}
           </p>
         )}
 
         {/* Terms */}
-        <div className="flex items-center  gap-2 mt-4 text-sm">
-          <input
-            type="checkbox"
-            name="terms"
-            onChange={handleChange}
-            className="accent-blue-600 cursor-pointer "
-          />
-          <span className={`${termsText} cursor-pointer`}>
-            I agree to <b className={`text-black dark:text-white`}>Terms & Conditions</b>
+        <div className="flex items-center gap-2 mt-4 text-sm">
+          <input type="checkbox" name="terms" onChange={handleChange} className="accent-blue-600" />
+          <span className={termsText}>
+            I agree to <b>Terms & Conditions</b>
           </span>
         </div>
 
@@ -220,9 +257,8 @@ export default function SignUp({ onSwitch, theme = "light" }) {
           whileHover={{ scale: 1.03 }}
           type="button"
           onClick={handleGoogleSignup}
-          className={`w-full flex items-center justify-center gap-2 border py-2 rounded-md text-sm ${
-            theme === "light" ? "border-gray-300 text-gray-700" : "border-gray-600 text-white"
-          }`}
+          className={`w-full flex items-center justify-center gap-2 border py-2 rounded-md text-sm
+            ${theme === "light" ? "border-gray-300 text-gray-700" : "border-gray-600 text-white"}`}
         >
           <FaGoogle /> Continue with Google
         </motion.button>
@@ -236,5 +272,6 @@ export default function SignUp({ onSwitch, theme = "light" }) {
         </p>
       </motion.form>
     </div>
-  );
+  </div>
+);
 }
