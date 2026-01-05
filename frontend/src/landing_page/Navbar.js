@@ -196,7 +196,15 @@ const Navbar = () => {
         </Link> 
         <ul className="hidden sm:flex items-center gap-10 text-black">
           <li>
-            <NavLink to="/signup" className="hover:text-blue-600 font-bold">Sign Up</NavLink>
+            <a
+  href="https://dashboardclone.vercel.app/"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="hover:text-blue-600 font-bold"
+>
+  Sign Up
+</a>
+
           </li>
           <li>
             <NavLink to="/Pricing" className="hover:text-blue-600 font-bold">Pricing</NavLink>
