@@ -1,44 +1,100 @@
-import React from 'react';
+import React from "react";
 
 function Brokerage() {
-    return (
-        <div className='container mx-auto px-4 lg:mt-40 py-10'>
-            <div className='text-center mb-8'>
-                <h2 className='text-2xl md:text-4xl text-gray-600 font-bold'>Open a Zerodha Account</h2>
-                <p className='text-gray-700 text-xl mt-8 font-semibold'>Modern platforms and apps, ₹0 investments, and flat ₹20 intraday and F&O trades.</p>
-            </div>
-            <div className='flex flex-wrap mt-20 justify-center'>
-                <div className='w-full md:w-1/2 mt-5'>
-                    <div className='text-center'>
-                        <a className='text-lg font-bold  text-blue-600 hover:underline' href='#'>Brokerage calculator</a>
-                    </div>
-                    <ul className='text-gray-600 mt-5'>
-                        <li className='mb-2'>
-                            <p className='text-sm   text-blue-600'>Call & Trade and RMS auto-squareoff: Additional charges of ₹50 + GST per order.</p>
-                        </li>
-                        <li className='mb-2'>
-                            <p className='text-sm  text-blue-600'>Digital contract notes will be sent via e-mail.</p>
-                        </li>
-                        <li className='mb-2'>
-                            <p className='text-sm  text-blue-600'>Physical copies of contract notes, if required, shall be charged ₹20 per contract note. Courier charges apply.</p>
-                        </li>
-                        <li className='mb-2'>
-                            <p className='text-sm text-blue-600'>For NRI account (non-PIS), 0.5% or ₹100 per executed order for equity (whichever is lower).</p>
-                        </li>
-                        <li className='mb-2'>
-                            <p className='text-sm  text-blue-600'>For NRI account (PIS), 0.5% or ₹200 per executed order for equity (whichever is lower).</p>
-                        </li>
-                        <li className='mb-2'>
-                            <p className='text-sm  text-blue-600'>If the account is in debit balance, any order placed will be charged ₹40 per executed order instead of ₹20 per executed order.</p>
-                        </li>
-                    </ul>
-                </div>
-                <div className='w-full md:w-1/2 mt-5 text-center'>
-                    <a className='text-lg font-bold  text-blue-600 hover:underline ' href='#'>List of charges</a>
-                </div>
-            </div>
+  return (
+    <section className="bg-gray-50 py-20">
+      <div className="max-w-7xl mx-auto px-6">
+
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">
+            Open a Zerodha Account
+          </h2>
+          <p className="text-lg md:text-xl text-gray-600">
+            Modern platforms and apps, ₹0 investments, and flat ₹20 intraday and
+            F&O trades.
+          </p>
         </div>
-    );
+
+        {/* Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+
+          {/* Left Card */}
+          <div className="bg-white rounded-2xl p-8 shadow-sm border hover:shadow-md transition">
+            <a
+              href="#"
+              className="inline-block text-blue-600 font-semibold text-lg mb-6 hover:underline"
+            >
+              Brokerage calculator →
+            </a>
+
+            <ul className="space-y-4 text-gray-600 text-sm leading-relaxed">
+              <li>
+                Call & Trade and RMS auto-squareoff:
+                <span className="text-gray-800 font-medium">
+                  {" "}
+                  ₹50 + GST per order
+                </span>.
+              </li>
+              <li>
+                Digital contract notes will be sent via e-mail.
+              </li>
+              <li>
+                Physical contract notes (if required):
+                <span className="text-gray-800 font-medium">
+                  {" "}
+                  ₹20 per note + courier charges
+                </span>.
+              </li>
+              <li>
+                NRI (non-PIS) accounts:
+                <span className="text-gray-800 font-medium">
+                  {" "}
+                  0.5% or ₹100 per executed order
+                </span>{" "}
+                (whichever is lower).
+              </li>
+              <li>
+                NRI (PIS) accounts:
+                <span className="text-gray-800 font-medium">
+                  {" "}
+                  0.5% or ₹200 per executed order
+                </span>{" "}
+                (whichever is lower).
+              </li>
+              <li>
+                Orders placed with debit balance:
+                <span className="text-gray-800 font-medium">
+                  {" "}
+                  ₹40 per executed order
+                </span>{" "}
+                instead of ₹20.
+              </li>
+            </ul>
+          </div>
+
+          {/* Right CTA */}
+          <div className="flex flex-col items-center justify-center text-center bg-white rounded-2xl p-10 shadow-sm border hover:shadow-md transition">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Want a detailed breakdown?
+            </h3>
+            <p className="text-gray-600 mb-8 max-w-sm">
+              View the complete list of all brokerage, statutory charges,
+              and taxes applicable across segments.
+            </p>
+
+            <a
+              href="#"
+              className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition shadow"
+            >
+              View list of charges
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default Brokerage;
