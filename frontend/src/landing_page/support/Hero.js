@@ -1,30 +1,34 @@
-import React from 'react';
+import React from "react";
 
 function Hero() {
   return (
-    <div className="bg-blue-700 p-8">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between text-center md:text-left">
-        {/* Left Section */}
+    <section className="bg-gradient-to-r from-blue-700 to-blue-600 py-14">
+      <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+
+        {/* Left Content */}
         <div>
-          <h4 className="text-white text-3xl md:text-4xl font-bold">Support Portal</h4>
-          <h5 className="text-white text-lg md:text-xl font-medium mt-3">
-            Search for an answer or browse help topics to <br className="hidden md:block" />
-            create a ticket.
-          </h5>
+          <h4 className="text-white text-3xl md:text-4xl font-extrabold mb-3">
+            Support Portal
+          </h4>
+
+          <p className="text-blue-100 text-lg md:text-xl max-w-md">
+            Search for answers or browse help topics to easily create and manage
+            your support tickets.
+          </p>
         </div>
 
-        {/* Right Section */}
-        <div className="mt-4 md:mt-0">
-          <a 
-            id="supp-her"
-            className="text-white text-lg md:text-xl font-bold hover:underline"
+        {/* CTA */}
+        <div>
+          <a
             href="#"
+            className="inline-flex items-center px-6 py-3 bg-white text-blue-700 text-lg font-semibold rounded-lg shadow hover:bg-blue-50 transition"
           >
             Track tickets →
           </a>
         </div>
+
       </div>
-    </div>
+    </section>
   );
 }
 

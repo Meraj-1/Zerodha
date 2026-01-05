@@ -1,72 +1,114 @@
-import React from 'react';
+import React from "react";
 
 function CreateTicket() {
-    return (
-        <div className='container mx-auto p-5'>
-            <div className='mt-4'>
-                <h4 className='text-lg md:font-bold md:text-xl text-gray-700 font-semibold'>To create a ticket, select a relevant topic</h4>
-            </div>
-            <div className='grid grid-cols-1 mb-10 md:grid-cols-3 gap-6 mt-5'>
-                <div>
-                    <h5 className='mb-3 text-lg font-bold text-blue-800 underline mt-3'>Account Opening</h5>
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Trading FAQs</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Kite</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Margin</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Product and Order Type</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Corporate Action</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Kite Feature</a><br />
-                </div>
+  return (
+    <section className="bg-gray-50 py-20">
+      <div className="max-w-7xl mx-auto px-6">
 
-                <div>
-                    <h5 className='mb-3 text-lg font-bold text-blue-800 underline mt-3'>Your Zerodha Account</h5>
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Login Credentials</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Your Profile</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Account Modification</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>CMR & DP ID</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Nomination</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Transfer and Conversion</a><br />
-                </div>
-
-                <div>
-                    <h5 className='mb-3 text-lg font-bold text-blue-800 underline mt-3'>Trading and Markets</h5>
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Getting Started</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Online</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Offline</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Charges</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Company, Partnership and HUF</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Non Resident Indian (NRI)</a><br />
-                </div>
-            </div>
-            <div className='grid grid-cols-1 mb-10 md:grid-cols-3 gap-6 mt-5'>
-                <div>
-                    <h4 className='mb-3 text-lg font-bold text-blue-800 underline mt-3'>Fund</h4>
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Fund Withdrawal</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Adding Funds</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Adding Bank Accounts</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>eMandate</a><br />
-                </div>
-
-                <div>
-                    <h4 className='mt-5 mb-3'>Console</h4>
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>IPO</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Portfolio</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Funds Statement</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Profile</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Reports</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Referral Program</a><br />
-                </div>
-
-                <div>
-                    <h4 className='mb-3 text-lg font-bold text-blue-800 underline mt-3'>Coin</h4>
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Understanding Mutual Funds and Coin</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Coin App</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Coin Web</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>Transactions and Reports</a><br />
-                    <a href='#' className='text-blue-600 font-bold hover:underline'>National Pension Scheme (NPS)</a><br />
-                </div>
-            </div>
+        {/* Header */}
+        <div className="mb-12">
+          <h4 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">
+            Create a support ticket
+          </h4>
+          <p className="text-gray-600 text-lg">
+            Select a relevant topic below to get started.
+          </p>
         </div>
-    );
+
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          {/* Card */}
+          <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+            <h5 className="text-lg font-bold text-blue-700 mb-4">
+              Account Opening
+            </h5>
+            <ul className="space-y-2 text-gray-700">
+              <li><a href="#" className="hover:text-blue-600">Trading FAQs</a></li>
+              <li><a href="#" className="hover:text-blue-600">Kite</a></li>
+              <li><a href="#" className="hover:text-blue-600">Margin</a></li>
+              <li><a href="#" className="hover:text-blue-600">Product & Order Types</a></li>
+              <li><a href="#" className="hover:text-blue-600">Corporate Actions</a></li>
+              <li><a href="#" className="hover:text-blue-600">Kite Features</a></li>
+            </ul>
+          </div>
+
+          {/* Card */}
+          <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+            <h5 className="text-lg font-bold text-blue-700 mb-4">
+              Your Zerodha Account
+            </h5>
+            <ul className="space-y-2 text-gray-700">
+              <li><a href="#" className="hover:text-blue-600">Login Credentials</a></li>
+              <li><a href="#" className="hover:text-blue-600">Profile</a></li>
+              <li><a href="#" className="hover:text-blue-600">Account Modification</a></li>
+              <li><a href="#" className="hover:text-blue-600">CMR & DP ID</a></li>
+              <li><a href="#" className="hover:text-blue-600">Nomination</a></li>
+              <li><a href="#" className="hover:text-blue-600">Transfer & Conversion</a></li>
+            </ul>
+          </div>
+
+          {/* Card */}
+          <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+            <h5 className="text-lg font-bold text-blue-700 mb-4">
+              Trading & Markets
+            </h5>
+            <ul className="space-y-2 text-gray-700">
+              <li><a href="#" className="hover:text-blue-600">Getting Started</a></li>
+              <li><a href="#" className="hover:text-blue-600">Online Trading</a></li>
+              <li><a href="#" className="hover:text-blue-600">Offline Trading</a></li>
+              <li><a href="#" className="hover:text-blue-600">Charges</a></li>
+              <li><a href="#" className="hover:text-blue-600">Company / Partnership / HUF</a></li>
+              <li><a href="#" className="hover:text-blue-600">NRI</a></li>
+            </ul>
+          </div>
+
+          {/* Card */}
+          <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+            <h5 className="text-lg font-bold text-blue-700 mb-4">
+              Funds
+            </h5>
+            <ul className="space-y-2 text-gray-700">
+              <li><a href="#" className="hover:text-blue-600">Fund Withdrawal</a></li>
+              <li><a href="#" className="hover:text-blue-600">Adding Funds</a></li>
+              <li><a href="#" className="hover:text-blue-600">Bank Accounts</a></li>
+              <li><a href="#" className="hover:text-blue-600">eMandate</a></li>
+            </ul>
+          </div>
+
+          {/* Card */}
+          <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+            <h5 className="text-lg font-bold text-blue-700 mb-4">
+              Console
+            </h5>
+            <ul className="space-y-2 text-gray-700">
+              <li><a href="#" className="hover:text-blue-600">IPO</a></li>
+              <li><a href="#" className="hover:text-blue-600">Portfolio</a></li>
+              <li><a href="#" className="hover:text-blue-600">Fund Statement</a></li>
+              <li><a href="#" className="hover:text-blue-600">Profile</a></li>
+              <li><a href="#" className="hover:text-blue-600">Reports</a></li>
+              <li><a href="#" className="hover:text-blue-600">Referral Program</a></li>
+            </ul>
+          </div>
+
+          {/* Card */}
+          <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+            <h5 className="text-lg font-bold text-blue-700 mb-4">
+              Coin
+            </h5>
+            <ul className="space-y-2 text-gray-700">
+              <li><a href="#" className="hover:text-blue-600">Mutual Funds & Coin</a></li>
+              <li><a href="#" className="hover:text-blue-600">Coin App</a></li>
+              <li><a href="#" className="hover:text-blue-600">Coin Web</a></li>
+              <li><a href="#" className="hover:text-blue-600">Transactions & Reports</a></li>
+              <li><a href="#" className="hover:text-blue-600">National Pension Scheme (NPS)</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default CreateTicket;
