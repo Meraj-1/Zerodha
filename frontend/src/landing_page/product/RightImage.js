@@ -1,25 +1,40 @@
-import React from 'react';
+import React from "react";
 
 function RightImage({ imageURL, productName, productDescription, learnmore }) {
-    return (
-        <div className="container mx-auto xl:w-full px-5 sm:px-20 md:px-10 mt-10">
-            <div className="flex flex-wrap items-center justify-center md:justify-between">
-                {/* Text Section */}
-                <div className="w-full md:w-1/2 lg:w-1/3 p-4 text-center md:text-left">
-                    <h3 className="md:text-4xl text-3xl text-gray-600 font-bold">{productName}</h3>
-                    <p className="text-gray-700 font-bold  mt-3">{productDescription}</p>
-                    <a href="#" className="text-blue-800 mt-3 inline-block font-semibold hover:underline">
-                        Learn more →
-                    </a>
-                </div>
+  return (
+    <section className="max-w-7xl mx-auto px-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
-                {/* Image Section */}
-                <div className="w-full md:w-1/2 lg:w-2/3 p-4 flex justify-center">
-                    <img src={imageURL} alt={productName} className="w-full h-auto max-w-lg" />
-                </div>
-            </div>
+        {/* Text */}
+        <div className="text-center md:text-left">
+          <h3 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+            {productName}
+          </h3>
+
+          <p className="text-lg text-gray-600 leading-relaxed mb-6">
+            {productDescription}
+          </p>
+
+          <a
+            href="#"
+            className="inline-flex items-center text-blue-600 font-semibold hover:underline"
+          >
+            {learnmore || "Learn more →"}
+          </a>
         </div>
-    );
+
+        {/* Image */}
+        <div className="flex justify-center">
+          <img
+            src={imageURL}
+            alt={productName}
+            className="w-full max-w-xl rounded-xl shadow-md hover:shadow-xl transition"
+          />
+        </div>
+
+      </div>
+    </section>
+  );
 }
 
 export default RightImage;
