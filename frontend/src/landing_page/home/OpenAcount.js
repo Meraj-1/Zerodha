@@ -1,36 +1,48 @@
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-
-// function OpenAccount() {
-//     return (
-//         <div id='open-account' className='container mx-auto mb-8 mt-20 px-4'>
-//             <div className='text-center mb-10'>
-//                 <h2 className='mt-2 mb-2 text-2xl font-bold'>Open a Zerodha account</h2>
-//                 <p className="text-lg text-gray-700 mb-4">Modern platforms and apps, ₹0 investments, & flat ₹20 intraday and F&O trades.</p>
-//                 <Link to="/signup" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" id='SIGN-UP'>SignUp Now</Link>
-//             </div>
-//         </div>
-//     );
-// }
-
-// export default OpenAccount;
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
 
 function OpenAccount() {
-    return (
-        <div id='open-account' className='container mx-auto mb-8 mt-20 px-4'>
-            <div className='text-center mb-10'>
-                <h2 className='mt-2 mb-2 text-2xl md:text-3xl font-bold'>Open a Zerodha Account</h2>
-                <p className="text-lg md:text-xl text-gray-700 mb-4">
-                    Modern platforms and apps, ₹0 investments, & flat ₹20 intraday and F&O trades.
-                </p>
-                <Link to="/signup" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300" id='SIGN-UP'>
-                    Sign Up Now
-                </Link>
-            </div>
-        </div>
-    );
+  return (
+    <section
+      id="open-account"
+      className="bg-gradient-to-r from-blue-50 to-white py-20 mt-20"
+    >
+      <div className="max-w-4xl mx-auto px-6 text-center">
+
+        {/* Heading */}
+        <h2 className="text-3xl md:text-5xl font-extrabold text-gray-800 mb-4">
+          Open a Zerodha account
+        </h2>
+
+        {/* Description */}
+        <p className="text-gray-600 text-lg md:text-xl mb-8">
+          Modern platforms and apps, ₹0 investments, and flat ₹20 intraday & F&O trades.
+        </p>
+
+        {/* CTA Button (External Redirect) */}
+        <a
+          href="https://dashboardclone.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center
+                     bg-gradient-to-r from-blue-600 to-blue-700
+                     text-white font-bold text-lg
+                     py-3 px-10 rounded-full
+                     shadow-lg hover:shadow-xl
+                     hover:from-blue-700 hover:to-blue-800
+                     transition-all duration-300"
+          id="SIGN-UP"
+        >
+          Sign up for free →
+        </a>
+
+        {/* Sub text */}
+        <p className="mt-4 text-sm text-gray-500">
+          Takes less than 5 minutes
+        </p>
+
+      </div>
+    </section>
+  );
 }
 
 export default OpenAccount;

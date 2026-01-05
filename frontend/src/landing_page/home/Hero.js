@@ -3,26 +3,54 @@ import { Link } from 'react-router-dom';
 
 function Hero() {
   return (
-    <div id='openacount' className='container mx-auto px-4 py-8'>
-      <div className='flex flex-col items-center text-center'>
-        <img
-          src='https://zerodha.com/static/images/landing.png'
-          alt='Hero.png'
-          className='w-2/1 h-auto mb-4 rounded-lg'
-        />
-        <h1 className='heading text-2xl md:text-3xl lg:text-5xl mt-6 font-bold'>
-          Invest in everything
-        </h1>
-        <p className="para-about text-sm md:text-base  lg:text-lg mt-4 font-serif ">
-          Online platform to invest in stocks, derivatives, mutual funds, ETFs, bonds, and more.
-        </p>
-        <Link to="/signup" className="Btn-SignUp mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-800 font-bold">
-          SignUp Now
-        </Link>
+    <section
+      id="openacount"
+      className="bg-gradient-to-b from-blue-50 to-white"
+    >
+      <div className="container mx-auto px-4 py-16">
+        <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+
+          {/* Hero Image */}
+          <img
+            src="https://zerodha.com/static/images/landing.png"
+            alt="Investing Platform"
+            className="w-full max-w-3xl mb-10 rounded-xl shadow-lg transition-transform duration-300 hover:scale-105"
+          />
+
+          {/* Heading */}
+          <h1 className="text-3xl md:text-4xl lg:text-6xl font-extrabold text-gray-800 leading-tight">
+            Invest in <span className="text-blue-600">everything</span>
+          </h1>
+
+          {/* Description */}
+          <p className="mt-6 text-gray-600 text-sm md:text-lg lg:text-xl max-w-2xl">
+            A modern online platform to invest in stocks, derivatives, mutual funds,
+            ETFs, bonds, and more — all in one place.
+          </p>
+
+          {/* CTA Button */}
+          <Link
+            to="/signup"
+            className="mt-8 inline-flex items-center justify-center
+                       bg-gradient-to-r from-blue-600 to-blue-700
+                       text-white font-bold text-lg
+                       py-3 px-8 rounded-full
+                       shadow-lg hover:shadow-xl
+                       hover:from-blue-700 hover:to-blue-800
+                       transition-all duration-300"
+          >
+            Sign up for free →
+          </Link>
+
+          {/* Trust text */}
+          <p className="mt-4 text-sm text-gray-500">
+            Trusted by 1+ crore investors across India
+          </p>
+
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
 export default Hero;
-

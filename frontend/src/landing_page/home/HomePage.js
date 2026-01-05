@@ -10,8 +10,8 @@ function Homepage() {
     <>
       <Hero />
       <Stats />
-      {/* <Pricing /> */}
-      {/* <Education /> */}
+      <Pricing />
+      <Education />
       <OpenAccount />
     </>
   );
