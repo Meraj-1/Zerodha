@@ -1,23 +1,28 @@
 import React from "react";
+import { useTheme } from "../../contexts/ThemeContext";
+import { themes } from "../../contexts/themeConfig";
 
 function RightImage({ imageURL, productName, productDescription, learnmore }) {
+  const { theme } = useTheme();
+  const t = themes[theme];
+
   return (
     <section className="max-w-7xl mx-auto px-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
         {/* Text */}
         <div className="text-center md:text-left">
-          <h3 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+          <h3 className={`text-3xl md:text-4xl font-extrabold ${t.text} mb-4`}>
             {productName}
           </h3>
 
-          <p className="text-lg text-gray-600 leading-relaxed mb-6">
+          <p className={`text-lg ${t.textSecondary} leading-relaxed mb-6`}>
             {productDescription}
           </p>
 
           <a
             href="#"
-            className="inline-flex items-center text-blue-600 font-semibold hover:underline"
+            className={`inline-flex items-center ${t.accent} font-semibold hover:underline`}
           >
             {learnmore || "Learn more →"}
           </a>
@@ -38,4 +43,3 @@ function RightImage({ imageURL, productName, productDescription, learnmore }) {
 }
 
 export default RightImage;
-

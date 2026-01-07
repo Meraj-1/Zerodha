@@ -1,6 +1,11 @@
 import React from "react";
+import { useTheme } from "../../contexts/ThemeContext";
+import { themes } from "../../contexts/themeConfig";
 
 function Hero() {
+  const { theme } = useTheme();
+  const t = themes[theme];
+
   return (
     <section className="bg-gradient-to-r from-blue-700 to-blue-600 py-14">
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">

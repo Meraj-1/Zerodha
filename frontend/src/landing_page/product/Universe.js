@@ -1,10 +1,15 @@
 import React from "react";
+import { useTheme } from "../../contexts/ThemeContext";
+import { themes } from "../../contexts/themeConfig";
 import Hero from "./Hero";
 import RightImage from "./RightImage";
 
 function Universe() {
+  const { theme } = useTheme();
+  const t = themes[theme];
+
   return (
-    <section className="bg-white">
+    <section className={t.bg}>
       
       {/* Hero */}
       <Hero />
@@ -50,14 +55,14 @@ function Universe() {
       </div>
 
       {/* Bottom CTA */}
-      <div className="bg-gray-50 mt-32 py-16 px-6 text-center">
-        <h6 className="text-xl md:text-2xl font-semibold text-gray-700 max-w-3xl mx-auto">
+      <div className={`${t.bgSecondary} mt-32 py-16 px-6 text-center`}>
+        <h6 className={`text-xl md:text-2xl font-semibold ${t.text} max-w-3xl mx-auto`}>
           Want to know more about our technology stack?
           <br className="hidden md:block" />
           Check out the{" "}
           <a
             href="#"
-            className="text-blue-600 hover:underline font-medium"
+            className={`${t.accent} hover:underline font-medium`}
           >
             Zerodha.tech
           </a>{" "}

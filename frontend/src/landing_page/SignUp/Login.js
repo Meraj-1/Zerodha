@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../contexts/ThemeContext';
+import { themes } from '../../contexts/themeConfig';
 
 function Login() {
+  const { theme } = useTheme();
+  const t = themes[theme];
+  
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -50,7 +55,7 @@ function Login() {
   };
 
   return (
-    <div className="container mx-auto mt-20 px-4">
+    <div className={`container mx-auto mt-20 px-4 ${t.bg}`}>
       {/* Login Section */}
       <div className="flex flex-wrap items-center p-3">
         {/* Left Side - Image */}
@@ -64,7 +69,7 @@ function Login() {
 
         {/* Right Side - Form */}
         <div className="w-full md:w-1/2 p-5">
-          <h1 className="text-gray-700 font-serif text-3xl font-bold mb-6 text-center md:text-left">
+          <h1 className={`${t.text} font-serif text-3xl font-bold mb-6 text-center md:text-left`}>
             Welcome Back
           </h1>
           
@@ -76,10 +81,10 @@ function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Input */}
-            <div className="flex items-center border-b-2 border-blue-300 py-2">
+            <div className={`flex items-center border-b-2 ${t.border} py-2`}>
               <span className="text-2xl text-blue-700">📧</span>
               <input
-                className="ml-2 p-2 w-full outline-none text-lg"
+                className={`ml-2 p-2 w-full outline-none text-lg ${t.bg} ${t.text}`}
                 type="email"
                 name="email"
                 value={formData.email}
@@ -90,10 +95,10 @@ function Login() {
             </div>
 
             {/* Password Input */}
-            <div className="flex items-center border-b-2 border-blue-300 py-2">
+            <div className={`flex items-center border-b-2 ${t.border} py-2`}>
               <span className="text-2xl text-blue-700">🔒</span>
               <input
-                className="ml-2 p-2 w-full outline-none text-lg"
+                className={`ml-2 p-2 w-full outline-none text-lg ${t.bg} ${t.text}`}
                 type="password"
                 name="password"
                 value={formData.password}
@@ -115,7 +120,7 @@ function Login() {
 
           {/* Google Login */}
           <div className="mt-4 text-center">
-            <p className="text-gray-600 mb-3">Or sign in with</p>
+            <p className={`${t.textSecondary} mb-3`}>Or sign in with</p>
             <a 
               href="https://kitebackend.vercel.app/auth/google"
               className="inline-flex items-center justify-center w-full bg-red-500 text-white font-bold py-3 px-6 rounded hover:bg-red-600 transition duration-300"
@@ -127,11 +132,11 @@ function Login() {
 
           {/* Signup Link */}
           <div className="mt-6 text-center">
-            <p className="text-gray-600">
+            <p className={t.textSecondary}>
               Don't have an account?{' '}
               <button 
                 onClick={() => navigate('/signup')}
-                className="text-blue-500 hover:underline font-bold"
+                className={`${t.accent} hover:underline font-bold`}
               >
                 Sign up here
               </button>
@@ -142,7 +147,7 @@ function Login() {
 
       {/* Additional Info */}
       <div className="mb-10 md:mt-10 text-center px-4">
-        <p className="text-gray-700 font-serif text-sm mb-3">
+        <p className={`${t.textSecondary} font-serif text-sm mb-3`}>
           Your account is secure and protected with industry-standard encryption.
           <br />
           Need help? Contact our support team.
