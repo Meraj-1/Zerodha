@@ -13,8 +13,10 @@ const Profile = () => {
     
     if (tokenFromUrl) {
       localStorage.setItem('token', tokenFromUrl);
-      // Clean URL
-      window.history.replaceState({}, document.title, window.location.pathname);
+      // Clean URL and redirect to dashboard
+      window.history.replaceState({}, document.title, '/');
+      window.location.href = '/';
+      return;
     }
     
     fetchUserProfile();
