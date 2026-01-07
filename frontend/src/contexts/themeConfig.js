@@ -9,8 +9,8 @@ export const themes = {
     hover: 'hover:bg-gray-100'
   },
   dark: {
-    bg: 'bg-gray-900',
-    bgSecondary: 'bg-gray-800',
+    bg: 'bg-black',
+    bgSecondary: 'bg-neutral-900',
     text: 'text-white',
     textSecondary: 'text-gray-300',
     border: 'border-gray-700',
