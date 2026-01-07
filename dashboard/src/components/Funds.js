@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-// import { useTheme } from '../context/ThemeContext';
 import { VerticalGraph } from "./VerticalGraph";
 import toast from 'react-hot-toast';
+import { useTheme } from '../context/ThemeContext';
 
 const Funds = () => {
-  // const { theme } = useTheme();
+  const { theme } = useTheme();
   const [user, setUser] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [fundStats, setFundStats] = useState({
