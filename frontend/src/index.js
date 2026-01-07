@@ -14,24 +14,35 @@ import NotFound from "./landing_page/NotFound";
 import Navbar from "./landing_page/Navbar";
 import Footer from "./landing_page/footer";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { useTheme } from "./contexts/ThemeContext";
+import { themes } from "./contexts/themeConfig";
+
+function App() {
+  const { theme } = useTheme();
+  const t = themes[theme];
+
+  return (
+    <div className={`${t.bg} min-h-screen`}>
+      <Navbar />
+      <Routes> 
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/product" element={<ProductPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/support" element={<SupportPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes> 
+      <Footer />
+    </div>
+  );
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <div className=" className='px-4 sm:px-[5vw] ms:px-[7vw] lg:px-[9vw]'">
   <BrowserRouter>
-  <ThemeProvider>
-    <Navbar />
-     <Routes> 
-       <Route path="/" element={<HomePage />} />
-       <Route path="/signup" element={<Signup />} />
-       <Route path="/about" element={<AboutPage />} />
-       <Route path="/product" element={<ProductPage />} />
-       <Route path="/pricing" element={<PricingPage />} />
-       <Route path="/support" element={<SupportPage />} />
-       <Route path="*" element={<NotFound />} />
-    </Routes> 
-    <Footer />
+    <ThemeProvider>
+      <App />
     </ThemeProvider>
   </BrowserRouter>
-  </div>
 );

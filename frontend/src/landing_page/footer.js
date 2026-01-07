@@ -7,7 +7,7 @@ function Footer() {
   const t = themes[theme];
 
   return (
-    <footer className={`${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-900'} ${t.textSecondary}`}>
+    <footer className="bg-gray-900 text-gray-400">
       <div className="max-w-full mx-auto px-6 py-12">
         
         {/* Top Section */}

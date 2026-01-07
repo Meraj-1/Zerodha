@@ -7,7 +7,7 @@ function NotFound() {
   const t = themes[theme];
 
   return (
-    <div className={`min-h-screen ${t.bgSecondary} flex items-center justify-center px-6`}>
+    <div className={`min-h-screen ${t.bg} flex items-center justify-center px-6`}>
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
         {/* LEFT CONTENT */}
