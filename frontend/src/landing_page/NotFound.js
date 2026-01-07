@@ -1,25 +1,30 @@
 import React from "react";
+import { useTheme } from "../contexts/ThemeContext";
+import { themes } from "../contexts/themeConfig";
 
 function NotFound() {
+  const { theme } = useTheme();
+  const t = themes[theme];
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center px-6">
+    <div className={`min-h-screen ${t.bgSecondary} flex items-center justify-center px-6`}>
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
         {/* LEFT CONTENT */}
         <div className="text-center md:text-left">
-          <p className="text-blue-600 font-semibold mb-3 tracking-wide">
+          <p className={`${t.accent} font-semibold mb-3 tracking-wide`}>
             ERROR 404
           </p>
 
-          <h1 className="text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+          <h1 className={`text-6xl font-extrabold ${t.text} leading-tight mb-6`}>
             Page not found
           </h1>
 
-          <p className="text-xl text-gray-600 mb-4">
-            Kiaan couldn’t find the page you’re looking for.
+          <p className={`text-xl ${t.textSecondary} mb-4`}>
+            Kiaan couldn't find the page you're looking for.
           </p>
 
-          <p className="text-gray-500 max-w-md mb-10 mx-auto md:mx-0">
+          <p className={`${t.textSecondary} max-w-md mb-10 mx-auto md:mx-0`}>
             The link might be broken, the page may have been removed,
             or it might never have existed.
           </p>
@@ -35,7 +40,7 @@ function NotFound() {
 
             <a
               href="/support"
-              className="inline-flex items-center justify-center px-7 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition-all"
+              className={`inline-flex items-center justify-center px-7 py-3 ${t.border} border ${t.textSecondary} font-medium rounded-lg ${t.hover} transition-all`}
             >
               Visit support
             </a>

@@ -13,12 +13,12 @@ function OpenAccount() {
       <div className="max-w-4xl mx-auto px-6 text-center">
 
         {/* Heading */}
-        <h2 className={`text-3xl md:text-5xl font-extrabold text-gray-800 mb-4`}>
+        <h2 className={`text-3xl md:text-5xl font-extrabold ${t.text} mb-4`}>
           Open a Zerodha account
         </h2>
 
         {/* Description */}
-        <p className="text-gray-600 text-lg md:text-xl mb-8">
+        <p className={`${t.textSecondary} text-lg md:text-xl mb-8`}>
           Modern platforms and apps, ₹0 investments, and flat ₹20 intraday & F&O trades.
         </p>
 
@@ -40,7 +40,7 @@ function OpenAccount() {
         </a>
 
         {/* Sub text */}
-        <p className="mt-4 text-sm text-gray-500">
+        <p className={`mt-4 text-sm ${t.textSecondary}`}>
           Takes less than 5 minutes
         </p>
 

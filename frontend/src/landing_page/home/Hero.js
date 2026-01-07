@@ -29,7 +29,7 @@ function Hero() {
           </h1>
 
           {/* Description */}
-          <p className={`${t.text} mt-6 text-gray-600 text-sm md:text-lg lg:text-xl max-w-2xl`}>
+          <p className={`${t.textSecondary} mt-6 text-sm md:text-lg lg:text-xl max-w-2xl`}>
             A modern online platform to invest in stocks, derivatives, mutual funds,
             ETFs, bonds, and more — all in one place.
           </p>
@@ -49,7 +49,7 @@ function Hero() {
           </Link>
 
           {/* Trust text */}
-          <p className={`mt-4 text-sm text-gray-500 ${t.text}`}>
+          <p className={`mt-4 text-sm ${t.textSecondary}`}>
             Trusted by 1+ crore investors across India
           </p>
 

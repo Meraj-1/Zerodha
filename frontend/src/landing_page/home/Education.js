@@ -17,19 +17,19 @@ function Education() {
       </div>
       <div className="flex-grow md:p-8 sm:mt-20"> {/* Content container */}
         <h3 className={` ${t.text} text-2xl font-medium mb-4`}>Free and open market education</h3>
-        <p className={`${t.text} mb-4`}>
+        <p className={`${t.textSecondary} mb-4`}>
           Varsity, the largest online stock market education book in the world
           covering everything from the basics to advanced trading.
-          <a href="#" className="text-blue-800 hover:underline mx-2 md:mx-5">
+          <a href="#" className={`${t.accent} hover:underline mx-2 md:mx-5`}>
         Varsity →
         </a>
         </p>
     
         <div className="mt-4"> {/* TradingQ&A section */}
-          <p className={` ${t.text} mb-2`}>
+          <p className={`${t.textSecondary} mb-2`}>
             TradingQ&A, the most active trading and investment community in India
             for all your market related queries.
-            <a href="#" className="text-blue-800 hover:underline mx-2 md:mx-5">
+            <a href="#" className={`${t.accent} hover:underline mx-2 md:mx-5`}>
             TradingQ&A →
           </a>
           </p>

@@ -1,50 +1,55 @@
 import React from "react";
+import { useTheme } from "../../contexts/ThemeContext";
+import { themes } from "../../contexts/themeConfig";
 
 function Hero() {
+  const { theme } = useTheme();
+  const t = themes[theme];
+
   return (
-    <section className="bg-gradient-to-b from-white to-gray-50 py-20">
+    <section className={`${t.bgSecondary} py-20`}>
       <div className="max-w-6xl mx-auto px-6">
 
         {/* Heading */}
         <div className="text-center mb-16">
-          <div className="inline-block border-b-4 border-blue-600 pb-4 mb-6">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">
+          <div className={`inline-block border-b-4 ${t.border} pb-4 mb-6`}>
+            <h2 className={`text-2xl md:text-3xl font-extrabold ${t.text}`}>
               We pioneered the discount broking model in India.
             </h2>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mt-2">
+            <h2 className={`text-2xl md:text-3xl font-extrabold ${t.text} mt-2`}>
               Now, we are breaking ground with our technology.
             </h2>
           </div>
         </div>
 
         {/* Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-gray-700 leading-relaxed">
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-12 ${t.textSecondary} leading-relaxed`}>
 
           <div className="space-y-5 text-lg">
             <p>
               We kick-started operations on the 15th of August, 2010 with the goal
               of breaking all barriers that traders and investors face in India
               in terms of cost, support, and technology. We named the company
-              <span className="font-semibold text-gray-900"> Zerodha</span>, a
-              combination of Zero and “Rodha”, the Sanskrit word for barrier.
+              <span className={`font-semibold ${t.text}`}> Zerodha</span>, a
+              combination of Zero and "Rodha", the Sanskrit word for barrier.
             </p>
 
             <p>
               Today, our disruptive pricing models and in-house technology have
               made us the{" "}
-              <span className="font-semibold text-gray-900">
+              <span className={`font-semibold ${t.text}`}>
                 largest stock broker in India
               </span>.
             </p>
 
             <p>
               Over{" "}
-              <span className="font-semibold text-gray-900">
+              <span className={`font-semibold ${t.text}`}>
                 1+ crore clients
               </span>{" "}
               place millions of orders every day through our powerful ecosystem
               of investment platforms, contributing over{" "}
-              <span className="font-semibold text-gray-900">
+              <span className={`font-semibold ${t.text}`}>
                 15% of all Indian retail trading volumes
               </span>.
             </p>

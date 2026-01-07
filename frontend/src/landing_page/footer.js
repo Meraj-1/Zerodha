@@ -1,12 +1,17 @@
 import React from "react";
+import { useTheme } from "../contexts/ThemeContext";
+import { themes } from "../contexts/themeConfig";
 
 function Footer() {
+  const { theme } = useTheme();
+  const t = themes[theme];
+
   return (
-    <footer className="bg-gray-900 text-gray-400">
+    <footer className={`${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-900'} ${t.textSecondary}`}>
       <div className="max-w-full mx-auto px-6 py-12">
         
         {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 border-b border-gray-700 pb-10">
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 border-b ${t.border} pb-10`}>
           
           {/* Logo & Copyright */}
           <div className="lg:col-span-2">
@@ -24,7 +29,7 @@ function Footer() {
 
           {/* Company */}
           <div>
-            <h5 className="text-white font-medium mb-4">Company</h5>
+            <h5 className={`${t.text} font-medium mb-4`}>Company</h5>
             <ul className="space-y-2">
               {[
                 "About",
@@ -37,7 +42,7 @@ function Footer() {
                 "Zerodha Cares (CSR)",
               ].map((item) => (
                 <li key={item}>
-                  <a href="#" className="hover:text-white transition">
+                  <a href="#" className={`${t.hover} transition`}>
                     {item}
                   </a>
                 </li>
@@ -47,7 +52,7 @@ function Footer() {
 
           {/* Support */}
           <div>
-            <h5 className="text-white font-medium mb-4">Support</h5>
+            <h5 className={`${t.text} font-medium mb-4`}>Support</h5>
             <ul className="space-y-2">
               {[
                 "Contact Us",
@@ -59,7 +64,7 @@ function Footer() {
                 "How to file a complaint?",
               ].map((item) => (
                 <li key={item}>
-                  <a href="#" className="hover:text-white transition">
+                  <a href="#" className={`${t.hover} transition`}>
                     {item}
                   </a>
                 </li>
@@ -69,15 +74,15 @@ function Footer() {
 
           {/* Account */}
           <div>
-            <h5 className="text-white font-medium mb-4">Account</h5>
+            <h5 className={`${t.text} font-medium mb-4`}>Account</h5>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="#" className={`${t.hover} transition`}>
                   Open an account
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="#" className={`${t.hover} transition`}>
                   Fund transfer
                 </a>
               </li>
@@ -105,7 +110,7 @@ function Footer() {
           </p>
 
           <p>
-            <span className="text-white font-medium">Attention Investors:</span>
+            <span className={`${t.text} font-medium`}>Attention Investors:</span>
             <br />
             1. Stock brokers can accept securities as margins only via pledge in
             the depository system.
