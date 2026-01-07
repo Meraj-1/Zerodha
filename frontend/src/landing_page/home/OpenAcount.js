@@ -1,15 +1,19 @@
 import React from "react";
+import { useTheme } from "../../contexts/ThemeContext";
+import { themes } from "../../contexts/themeConfig";
 
 function OpenAccount() {
+  const {theme} = useTheme();
+  const t = themes[theme];
   return (
     <section
       id="open-account"
-      className="bg-gradient-to-r from-blue-50 to-white py-20 mt-20"
+      className={`py-20 ${t.bgSecondary}`}
     >
       <div className="max-w-4xl mx-auto px-6 text-center">
 
         {/* Heading */}
-        <h2 className="text-3xl md:text-5xl font-extrabold text-gray-800 mb-4">
+        <h2 className={`text-3xl md:text-5xl font-extrabold text-gray-800 mb-4`}>
           Open a Zerodha account
         </h2>
 

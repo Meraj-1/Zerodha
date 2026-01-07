@@ -1,11 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../../contexts/ThemeContext';
+import { themes } from '../../contexts/themeConfig';
 
 function Hero() {
+
+ const {theme} = useTheme();
+ const t = themes[theme];
+
   return (
     <section
       id="openacount"
-      className="bg-gradient-to-b from-blue-50 to-white"
+      className={` ${t.bgSecondary} `}
     >
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
@@ -18,12 +24,12 @@ function Hero() {
           />
 
           {/* Heading */}
-          <h1 className="text-3xl md:text-4xl lg:text-6xl font-extrabold text-gray-800 leading-tight">
-            Invest in <span className="text-blue-600">everything</span>
+          <h1 className={`text-3xl ${t.text} md:text-4xl lg:text-6xl font-extrabold  leading-tight`}>
+            Invest in <span className={`text-blue-600 ${t.text}`}>everything</span>
           </h1>
 
           {/* Description */}
-          <p className="mt-6 text-gray-600 text-sm md:text-lg lg:text-xl max-w-2xl">
+          <p className={`${t.text} mt-6 text-gray-600 text-sm md:text-lg lg:text-xl max-w-2xl`}>
             A modern online platform to invest in stocks, derivatives, mutual funds,
             ETFs, bonds, and more — all in one place.
           </p>
@@ -43,7 +49,7 @@ function Hero() {
           </Link>
 
           {/* Trust text */}
-          <p className="mt-4 text-sm text-gray-500">
+          <p className={`mt-4 text-sm text-gray-500 ${t.text}`}>
             Trusted by 1+ crore investors across India
           </p>
 

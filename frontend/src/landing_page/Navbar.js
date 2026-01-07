@@ -181,12 +181,16 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
+import { useTheme } from "../contexts/ThemeContext";
+import { themes } from "../contexts/themeConfig";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-
+  const {theme} = useTheme();
+  const t = themes[theme];
+  
   return (
-    <div className="bg-white border-b-2">
+    <div className={` ${t.bgSecondary} border-b-2`}>
       <div className="container mx-auto flex items-center justify-between p-6">
         <Link to="/">
           <img
@@ -195,7 +199,7 @@ const Navbar = () => {
             className="h-5"
           />
         </Link> 
-        <ul className="hidden sm:flex items-center gap-10 text-black">
+        <ul className={`hidden sm:flex items-center gap-10 ${t.text}`}>
           <li>
             <ThemeToggle />
           </li>
