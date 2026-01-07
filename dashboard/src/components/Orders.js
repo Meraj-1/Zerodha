@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTheme } from '../context/ThemeContext';
 
 const Orders = () => {
+  const { theme } = useTheme();
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -22,20 +24,28 @@ const Orders = () => {
   }, []);
 
   return (
-    <div className="orders transition-colors">
+    <div className={`orders transition-colors ${
+      theme === "dark" ? "text-white" : ""
+    }`}>
       {orders.length === 0 ? (
         <div className="no-orders">
-          <div className="icon text-6xl mb-4 text-gray-300">📈</div>
-          <p className="text-gray-600">You haven't placed any orders today</p>
+          <div className={`icon text-6xl mb-4 ${
+            theme === "light" ? "text-gray-300" : "text-gray-600"
+          }`}>📈</div>
+          <p className={theme === "light" ? "text-gray-600" : "text-gray-400"}>You haven't placed any orders today</p>
           <Link to={"/"} className="btn">
             Get started
           </Link>
         </div>
       ) : (
         <>
-          <h3 className="title text-gray-800">Orders ({orders.length})</h3>
+          <h3 className={`title ${
+            theme === "light" ? "text-gray-800" : "text-white"
+          }`}>Orders ({orders.length})</h3>
           
-          <div className="order-table mt-4">
+          <div className={`order-table mt-4 ${
+            theme === "dark" ? "dark-theme" : ""
+          }`}>
             <table>
               <thead>
                 <tr>
@@ -57,14 +67,16 @@ const Orders = () => {
                     <td>
                       <span className={`px-2 py-1 rounded text-xs ${
                         order.side === 'BUY' 
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
+                          ? (theme === 'dark' ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-800')
+                          : (theme === 'dark' ? 'bg-red-900 text-red-300' : 'bg-red-100 text-red-800')
                       }`}>
                         {order.side}
                       </span>
                     </td>
                     <td>
-                      <span className="px-2 py-1 rounded text-xs bg-green-100 text-green-800">
+                      <span className={`px-2 py-1 rounded text-xs ${
+                        theme === 'dark' ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-800'
+                      }`}>
                         {order.status}
                       </span>
                     </td>

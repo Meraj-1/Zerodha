@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import { VerticalGraph } from "./VerticalGraph";
+import { useTheme } from '../context/ThemeContext';
+import { VerticalGraph } from "./VerticalGraph";
 
 const Positions = () => {
+  const { theme } = useTheme();
   const [positions, setPositions] = useState([]);
   const [dayTradingStats, setDayTradingStats] = useState({
     totalTrades: 0,
@@ -81,30 +83,30 @@ const Positions = () => {
   };
 
   return (
-    <div className="transition-colors">
-      <h3 className="title text-gray-800">
+    <div className={`transition-colors ${theme === "dark" ? "text-white" : ""}`}>
+      <h3 className={`title ${theme === "light" ? "text-gray-800" : "text-white"}`}>
         Positions ({positions.length})
       </h3>
 
       {/* Day Trading Stats */}
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="p-4 rounded-lg border bg-blue-50 border-blue-200">
-          <h4 className="text-2xl font-bold text-blue-600">{dayTradingStats.totalTrades}</h4>
-          <p className="text-sm text-blue-600">Active Positions</p>
+        <div className={`p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-blue-50 border-blue-200"}`}>
+          <h4 className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}>{dayTradingStats.totalTrades}</h4>
+          <p className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-blue-600"}`}>Active Positions</p>
         </div>
-        <div className="p-4 rounded-lg border bg-green-50 border-green-200">
-          <h4 className="text-2xl font-bold text-green-600">{dayTradingStats.profitableTrades}</h4>
-          <p className="text-sm text-green-600">Profitable</p>
+        <div className={`p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-green-50 border-green-200"}`}>
+          <h4 className={`text-2xl font-bold ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>{dayTradingStats.profitableTrades}</h4>
+          <p className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-green-600"}`}>Profitable</p>
         </div>
-        <div className="p-4 rounded-lg border bg-purple-50 border-purple-200">
+        <div className={`p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-purple-50 border-purple-200"}`}>
           <h4 className={`text-2xl font-bold ${dayTradingStats.totalPnL >= 0 ? 'text-green-500' : 'text-red-500'}`}>
             ₹{dayTradingStats.totalPnL.toFixed(0)}
           </h4>
-          <p className="text-sm text-purple-600">Total P&L</p>
+          <p className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-purple-600"}`}>Total P&L</p>
         </div>
       </div>
 
-      <div className="order-table">
+      <div className={`order-table ${theme === "dark" ? "dark-theme" : ""}`}>
         <table>
           <thead>
             <tr>
@@ -152,21 +154,19 @@ const Positions = () => {
       {/* P&L Chart */}
       {positions.length > 0 && (
         <div className="mt-8">
-          <h4 className="text-lg font-semibold mb-4 text-gray-800">
+          <h4 className={`text-lg font-semibold mb-4 ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
             Position-wise P&L
           </h4>
-          <div className="text-center p-4 bg-gray-100 rounded">
-            <p className="text-sm text-gray-600">Chart Loading...</p>
-          </div>
+          <VerticalGraph data={chartData} />
         </div>
       )}
 
       {/* Trading Tips */}
-      <div className="mt-8 p-4 rounded-lg border bg-yellow-50 border-yellow-200">
-        <h4 className="font-semibold mb-2 text-yellow-800">
+      <div className={`mt-8 p-4 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-yellow-50 border-yellow-200"}`}>
+        <h4 className={`font-semibold mb-2 ${theme === "dark" ? "text-yellow-400" : "text-yellow-800"}`}>
           💡 Day Trading Tips
         </h4>
-        <ul className="text-sm space-y-1 text-yellow-700">
+        <ul className={`text-sm space-y-1 ${theme === "dark" ? "text-gray-300" : "text-yellow-700"}`}>
           <li>• MIS positions will be auto-squared off by 3:20 PM</li>
           <li>• Monitor your positions closely during market hours</li>
           <li>• Set stop-losses to manage risk effectively</li>
