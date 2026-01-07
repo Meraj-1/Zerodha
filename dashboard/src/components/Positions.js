@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { VerticalGraph } from "./VerticalGraph";
+// import { VerticalGraph } from "./VerticalGraph";
 
 const Positions = () => {
   const [positions, setPositions] = useState([]);
@@ -155,7 +155,9 @@ const Positions = () => {
           <h4 className="text-lg font-semibold mb-4 text-gray-800">
             Position-wise P&L
           </h4>
-          <VerticalGraph data={chartData} />
+          <div className="text-center p-4 bg-gray-100 rounded">
+            <p className="text-sm text-gray-600">Chart Loading...</p>
+          </div>
         </div>
       )}
 

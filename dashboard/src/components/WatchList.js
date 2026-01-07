@@ -15,6 +15,9 @@ import {
 } from "@mui/icons-material";
 
 import { watchlist } from "../data/data";
+// import { DoughnutChart } from "./DoughnoutChart";
+
+import { watchlist } from "../data/data";
 import { DoughnutChart } from "./DoughnoutChart";
 
 const labels = watchlist.map((subArray) => subArray["name"]);
@@ -86,7 +89,9 @@ const WatchList = () => {
 
       {/* Chart - Desktop Only */}
       <div className="chart-container mt-4 p-3 hidden lg:block">
-        <DoughnutChart data={data} />
+        <div className="text-center p-4 bg-gray-100 rounded">
+          <p className="text-sm text-gray-600">Chart Loading...</p>
+        </div>
       </div>
 
       {/* Enhanced Footer */}

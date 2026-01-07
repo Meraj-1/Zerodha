@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DoughnutChart } from "./DoughnoutChart";
+// import { DoughnutChart } from "./DoughnoutChart";
 
 const Apps = () => {
   const [appUsage, setAppUsage] = useState({
@@ -192,7 +192,9 @@ const Apps = () => {
             App Usage Distribution
           </h4>
           <div className="w-full max-w-[200px] mx-auto chart-container">
-            <DoughnutChart data={chartData} />
+            <div className="text-center p-4 bg-gray-100 rounded">
+              <p className="text-sm text-gray-600">Chart Loading...</p>
+            </div>
           </div>
         </div>
 

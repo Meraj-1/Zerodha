@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { VerticalGraph } from "./VerticalGraph";
+// import { VerticalGraph } from "./VerticalGraph";
 
 const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
@@ -128,7 +128,11 @@ const Holdings = () => {
             </div>
           </div>
           
-          {allHoldings.length > 0 && <VerticalGraph data={data} />}
+          {allHoldings.length > 0 && (
+            <div className="text-center p-4 bg-gray-100 rounded mt-4">
+              <p className="text-sm text-gray-600">Chart Loading...</p>
+            </div>
+          )}
         </>
       )}
     </div>

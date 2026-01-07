@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DoughnutChart } from "./DoughnoutChart";
+// import { DoughnutChart } from "./DoughnoutChart";
 
 const Summary = () => {
   const [user, setUser] = useState(null);
@@ -119,7 +119,9 @@ const Summary = () => {
             <p className="text-responsive-sm">Portfolio Distribution</p>
           </span>
           <div className="w-full max-w-[180px] mx-auto chart-container">
-            <DoughnutChart data={chartData} />
+            <div className="text-center p-4 bg-gray-100 rounded">
+              <p className="text-sm text-gray-600">Chart Loading...</p>
+            </div>
           </div>
           <hr className="divider" />
         </div>
