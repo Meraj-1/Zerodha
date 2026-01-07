@@ -92,7 +92,13 @@ export default function SignUp({ onSwitch }) {
   };
 
   const handleGoogleSignup = () => {
-    window.location.href = "https://kitebackend.vercel.app/auth/google";
+    console.log('Google signup clicked');
+    try {
+      window.location.href = "https://kitebackend.vercel.app/auth/google";
+    } catch (error) {
+      console.error('Google signup error:', error);
+      toast.error('Unable to redirect to Google. Please try again.');
+    }
   };
 
 return (
