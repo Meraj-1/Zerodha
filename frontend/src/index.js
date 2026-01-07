@@ -13,11 +13,13 @@ import SupportPage from "./landing_page/support/SupportPage";
 import NotFound from "./landing_page/NotFound";
 import Navbar from "./landing_page/Navbar";
 import Footer from "./landing_page/footer";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <div className=" className='px-4 sm:px-[5vw] ms:px-[7vw] lg:px-[9vw]'">
   <BrowserRouter>
+  <ThemeProvider>
     <Navbar />
      <Routes> 
        <Route path="/" element={<HomePage />} />
@@ -29,6 +31,7 @@ root.render(
        <Route path="*" element={<NotFound />} />
     </Routes> 
     <Footer />
+    </ThemeProvider>
   </BrowserRouter>
   </div>
 );

@@ -180,6 +180,7 @@
 
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
@@ -195,6 +196,9 @@ const Navbar = () => {
           />
         </Link> 
         <ul className="hidden sm:flex items-center gap-10 text-black">
+          <li>
+            <ThemeToggle />
+          </li>
           <li>
             <a
   href="https://dashboardclone.vercel.app/"
@@ -223,7 +227,8 @@ const Navbar = () => {
           </NavLink>
           </li>
         </ul>
-        <div className="sm:hidden">
+        <div className="sm:hidden flex items-center gap-2">
+          <ThemeToggle />
           <img
             onClick={() => setVisible(true)}
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYftBHUiUU-9L8NljTc4AACBVPdqzDLYrwKWCjddKNBHRb_bs-02eXzHUa07cKQTyWjSc&usqp=CAU"
