@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { useTheme } from '../contexts/ThemeContext';
+import { themes } from '../contexts/themeConfig';
 
 import Apps from "./Apps";
 import Funds from "./Funds";
@@ -13,6 +15,9 @@ import { GeneralContextProvider } from "./GeneralContext";
 import Profile from "./Profile";
 
 const Dashboard = () => {
+  const { theme } = useTheme();
+  const t = themes[theme];
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -21,7 +26,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="dashboard-container">
+    <div className={`dashboard-container ${t.bg}`}>
       <GeneralContextProvider>
         <WatchList />
       </GeneralContextProvider>

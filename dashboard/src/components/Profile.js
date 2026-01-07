@@ -14,10 +14,12 @@ import {
   Edit
 } from "lucide-react";
 import toast, { Toaster } from 'react-hot-toast';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../contexts/ThemeContext';
+import { themes } from '../contexts/themeConfig';
 
 export default function OrbitProfile() {
   const { theme, toggleTheme } = useTheme();
+  const t = themes[theme];
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -372,28 +374,25 @@ export default function OrbitProfile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading profile...</div>
+      <div className={`min-h-screen flex items-center justify-center ${t.bg}`}>
+        <div className={`text-lg ${t.text}`}>Loading profile...</div>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Unable to load profile</div>
+      <div className={`min-h-screen flex items-center justify-center ${t.bg}`}>
+        <div className={`text-lg ${t.text}`}>Unable to load profile</div>
       </div>
     );
   }
+
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      theme === "light" ? "bg-gradient-to-br from-gray-50 to-gray-100" : "bg-black text-white"
-    }`}>
+    <div className={`min-h-screen transition-colors duration-300 ${t.bgGradient} ${t.text}`}>
 
       {/* HERO HEADER */}
-      <div className={`relative overflow-hidden ${
-        theme === "light" ? "bg-white border-b border-gray-200" : "bg-gray-900 border-b border-gray-700"
-      }`}>
+      <div className={`relative overflow-hidden ${t.bg} ${t.border} border-b`}>
         
         <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {/* Row 1: Avatar + Name + Menu */}
@@ -422,11 +421,11 @@ export default function OrbitProfile() {
                 </div>
               </div>
 
-              <div className={theme === "light" ? "text-gray-900" : "text-white"}>
+              <div className={t.text}>
                 <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold">
                   {user.name}
                 </h1>
-                <p className={`text-sm mt-1 ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>
+                <p className={`text-sm mt-1 ${t.textSecondary}`}>
                   {user.email}
                 </p>
               </div>
@@ -435,20 +434,18 @@ export default function OrbitProfile() {
             {/* Menu Button */}
             <button
               onClick={() => setShowMenuModal(true)}
-              className={`p-3 rounded-lg transition-colors ${
-                theme === "light" ? "hover:bg-gray-100" : "hover:bg-gray-800"
-              }`}
+              className={`p-3 rounded-lg transition-colors ${t.hover}`}
             >
-              <MoreVertical className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={20} />
+              <MoreVertical className={t.textSecondary} size={20} />
             </button>
           </div>
 
           {/* Row 2: Balance and Role */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {/* Balance */}
-            <div className={`text-center sm:text-left ${theme === "light" ? "text-gray-900" : "text-white"}`}>
+            <div className={`text-center sm:text-left ${t.text}`}>
               <p className="text-2xl sm:text-3xl font-bold">₹{user.balance || 0}</p>
-              <p className={`text-sm ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>Available Balance</p>
+              <p className={`text-sm ${t.textSecondary}`}>Available Balance</p>
             </div>
 
             {/* Role & Status */}
@@ -474,55 +471,37 @@ export default function OrbitProfile() {
       <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         {/* Portfolio Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-          <div className={`p-3 sm:p-4 rounded-lg border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
-          }`}>
+          <div className={`p-3 sm:p-4 rounded-lg border ${t.bg} ${t.border}`}>
             <div className="flex items-center justify-between mb-2">
-              <Wallet className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={18} />
+              <Wallet className={t.textSecondary} size={18} />
             </div>
-            <p className={`text-lg sm:text-xl font-semibold ${
-              theme === "light" ? "text-gray-900" : "text-white"
-            }`}>₹{user.balance || 0}</p>
-            <p className={`text-xs ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>Available Funds</p>
+            <p className={`text-lg sm:text-xl font-semibold ${t.text}`}>₹{user.balance || 0}</p>
+            <p className={`text-xs ${t.textSecondary}`}>Available Funds</p>
           </div>
 
-          <div className={`p-3 sm:p-4 rounded-lg border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
-          }`}>
+          <div className={`p-3 sm:p-4 rounded-lg border ${t.bg} ${t.border}`}>
             <div className="flex items-center justify-between mb-2">
-              <Shield className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={18} />
+              <Shield className={t.textSecondary} size={18} />
             </div>
-            <p className={`text-lg sm:text-xl font-semibold ${
-              theme === "light" ? "text-gray-900" : "text-white"
-            }`}>₹0</p>
-            <p className={`text-xs ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>Used Margin</p>
+            <p className={`text-lg sm:text-xl font-semibold ${t.text}`}>₹0</p>
+            <p className={`text-xs ${t.textSecondary}`}>Used Margin</p>
           </div>
 
-          <div className={`p-3 sm:p-4 rounded-lg border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
-          }`}>
+          <div className={`p-3 sm:p-4 rounded-lg border ${t.bg} ${t.border}`}>
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={18} />
+              <TrendingUp className={t.textSecondary} size={18} />
               <span className="text-xs text-green-600">+2.8%</span>
             </div>
-            <p className={`text-lg sm:text-xl font-semibold ${
-              theme === "light" ? "text-gray-900" : "text-white"
-            }`}>+₹1,550</p>
-            <p className={`text-xs ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>Today's P&L</p>
+            <p className={`text-lg sm:text-xl font-semibold ${t.text}`}>+₹1,550</p>
+            <p className={`text-xs ${t.textSecondary}`}>Today's P&L</p>
           </div>
 
-          <div className={`p-3 sm:p-4 rounded-lg border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
-          }`}>
+          <div className={`p-3 sm:p-4 rounded-lg border ${t.bg} ${t.border}`}>
             <div className="flex items-center justify-between mb-2">
-              <span className={`text-xs font-medium ${
-                theme === "light" ? "text-gray-600" : "text-gray-400"
-              }`}>87%</span>
+              <span className={`text-xs font-medium ${t.textSecondary}`}>87%</span>
             </div>
-            <p className={`text-lg sm:text-xl font-semibold ${
-              theme === "light" ? "text-gray-900" : "text-white"
-            }`}>Win Rate</p>
-            <p className={`text-xs ${theme === "light" ? "text-gray-600" : "text-gray-400"}`}>Success Rate</p>
+            <p className={`text-lg sm:text-xl font-semibold ${t.text}`}>Win Rate</p>
+            <p className={`text-xs ${t.textSecondary}`}>Success Rate</p>
           </div>
         </div>
 
@@ -530,11 +509,7 @@ export default function OrbitProfile() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
           <button
             onClick={() => { setFundType("add"); setShowFundModal(true); }}
-            className={`p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 ${
-              theme === "light" 
-                ? "bg-blue-600 text-white hover:bg-blue-700" 
-                : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
+            className="p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 bg-blue-600 text-white hover:bg-blue-700"
           >
             <Wallet size={20} />
             <span className="text-xs sm:text-sm">Add Funds</span>
@@ -542,11 +517,7 @@ export default function OrbitProfile() {
           
           <button
             onClick={() => { setFundType("withdraw"); setShowFundModal(true); }}
-            className={`p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 ${
-              theme === "light" 
-                ? "bg-gray-600 text-white hover:bg-gray-700" 
-                : "bg-gray-600 text-white hover:bg-gray-700"
-            }`}
+            className="p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 bg-gray-600 text-white hover:bg-gray-700"
           >
             <TrendingUp size={20} />
             <span className="text-xs sm:text-sm">Withdraw</span>
@@ -557,11 +528,7 @@ export default function OrbitProfile() {
               setShowTransactionHistory(true);
               fetchTransactionHistory();
             }}
-            className={`p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 ${
-              theme === "light" 
-                ? "bg-indigo-600 text-white hover:bg-indigo-700" 
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
-            }`}
+            className="p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700"
           >
             <TrendingUp size={20} />
             <span className="text-xs sm:text-sm">History</span>
@@ -569,11 +536,7 @@ export default function OrbitProfile() {
           
           <button 
             onClick={handleLogout} 
-            className={`p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 ${
-              theme === "light" 
-                ? "bg-red-600 text-white hover:bg-red-700" 
-                : "bg-red-600 text-white hover:bg-red-700"
-            }`}
+            className="p-3 sm:p-4 rounded-lg font-medium transition-colors flex flex-col items-center gap-2 bg-red-600 text-white hover:bg-red-700"
           >
             <LogOut size={20} />
             <span className="text-xs sm:text-sm">Logout</span>
@@ -582,31 +545,21 @@ export default function OrbitProfile() {
 
         {/* PERSONAL INFO & SETTINGS */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          <div className={`p-4 sm:p-6 rounded-lg border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
-          }`}>
+          <div className={`p-4 sm:p-6 rounded-lg border ${t.bg} ${t.border}`}>
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-3">
-                <div className={`p-2 sm:p-3 rounded-lg ${
-                  theme === "light" ? "bg-gray-100" : "bg-gray-700"
-                }`}>
-                  <Sliders className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={20} />
+                <div className={`p-2 sm:p-3 rounded-lg ${t.bgSecondary}`}>
+                  <Sliders className={t.textSecondary} size={20} />
                 </div>
                 <div>
-                  <h3 className={`text-lg sm:text-xl font-semibold ${
-                    theme === "light" ? "text-gray-900" : "text-white"
-                  }`}>Profile Information</h3>
-                  <p className={`text-xs sm:text-sm ${theme === "light" ? "text-gray-500" : "text-gray-400"}`}>Manage your account details</p>
+                  <h3 className={`text-lg sm:text-xl font-semibold ${t.text}`}>Profile Information</h3>
+                  <p className={`text-xs sm:text-sm ${t.textSecondary}`}>Manage your account details</p>
                 </div>
               </div>
               {!isEditing && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm ${
-                    theme === "light" 
-                      ? "bg-blue-600 text-white hover:bg-blue-700" 
-                      : "bg-blue-600 text-white hover:bg-blue-700"
-                  }`}
+                  className="px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-sm bg-blue-600 text-white hover:bg-blue-700"
                 >
                   <Edit size={16} />
                   <span className="hidden sm:inline">Edit</span>
@@ -617,9 +570,7 @@ export default function OrbitProfile() {
             {isEditing ? (
               <div className="space-y-4">
                 {/* Profile Photo Section */}
-                <div className={`p-4 rounded-lg border ${
-                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700 border-gray-600"
-                }`}>
+                <div className={`p-4 rounded-lg border ${t.bgSecondary} ${t.border}`}>
                   <div className="flex items-center gap-4">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-gray-300 group cursor-pointer">
                       <img 
@@ -641,15 +592,9 @@ export default function OrbitProfile() {
                       </div>
                     </div>
                     <div>
-                      <h4 className={`font-medium text-sm mb-1 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}>Profile Photo</h4>
-                      <p className={`text-xs ${
-                        theme === "light" ? "text-gray-600" : "text-gray-400"
-                      }`}>Click to change your profile picture</p>
-                      <p className={`text-xs mt-1 ${
-                        theme === "light" ? "text-gray-500" : "text-gray-500"
-                      }`}>JPG, PNG or GIF (max. 5MB)</p>
+                      <h4 className={`font-medium text-sm mb-1 ${t.text}`}>Profile Photo</h4>
+                      <p className={`text-xs ${t.textSecondary}`}>Click to change your profile picture</p>
+                      <p className={`text-xs mt-1 ${t.textMuted}`}>JPG, PNG or GIF (max. 5MB)</p>
                     </div>
                   </div>
                 </div>
@@ -657,39 +602,27 @@ export default function OrbitProfile() {
                 {/* Form Fields */}
                 <div className="space-y-4">
                   <div>
-                    <label className={`block text-sm font-medium mb-2 ${
-                      theme === "light" ? "text-gray-700" : "text-gray-300"
-                    }`}>Full Name</label>
+                    <label className={`block text-sm font-medium mb-2 ${t.textSecondary}`}>Full Name</label>
                     <input
                       type="text"
                       name="name"
                       value={editData.name}
                       onChange={handleInputChange}
-                      className={`w-full px-3 py-2 rounded-lg border transition-colors text-sm ${
-                        theme === "light" 
-                          ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
-                          : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
-                      } focus:outline-none`}
+                      className={`w-full px-3 py-2 rounded-lg border transition-colors text-sm ${t.bg} ${t.text} ${t.border} focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none`}
                       placeholder="Enter your full name"
                     />
                   </div>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className={`block text-sm font-medium mb-2 ${
-                        theme === "light" ? "text-gray-700" : "text-gray-300"
-                      }`}>Phone Number</label>
+                      <label className={`block text-sm font-medium mb-2 ${t.textSecondary}`}>Phone Number</label>
                       <div className="flex gap-2">
                         <input
                           type="tel"
                           name="phone"
                           value={profileData.phone}
                           onChange={handleInputChange}
-                          className={`flex-1 px-3 py-2 rounded-lg border transition-colors text-sm ${
-                            theme === "light" 
-                              ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
-                              : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
-                          } focus:outline-none`}
+                          className={`flex-1 px-3 py-2 rounded-lg border transition-colors text-sm ${t.bg} ${t.text} ${t.border} focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none`}
                           placeholder="Enter phone number"
                         />
                         {profileData.phone && profileData.phone !== user.phone && (
@@ -710,18 +643,12 @@ export default function OrbitProfile() {
                     </div>
                     
                     <div>
-                      <label className={`block text-sm font-medium mb-2 ${
-                        theme === "light" ? "text-gray-700" : "text-gray-300"
-                      }`}>Gender</label>
+                      <label className={`block text-sm font-medium mb-2 ${t.textSecondary}`}>Gender</label>
                       <select
                         name="gender"
                         value={profileData.gender}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 rounded-lg border transition-colors text-sm ${
-                          theme === "light" 
-                            ? "border-gray-300 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
-                            : "border-gray-600 bg-gray-700 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
-                        } focus:outline-none`}
+                        className={`w-full px-3 py-2 rounded-lg border transition-colors text-sm ${t.bg} ${t.text} ${t.border} focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none`}
                       >
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>
@@ -732,27 +659,19 @@ export default function OrbitProfile() {
                   </div>
                   
                   <div>
-                    <label className={`block text-sm font-medium mb-2 ${
-                      theme === "light" ? "text-gray-700" : "text-gray-300"
-                    }`}>Email Address</label>
+                    <label className={`block text-sm font-medium mb-2 ${t.textSecondary}`}>Email Address</label>
                     <input
                       type="email"
                       value={user.email}
                       disabled
-                      className={`w-full px-3 py-2 rounded-lg border text-sm ${
-                        theme === "light" 
-                          ? "border-gray-200 bg-gray-50 text-gray-500" 
-                          : "border-gray-600 bg-gray-600 text-gray-400"
-                      }`}
+                      className={`w-full px-3 py-2 rounded-lg border text-sm ${t.bgSecondary} ${t.textMuted} ${t.border}`}
                     />
-                    <p className={`text-xs mt-1 ${
-                      theme === "light" ? "text-gray-500" : "text-gray-400"
-                    }`}>Email cannot be changed</p>
+                    <p className={`text-xs mt-1 ${t.textMuted}`}>Email cannot be changed</p>
                   </div>
                 </div>
                 
                 {/* Action Buttons */}
-                <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
+                <div className={`flex gap-3 pt-4 border-t ${t.border}`}>
                   <button
                     onClick={handleProfileUpdate}
                     disabled={isProcessing}
@@ -775,11 +694,7 @@ export default function OrbitProfile() {
                         gender: user.gender || ""
                       });
                     }}
-                    className={`px-4 py-2 rounded-lg border transition-colors font-medium text-sm ${
-                      theme === "light" 
-                        ? "border-gray-300 text-gray-700 hover:bg-gray-50" 
-                        : "border-gray-600 text-gray-300 hover:bg-gray-700"
-                    }`}
+                    className={`px-4 py-2 rounded-lg border transition-colors font-medium text-sm ${t.border} ${t.textSecondary} ${t.hover}`}
                   >
                     Cancel
                   </button>
@@ -788,34 +703,20 @@ export default function OrbitProfile() {
             ) : (
               <div className="space-y-4">
                 {/* Display Mode */}
-                <div className={`p-4 rounded-lg border ${
-                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700 border-gray-600"
-                }`}>
+                <div className={`p-4 rounded-lg border ${t.bgSecondary} ${t.border}`}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <p className={`text-sm font-medium ${
-                        theme === "light" ? "text-gray-700" : "text-gray-300"
-                      }`}>Full Name</p>
-                      <p className={`text-sm mt-1 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}>{user.name}</p>
+                      <p className={`text-sm font-medium ${t.textSecondary}`}>Full Name</p>
+                      <p className={`text-sm mt-1 ${t.text}`}>{user.name}</p>
                     </div>
                     <div>
-                      <p className={`text-sm font-medium ${
-                        theme === "light" ? "text-gray-700" : "text-gray-300"
-                      }`}>Email Address</p>
-                      <p className={`text-sm mt-1 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}>{user.email}</p>
+                      <p className={`text-sm font-medium ${t.textSecondary}`}>Email Address</p>
+                      <p className={`text-sm mt-1 ${t.text}`}>{user.email}</p>
                     </div>
                     <div>
-                      <p className={`text-sm font-medium ${
-                        theme === "light" ? "text-gray-700" : "text-gray-300"
-                      }`}>Phone Number</p>
+                      <p className={`text-sm font-medium ${t.textSecondary}`}>Phone Number</p>
                       <div className="flex items-center gap-2 mt-1">
-                        <p className={`text-sm ${
-                          theme === "light" ? "text-gray-900" : "text-white"
-                        }`}>{user.phone || "Not provided"}</p>
+                        <p className={`text-sm ${t.text}`}>{user.phone || "Not provided"}</p>
                         {user.isPhoneVerified && (
                           <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                             <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
@@ -825,12 +726,8 @@ export default function OrbitProfile() {
                       </div>
                     </div>
                     <div>
-                      <p className={`text-sm font-medium ${
-                        theme === "light" ? "text-gray-700" : "text-gray-300"
-                      }`}>Gender</p>
-                      <p className={`text-sm mt-1 ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}>{user.gender ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1) : "Not specified"}</p>
+                      <p className={`text-sm font-medium ${t.textSecondary}`}>Gender</p>
+                      <p className={`text-sm mt-1 ${t.text}`}>{user.gender ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1) : "Not specified"}</p>
                     </div>
                   </div>
                 </div>
@@ -879,35 +776,23 @@ export default function OrbitProfile() {
           </div>
 
           {/* ACCOUNT SETTINGS */}
-          <div className={`p-4 sm:p-6 rounded-lg border ${
-            theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
-          }`}>
+          <div className={`p-4 sm:p-6 rounded-lg border ${t.bg} ${t.border}`}>
             <div className="flex items-center gap-3 mb-4 sm:mb-6">
-              <div className={`p-2 sm:p-3 rounded-lg ${
-                theme === "light" ? "bg-gray-100" : "bg-gray-700"
-              }`}>
-                <TrendingUp className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={20} />
+              <div className={`p-2 sm:p-3 rounded-lg ${t.bgSecondary}`}>
+                <TrendingUp className={t.textSecondary} size={20} />
               </div>
               <div>
-                <h3 className={`text-lg sm:text-xl font-semibold ${
-                  theme === "light" ? "text-gray-900" : "text-white"
-                }`}>Account Settings</h3>
-                <p className={`text-xs sm:text-sm ${theme === "light" ? "text-gray-500" : "text-gray-400"}`}>Security and preferences</p>
+                <h3 className={`text-lg sm:text-xl font-semibold ${t.text}`}>Account Settings</h3>
+                <p className={`text-xs sm:text-sm ${t.textSecondary}`}>Security and preferences</p>
               </div>
             </div>
 
             <div className="space-y-4">
-              <div className={`p-4 rounded-lg border ${
-                theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700 border-gray-600"
-              }`}>
+              <div className={`p-4 rounded-lg border ${t.bgSecondary} ${t.border}`}>
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className={`text-sm font-medium ${
-                      theme === "light" ? "text-gray-900" : "text-white"
-                    }`}>Account Type</p>
-                    <p className={`text-xs ${
-                      theme === "light" ? "text-gray-600" : "text-gray-400"
-                    }`}>{user.role === 'admin' ? 'Administrator' : 'Standard User'}</p>
+                    <p className={`text-sm font-medium ${t.text}`}>Account Type</p>
+                    <p className={`text-xs ${t.textSecondary}`}>{user.role === 'admin' ? 'Administrator' : 'Standard User'}</p>
                   </div>
                   <span className={`px-2 py-1 rounded text-xs font-medium ${
                     user.role === 'admin' 
@@ -919,17 +804,11 @@ export default function OrbitProfile() {
                 </div>
               </div>
               
-              <div className={`p-4 rounded-lg border ${
-                theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700 border-gray-600"
-              }`}>
+              <div className={`p-4 rounded-lg border ${t.bgSecondary} ${t.border}`}>
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className={`text-sm font-medium ${
-                      theme === "light" ? "text-gray-900" : "text-white"
-                    }`}>Authentication</p>
-                    <p className={`text-xs ${
-                      theme === "light" ? "text-gray-600" : "text-gray-400"
-                    }`}>{user.authProvider === 'google' ? 'Google OAuth' : 'Email & Password'}</p>
+                    <p className={`text-sm font-medium ${t.text}`}>Authentication</p>
+                    <p className={`text-xs ${t.textSecondary}`}>{user.authProvider === 'google' ? 'Google OAuth' : 'Email & Password'}</p>
                   </div>
                   <span className={`px-2 py-1 rounded text-xs font-medium ${
                     theme === "light" ? "bg-green-100 text-green-800" : "bg-green-900 text-green-300"
@@ -939,21 +818,13 @@ export default function OrbitProfile() {
                 </div>
               </div>
               
-              <div className={`p-4 rounded-lg border ${
-                theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-700 border-gray-600"
-              }`}>
+              <div className={`p-4 rounded-lg border ${t.bgSecondary} ${t.border}`}>
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className={`text-sm font-medium ${
-                      theme === "light" ? "text-gray-900" : "text-white"
-                    }`}>Account Balance</p>
-                    <p className={`text-xs ${
-                      theme === "light" ? "text-gray-600" : "text-gray-400"
-                    }`}>Current available funds</p>
+                    <p className={`text-sm font-medium ${t.text}`}>Account Balance</p>
+                    <p className={`text-xs ${t.textSecondary}`}>Current available funds</p>
                   </div>
-                  <span className={`text-lg font-semibold ${
-                    theme === "light" ? "text-gray-900" : "text-white"
-                  }`}>
+                  <span className={`text-lg font-semibold ${t.text}`}>
                     ₹{user.balance || 0}
                   </span>
                 </div>
@@ -962,26 +833,18 @@ export default function OrbitProfile() {
 
             {/* Quick Settings */}
             <div className="mt-6 space-y-3">
-              <h4 className={`text-sm font-medium ${
-                theme === "light" ? "text-gray-900" : "text-white"
-              }`}>Quick Actions</h4>
+              <h4 className={`text-sm font-medium ${t.text}`}>Quick Actions</h4>
               
               <div className="grid grid-cols-1 gap-2">
                 <button
                   onClick={() => { setFundType("add"); setShowFundModal(true); }}
-                  className={`p-3 rounded-lg text-left transition-colors ${
-                    theme === "light" ? "hover:bg-gray-100" : "hover:bg-gray-700"
-                  }`}
+                  className={`p-3 rounded-lg text-left transition-colors ${t.hover}`}
                 >
                   <div className="flex items-center gap-3">
-                    <Wallet className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={16} />
+                    <Wallet className={t.textSecondary} size={16} />
                     <div>
-                      <p className={`text-sm font-medium ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}>Add Funds</p>
-                      <p className={`text-xs ${
-                        theme === "light" ? "text-gray-600" : "text-gray-400"
-                      }`}>Deposit money to your account</p>
+                      <p className={`text-sm font-medium ${t.text}`}>Add Funds</p>
+                      <p className={`text-xs ${t.textSecondary}`}>Deposit money to your account</p>
                     </div>
                   </div>
                 </button>
@@ -991,19 +854,13 @@ export default function OrbitProfile() {
                     setShowTransactionHistory(true);
                     fetchTransactionHistory();
                   }}
-                  className={`p-3 rounded-lg text-left transition-colors ${
-                    theme === "light" ? "hover:bg-gray-100" : "hover:bg-gray-700"
-                  }`}
+                  className={`p-3 rounded-lg text-left transition-colors ${t.hover}`}
                 >
                   <div className="flex items-center gap-3">
-                    <TrendingUp className={theme === "light" ? "text-gray-600" : "text-gray-400"} size={16} />
+                    <TrendingUp className={t.textSecondary} size={16} />
                     <div>
-                      <p className={`text-sm font-medium ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}>Transaction History</p>
-                      <p className={`text-xs ${
-                        theme === "light" ? "text-gray-600" : "text-gray-400"
-                      }`}>View your transaction records</p>
+                      <p className={`text-sm font-medium ${t.text}`}>Transaction History</p>
+                      <p className={`text-xs ${t.textSecondary}`}>View your transaction records</p>
                     </div>
                   </div>
                 </button>
@@ -1054,27 +911,17 @@ export default function OrbitProfile() {
       {/* Fund Modal */}
       {showFundModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`p-6 rounded-lg w-96 ${
-            theme === "light" ? "bg-white" : "bg-gray-800"
-          }`}>
-            <h3 className={`text-lg font-semibold mb-4 ${
-              theme === "light" ? "text-gray-900" : "text-white"
-            }`}>
+          <div className={`p-6 rounded-lg w-96 ${t.bg}`}>
+            <h3 className={`text-lg font-semibold mb-4 ${t.text}`}>
               {fundType === "add" ? "Add Funds" : "Withdraw Funds"}
             </h3>
             <div className="mb-4">
-              <label className={`block text-sm font-medium mb-2 ${
-                theme === "light" ? "text-gray-700" : "text-gray-300"
-              }`}>Amount (₹)</label>
+              <label className={`block text-sm font-medium mb-2 ${t.textSecondary}`}>Amount (₹)</label>
               <input
                 type="number"
                 value={fundAmount}
                 onChange={(e) => setFundAmount(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg ${
-                  theme === "light" 
-                    ? "border-gray-300 bg-white text-gray-900" 
-                    : "border-gray-600 bg-gray-700 text-white"
-                }`}
+                className={`w-full px-3 py-2 border rounded-lg ${t.bg} ${t.text} ${t.border}`}
                 placeholder="Enter amount"
                 min="1"
               />
@@ -1103,39 +950,25 @@ export default function OrbitProfile() {
       {/* Transaction History Modal */}
       {showTransactionHistory && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`p-6 rounded-lg w-[600px] max-h-[80vh] overflow-y-auto ${
-            theme === "light" ? "bg-white" : "bg-gray-800"
-          }`}>
+          <div className={`p-6 rounded-lg w-[600px] max-h-[80vh] overflow-y-auto ${t.bg}`}>
             <div className="flex justify-between items-center mb-4">
-              <h3 className={`text-lg font-semibold ${
-                theme === "light" ? "text-gray-900" : "text-white"
-              }`}>Transaction History</h3>
+              <h3 className={`text-lg font-semibold ${t.text}`}>Transaction History</h3>
               <button
                 onClick={() => setShowTransactionHistory(false)}
-                className={`hover:text-gray-700 ${
-                  theme === "light" ? "text-gray-500" : "text-gray-300 hover:text-gray-100"
-                }`}
+                className={`${t.textSecondary} hover:text-gray-700`}
               >
                 ×
               </button>
             </div>
             <div className="space-y-3">
               {transactions.length === 0 ? (
-                <p className={`text-center py-4 ${
-                  theme === "light" ? "text-gray-500" : "text-gray-400"
-                }`}>No transactions found</p>
+                <p className={`text-center py-4 ${t.textSecondary}`}>No transactions found</p>
               ) : (
                 transactions.map((transaction) => (
-                  <div key={transaction._id} className={`border rounded-lg p-4 flex justify-between items-center ${
-                    theme === "light" ? "border-gray-200" : "border-gray-600"
-                  }`}>
+                  <div key={transaction._id} className={`border rounded-lg p-4 flex justify-between items-center ${t.border}`}>
                     <div>
-                      <p className={`font-medium ${
-                        theme === "light" ? "text-gray-900" : "text-white"
-                      }`}>{transaction.description}</p>
-                      <p className={`text-sm ${
-                        theme === "light" ? "text-gray-500" : "text-gray-400"
-                      }`}>
+                      <p className={`font-medium ${t.text}`}>{transaction.description}</p>
+                      <p className={`text-sm ${t.textSecondary}`}>
                         {new Date(transaction.createdAt).toLocaleString()}
                       </p>
                     </div>
@@ -1145,9 +978,7 @@ export default function OrbitProfile() {
                       }`}>
                         {transaction.type === 'credit' ? '+' : '-'}₹{transaction.amount}
                       </p>
-                      <p className={`text-sm ${
-                        theme === "light" ? "text-gray-500" : "text-gray-400"
-                      }`}>
+                      <p className={`text-sm ${t.textSecondary}`}>
                         Balance: ₹{transaction.balanceAfter}
                       </p>
                     </div>
@@ -1162,13 +993,9 @@ export default function OrbitProfile() {
       {/* Delete Account Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`p-6 rounded-lg w-[500px] max-h-[80vh] overflow-y-auto ${
-            theme === "light" ? "bg-white" : "bg-gray-800"
-          }`}>
+          <div className={`p-6 rounded-lg w-[500px] max-h-[80vh] overflow-y-auto ${t.bg}`}>
             <h3 className="text-xl font-semibold text-red-600 mb-4">⚠️ Delete Account</h3>
-            <div className={`space-y-4 text-sm ${
-              theme === "light" ? "text-gray-700" : "text-gray-300"
-            }`}>
+            <div className={`space-y-4 text-sm ${t.textSecondary}`}>
               <p className="font-medium">Are you absolutely sure you want to delete your account?</p>
               <div className={`p-4 rounded-lg border ${
                 theme === "light" ? "bg-red-50 border-red-200" : "bg-red-900/20 border-red-800"
@@ -1219,35 +1046,23 @@ export default function OrbitProfile() {
       {/* Phone OTP Verification Modal */}
       {showPhoneOTPModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`p-6 rounded-lg w-96 ${
-            theme === "light" ? "bg-white" : "bg-gray-800"
-          }`}>
+          <div className={`p-6 rounded-lg w-96 ${t.bg}`}>
             <h3 className="text-lg font-semibold mb-4">Verify Phone Number</h3>
-            <p className={`text-sm mb-4 ${
-              theme === "light" ? "text-gray-600" : "text-gray-300"
-            }`}>
+            <p className={`text-sm mb-4 ${t.textSecondary}`}>
               We've sent a 6-digit OTP to {tempPhone}. Please enter it below to verify your phone number.
             </p>
             <div className="mb-4">
-              <label className={`block text-sm font-medium mb-2 ${
-                theme === "light" ? "text-gray-700" : "text-gray-300"
-              }`}>Enter OTP</label>
+              <label className={`block text-sm font-medium mb-2 ${t.textSecondary}`}>Enter OTP</label>
               <input
                 type="text"
                 value={phoneOTP}
                 onChange={(e) => setPhoneOTP(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${
-                  theme === "light" 
-                    ? "border-gray-300 bg-white text-gray-900" 
-                    : "border-gray-600 bg-gray-700 text-white"
-                }`}
+                className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${t.bg} ${t.text} ${t.border}`}
                 placeholder="000000"
                 maxLength="6"
               />
             </div>
-            <p className={`text-xs mb-4 ${
-              theme === "light" ? "text-gray-500" : "text-gray-400"
-            }`}>
+            <p className={`text-xs mb-4 ${t.textMuted}`}>
               OTP is valid for 10 minutes only.
             </p>
             <div className="flex gap-2">
@@ -1275,35 +1090,23 @@ export default function OrbitProfile() {
       {/* Delete Account OTP Verification Modal */}
       {showDeleteOTPModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`p-6 rounded-lg w-96 ${
-            theme === "light" ? "bg-white" : "bg-gray-800"
-          }`}>
+          <div className={`p-6 rounded-lg w-96 ${t.bg}`}>
             <h3 className="text-lg font-semibold text-red-600 mb-4">Enter OTP</h3>
-            <p className={`text-sm mb-4 ${
-              theme === "light" ? "text-gray-600" : "text-gray-300"
-            }`}>
+            <p className={`text-sm mb-4 ${t.textSecondary}`}>
               We've sent a 6-digit OTP to your email address. Please enter it below to confirm account deletion.
             </p>
             <div className="mb-4">
-              <label className={`block text-sm font-medium mb-2 ${
-                theme === "light" ? "text-gray-700" : "text-gray-300"
-              }`}>OTP</label>
+              <label className={`block text-sm font-medium mb-2 ${t.textSecondary}`}>OTP</label>
               <input
                 type="text"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${
-                  theme === "light" 
-                    ? "border-gray-300 bg-white text-gray-900" 
-                    : "border-gray-600 bg-gray-700 text-white"
-                }`}
+                className={`w-full px-3 py-2 border rounded-lg text-center text-lg tracking-widest ${t.bg} ${t.text} ${t.border}`}
                 placeholder="000000"
                 maxLength="6"
               />
             </div>
-            <p className={`text-xs mb-4 ${
-              theme === "light" ? "text-gray-500" : "text-gray-400"
-            }`}>
+            <p className={`text-xs mb-4 ${t.textMuted}`}>
               OTP is valid for 10 minutes only.
             </p>
             <div className="flex gap-2">
@@ -1328,14 +1131,12 @@ export default function OrbitProfile() {
       {/* Menu Modal */}
       {showMenuModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`p-6 rounded-lg w-80 ${
-            theme === "light" ? "bg-white" : "bg-gray-800"
-          }`}>
+          <div className={`p-6 rounded-lg w-80 ${t.bg}`}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Settings</h3>
               <button
                 onClick={() => setShowMenuModal(false)}
-                className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700`}
+                className={`p-1 rounded ${t.hover}`}
               >
                 <X size={20} />
               </button>
@@ -1346,18 +1147,14 @@ export default function OrbitProfile() {
                   toggleTheme();
                   setShowMenuModal(false);
                 }}
-                className={`w-full flex items-center gap-3 p-3 rounded-lg transition ${
-                  theme === "light" ? "hover:bg-gray-100" : "hover:bg-gray-700"
-                }`}
+                className={`w-full flex items-center gap-3 p-3 rounded-lg transition ${t.hover}`}
               >
                 {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
                 Switch to {theme === "light" ? "Dark" : "Light"} Mode
               </button>
               <button
                 onClick={handleContactClick}
-                className={`w-full flex items-center gap-3 p-3 rounded-lg transition ${
-                  theme === "light" ? "hover:bg-gray-100" : "hover:bg-gray-700"
-                }`}
+                className={`w-full flex items-center gap-3 p-3 rounded-lg transition ${t.hover}`}
               >
                 <Mail size={18} />
                 Contact Support
@@ -1415,11 +1212,10 @@ export default function OrbitProfile() {
 
 function Card({ children, className }) {
   const { theme } = useTheme();
+  const t = themes[theme];
   return (
     <div
-      className={`p-6 border transition-colors ${
-        theme === "light" ? "border-gray-200 bg-white" : "border-gray-700 bg-gray-800"
-      } ${className}`}
+      className={`p-6 border transition-colors ${t.border} ${t.bg} ${className}`}
     >
       {children}
     </div>
@@ -1428,21 +1224,21 @@ function Card({ children, className }) {
 
 function CardHeader({ icon: Icon, title }) {
   const { theme } = useTheme();
+  const t = themes[theme];
   return (
     <div className="flex items-center gap-3 mb-5">
       <Icon size={18} className={theme === "light" ? "text-blue-600" : "text-indigo-400"} />
-      <h3 className={`text-sm tracking-wide ${
-        theme === "light" ? "text-gray-700" : "text-gray-300"
-      }`}>{title}</h3>
+      <h3 className={`text-sm tracking-wide ${t.textSecondary}`}>{title}</h3>
     </div>
   );
 }
 
 function Metric({ label, value, highlight, positive }) {
   const { theme } = useTheme();
+  const t = themes[theme];
   return (
     <div className="flex justify-between py-2 text-sm">
-      <span className={theme === "light" ? "text-gray-600" : "text-gray-400"}>{label}</span>
+      <span className={t.textSecondary}>{label}</span>
       <span
         className={`font-medium ${
           highlight
@@ -1460,6 +1256,7 @@ function Metric({ label, value, highlight, positive }) {
 
 function Tag({ text, accent }) {
   const { theme } = useTheme();
+  const t = themes[theme];
   return (
     <div
       className={`text-xs px-3 py-2 rounded-full inline-block mr-2 mt-2 ${
