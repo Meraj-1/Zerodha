@@ -50,8 +50,12 @@ export default function OrbitProfile() {
     
     if (tokenFromUrl) {
       localStorage.setItem('token', tokenFromUrl);
-      // Clean URL
-      window.history.replaceState({}, document.title, window.location.pathname);
+      // Show loading and redirect
+      setLoading(true);
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 100);
+      return;
     }
     
     fetchUserProfile();
@@ -373,7 +377,7 @@ export default function OrbitProfile() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading profile...</div>
+        <div className="text-lg">Redirecting to dashboard...</div>
       </div>
     );
   }
