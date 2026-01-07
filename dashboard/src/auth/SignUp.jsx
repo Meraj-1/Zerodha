@@ -2,8 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaUser, FaUserShield, FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from 'react-hot-toast';
+import { useTheme } from "../contexts/ThemeContext";
+import { themes } from "../contexts/themeConfig";
 
-export default function SignUp({ onSwitch, theme = "light" }) {
+export default function SignUp({ onSwitch }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,6 +16,8 @@ export default function SignUp({ onSwitch, theme = "light" }) {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { theme } = useTheme();
+  const t = themes[theme];
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -55,20 +59,17 @@ export default function SignUp({ onSwitch, theme = "light" }) {
       });
 
       const data = await response.json();
-      console.log('Signup response:', data); // Debug log
+      console.log('Signup response:', data);
       
       if (response.ok) {
         toast.success("Account created successfully!");
-        // Store token if provided
         if (data.token) {
           localStorage.setItem("token", data.token);
-          console.log('Token stored:', data.token.substring(0, 20) + '...'); // Debug log
+          console.log('Token stored:', data.token.substring(0, 20) + '...');
         }
-        // Immediate redirect to profile
-        console.log('Redirecting to dashboard...'); // Debug log
+        console.log('Redirecting to dashboard...');
         window.location.href = "https://dashboardclone.vercel.app/profile";
       } else {
-        // Handle specific error cases
         if (response.status === 409 || data.message === "User already exists") {
           toast.error(
             <div>
@@ -90,25 +91,12 @@ export default function SignUp({ onSwitch, theme = "light" }) {
     }
   };
 
-  // Theme classes
-  const bgClass = theme === "light" ? "bg-white/80" : "bg-gray-900/80";
-  const textClass = theme === "light" ? "text-gray-900" : "text-white";
-  const inputClass =
-    theme === "light"
-      ? "text-black bg-gray-200"
-      : "text-white bg-gray-800";
-  const roleSelectedClass = "border-blue-600 bg-blue-50 text-blue-600";
-  const roleUnselectedClass =
-    theme === "light" ? "border-gray-200 text-gray-600" : "border-gray-700 text-gray-300";
-  const dividerText = theme === "light" ? "text-gray-400" : "text-gray-300";
-  const termsText = theme === "light" ? "text-black" : "text-white";
-
   const handleGoogleSignup = () => {
     window.location.href = "https://kitebackend.vercel.app/auth/google";
   };
 
 return (
-  <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-50 to-blue-100">
+  <div className={`min-h-screen flex items-center justify-center px-4 ${t.bgGradient}`}>
     <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl">
 
       {/* LEFT PANEL */}
@@ -155,13 +143,13 @@ return (
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className={`${bgClass} w-full rounded-none md:rounded-none p-8`}
+        className={`${t.bg} w-full rounded-none md:rounded-none p-8`}
       >
         {/* Logo */}
-        <h2 className={`text-2xl font-bold text-center ${textClass}`}>
+        <h2 className={`text-2xl font-bold text-center ${t.text}`}>
           Q<span className="text-blue-600">pay</span>
         </h2>
-        <p className={`text-center text-sm mt-1 ${termsText}`}>
+        <p className={`text-center text-sm mt-1 ${t.text}`}>
           Create your account to get started
         </p>
 
@@ -177,14 +165,14 @@ return (
             transition={{ delay: 0.2 + i * 0.1 }}
             className="mt-4"
           >
-            <label className={`text-xs ${termsText}`}>{field.label}</label>
+            <label className={`text-xs ${t.textSecondary}`}>{field.label}</label>
             <input
               type={field.type}
               name={field.name}
               onChange={handleChange}
               className={`w-full mt-1 px-3 py-2 border rounded-md text-sm
                           focus:outline-none focus:ring-2 focus:ring-blue-500
-                          transition ${inputClass}`}
+                          transition ${t.bg} ${t.text} ${t.border}`}
               required
             />
           </motion.div>
@@ -202,20 +190,20 @@ return (
             transition={{ delay: 0.3 + i * 0.1 }}
             className="mt-4 relative"
           >
-            <label className={`text-xs ${termsText}`}>{field.label}</label>
+            <label className={`text-xs ${t.textSecondary}`}>{field.label}</label>
             <input
               type={field.show ? "text" : "password"}
               name={field.name}
               onChange={handleChange}
               className={`w-full mt-1 px-3 py-2 border rounded-md text-sm
                           focus:outline-none focus:ring-2 focus:ring-blue-500
-                          transition ${inputClass}`}
+                          transition ${t.bg} ${t.text} ${t.border}`}
               required
             />
             <button
               type="button"
               onClick={() => field.toggle(!field.show)}
-              className="absolute top-9 right-3 text-gray-500"
+              className={`absolute top-9 right-3 ${t.textMuted}`}
             >
               {field.show ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -232,7 +220,7 @@ return (
         {/* Terms */}
         <div className="flex items-center gap-2 mt-4 text-sm">
           <input type="checkbox" name="terms" onChange={handleChange} className="accent-blue-600" />
-          <span className={termsText}>
+          <span className={t.text}>
             I agree to <b>Terms & Conditions</b>
           </span>
         </div>
@@ -248,7 +236,7 @@ return (
         </motion.button>
 
         {/* Divider */}
-        <div className={`text-center text-xs my-4 ${dividerText}`}>
+        <div className={`text-center text-xs my-4 ${t.textMuted}`}>
           OR CONTINUE WITH
         </div>
 
@@ -258,13 +246,13 @@ return (
           type="button"
           onClick={handleGoogleSignup}
           className={`w-full flex items-center justify-center gap-2 border py-2 rounded-md text-sm
-            ${theme === "light" ? "border-gray-300 text-gray-700" : "border-gray-600 text-white"}`}
+            ${t.border} ${t.text}`}
         >
           <FaGoogle /> Continue with Google
         </motion.button>
 
         {/* Switch */}
-        <p className={`text-center text-sm mt-4 ${termsText}`}>
+        <p className={`text-center text-sm mt-4 ${t.text}`}>
           Already have an account?
           <button onClick={onSwitch} className="ml-1 text-blue-600 font-medium">
             Log in
