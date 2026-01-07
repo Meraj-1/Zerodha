@@ -1,24 +1,22 @@
 import React from "react";
-import { useTheme } from '../contexts/ThemeContext';
-import { themes } from '../contexts/themeConfig';
+import { useTheme } from '../context/ThemeContext';
 
 import Menu from "./Menu";
 
 const TopBar = () => {
   const { theme } = useTheme();
-  const t = themes[theme];
   
   return (
-    <div className={`topbar-container ${t.bg} ${t.border} border-b`}>
+    <div className={`topbar-container ${theme === 'dark' ? 'dark' : ''}`}>
       <div className="indices-container">
         <div className="nifty">
-          <p className={`index ${t.text}`}>NIFTY 50</p>
-          <p className="index-points profit text-green-500">{100.2} </p>
+          <p className={`index ${theme === 'dark' ? 'text-white' : ''}`}>NIFTY 50</p>
+          <p className={`index-points profit ${theme === 'dark' ? 'text-green-400' : ''}`}>{100.2} </p>
           <p className="percent"> </p>
         </div>
         <div className="sensex">
-          <p className={`index ${t.text}`}>SENSEX</p>
-          <p className="index-points profit text-green-500">{100.2}</p>
+          <p className={`index ${theme === 'dark' ? 'text-white' : ''}`}>SENSEX</p>
+          <p className={`index-points profit ${theme === 'dark' ? 'text-green-400' : ''}`}>{100.2}</p>
           <p className="percent"></p>
         </div>
       </div>
