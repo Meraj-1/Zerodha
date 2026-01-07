@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useTheme } from '../contexts/ThemeContext';
 import { DoughnutChart } from "./DoughnoutChart";
 
 const Summary = () => {
-  const { theme } = useTheme();
   const [user, setUser] = useState(null);
   const [holdings, setHoldings] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -52,44 +50,44 @@ const Summary = () => {
         '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
       ],
       borderWidth: 2,
-      borderColor: theme === 'dark' ? '#374151' : '#fff'
+      borderColor: '#fff'
     }]
   };
 
   return (
-    <div className={`transition-colors ${theme === "dark" ? "text-white" : ""}`}>
+    <div className="transition-colors">
       <div className="username">
-        <h6 className={`text-responsive-base ${theme === "dark" ? "text-white" : ""}`}>Hi, {user?.name || 'User'}!</h6>
-        <hr className={`divider ${theme === "dark" ? "border-gray-600" : ""}`} />
+        <h6 className="text-responsive-base">Hi, {user?.name || 'User'}!</h6>
+        <hr className="divider" />
       </div>
 
       {/* Portfolio Overview */}
       <div className="section">
         <span>
-          <p className={`text-responsive-sm ${theme === "dark" ? "text-green-400" : ""}`}>Portfolio Overview</p>
+          <p className="text-responsive-sm">Portfolio Overview</p>
         </span>
         <div className="data">
           <div className="first">
-            <h3 className={`text-responsive-lg ${theme === "dark" ? "text-white" : ""}`}>₹{user?.balance || 0}</h3>
+            <h3 className="text-responsive-lg">₹{user?.balance || 0}</h3>
             <p className="text-responsive-xs">Available Balance</p>
           </div>
-          <hr className={`${theme === "dark" ? "border-gray-600" : ""} mobile-hidden`} />
+          <hr className="mobile-hidden" />
           <div className="second">
-            <p className={`text-responsive-xs ${theme === "dark" ? "text-gray-300" : ""}`}>
-              Total Holdings <span className={`text-responsive-sm ${theme === "dark" ? "text-white" : ""}`}>₹{currentValue.toFixed(0)}</span>
+            <p className="text-responsive-xs">
+              Total Holdings <span className="text-responsive-sm">₹{currentValue.toFixed(0)}</span>
             </p>
-            <p className={`text-responsive-xs ${theme === "dark" ? "text-gray-300" : ""}`}>
-              Total Orders <span className={`text-responsive-sm ${theme === "dark" ? "text-white" : ""}`}>{orders.length}</span>
+            <p className="text-responsive-xs">
+              Total Orders <span className="text-responsive-sm">{orders.length}</span>
             </p>
           </div>
         </div>
-        <hr className={`divider ${theme === "dark" ? "border-gray-600" : ""}`} />
+        <hr className="divider" />
       </div>
 
       {/* Holdings Summary */}
       <div className="section">
         <span>
-          <p className={`text-responsive-sm ${theme === "dark" ? "text-green-400" : ""}`}>Holdings ({holdings.length})</p>
+          <p className="text-responsive-sm">Holdings ({holdings.length})</p>
         </span>
         <div className="data">
           <div className="first">
@@ -101,49 +99,49 @@ const Summary = () => {
             </h3>
             <p className="text-responsive-xs">P&L</p>
           </div>
-          <hr className={`${theme === "dark" ? "border-gray-600" : ""} mobile-hidden`} />
+          <hr className="mobile-hidden" />
           <div className="second">
-            <p className={`text-responsive-xs ${theme === "dark" ? "text-gray-300" : ""}`}>
-              Current Value <span className={`text-responsive-sm ${theme === "dark" ? "text-white" : ""}`}>₹{currentValue.toFixed(0)}</span>
+            <p className="text-responsive-xs">
+              Current Value <span className="text-responsive-sm">₹{currentValue.toFixed(0)}</span>
             </p>
-            <p className={`text-responsive-xs ${theme === "dark" ? "text-gray-300" : ""}`}>
-              Investment <span className={`text-responsive-sm ${theme === "dark" ? "text-white" : ""}`}>₹{totalInvestment.toFixed(0)}</span>
+            <p className="text-responsive-xs">
+              Investment <span className="text-responsive-sm">₹{totalInvestment.toFixed(0)}</span>
             </p>
           </div>
         </div>
-        <hr className={`divider ${theme === "dark" ? "border-gray-600" : ""}`} />
+        <hr className="divider" />
       </div>
 
       {/* Portfolio Distribution Chart */}
       {holdings.length > 0 && (
         <div className="section">
           <span>
-            <p className={`text-responsive-sm ${theme === "dark" ? "text-green-400" : ""}`}>Portfolio Distribution</p>
+            <p className="text-responsive-sm">Portfolio Distribution</p>
           </span>
           <div className="w-full max-w-[180px] mx-auto chart-container">
             <DoughnutChart data={chartData} />
           </div>
-          <hr className={`divider ${theme === "dark" ? "border-gray-600" : ""}`} />
+          <hr className="divider" />
         </div>
       )}
 
       {/* Quick Stats */}
       <div className="section">
         <span>
-          <p className={`text-responsive-sm ${theme === "dark" ? "text-green-400" : ""}`}>Today's Activity</p>
+          <p className="text-responsive-sm">Today's Activity</p>
         </span>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mt-3">
-          <div className={`p-2 sm:p-3 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
-            <h4 className={`text-base sm:text-lg font-bold ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>{orders.filter(o => o.side === 'BUY').length}</h4>
-            <p className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Buy Orders</p>
+          <div className="p-2 sm:p-3 rounded-lg border bg-gray-50 border-gray-200">
+            <h4 className="text-base sm:text-lg font-bold text-green-600">{orders.filter(o => o.side === 'BUY').length}</h4>
+            <p className="text-xs text-gray-600">Buy Orders</p>
           </div>
-          <div className={`p-2 sm:p-3 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
-            <h4 className={`text-base sm:text-lg font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}>{holdings.length}</h4>
-            <p className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Holdings</p>
+          <div className="p-2 sm:p-3 rounded-lg border bg-gray-50 border-gray-200">
+            <h4 className="text-base sm:text-lg font-bold text-blue-600">{holdings.length}</h4>
+            <p className="text-xs text-gray-600">Holdings</p>
           </div>
-          <div className={`p-2 sm:p-3 rounded-lg border ${theme === "dark" ? "bg-gray-800 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
-            <h4 className={`text-base sm:text-lg font-bold ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>87%</h4>
-            <p className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>Success Rate</p>
+          <div className="p-2 sm:p-3 rounded-lg border bg-gray-50 border-gray-200">
+            <h4 className="text-base sm:text-lg font-bold text-purple-600">87%</h4>
+            <p className="text-xs text-gray-600">Success Rate</p>
           </div>
         </div>
       </div>

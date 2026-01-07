@@ -1,14 +1,12 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import toast from 'react-hot-toast';
-import { useTheme } from '../contexts/ThemeContext';
 
 import GeneralContext from "./GeneralContext";
 
 import "./BuyActionWindow.css";
 
 const BuyActionWindow = ({ uid }) => {
-  const { theme } = useTheme();
   const generalContext = useContext(GeneralContext);
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
@@ -68,7 +66,7 @@ const BuyActionWindow = ({ uid }) => {
   };
 
   return (
-    <div className={`container ${theme === "dark" ? "dark-theme" : ""}`} id="buy-window" draggable="true">
+    <div className="container" id="buy-window" draggable="true">
       <div className="header">
         <h3>{uid} <span>NSE</span></h3>
         <div className="market-options">
@@ -124,20 +122,20 @@ const BuyActionWindow = ({ uid }) => {
         </div>
         
         <div className="inputs">
-          <fieldset className={theme === "dark" ? "dark-fieldset" : ""}>
-            <legend className={theme === "dark" ? "dark-legend" : ""}>Qty.</legend>
+          <fieldset>
+            <legend>Qty.</legend>
             <input
               type="number"
               name="qty"
               id="qty"
               onChange={(e) => setStockQuantity(e.target.value)}
               value={stockQuantity}
-              className={theme === "dark" ? "dark-input" : ""}
+              className=""
               min="1"
             />
           </fieldset>
-          <fieldset className={theme === "dark" ? "dark-fieldset" : ""}>
-            <legend className={theme === "dark" ? "dark-legend" : ""}>Price</legend>
+          <fieldset>
+            <legend>Price</legend>
             <input
               type="number"
               name="price"
@@ -145,7 +143,7 @@ const BuyActionWindow = ({ uid }) => {
               step="0.05"
               onChange={(e) => setStockPrice(e.target.value)}
               value={stockPrice}
-              className={theme === "dark" ? "dark-input" : ""}
+              className=""
               disabled={orderType === "MARKET"}
               placeholder={orderType === "MARKET" ? "Market Price" : "0.00"}
             />
@@ -158,7 +156,7 @@ const BuyActionWindow = ({ uid }) => {
       </div>
 
       <div className="buttons">
-        <span className={theme === "dark" ? "dark-text" : ""}>Margin required ₹{(stockQuantity * stockPrice * 0.2).toFixed(2)}</span>
+        <span>Margin required ₹{(stockQuantity * stockPrice * 0.2).toFixed(2)}</span>
         <div>
           <Link className="btn btn-blue" onClick={handleBuyClick}>
             Buy

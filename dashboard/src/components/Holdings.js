@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { VerticalGraph } from "./VerticalGraph";
-import { useTheme } from '../contexts/ThemeContext';
 
 const Holdings = () => {
-  const { theme } = useTheme();
   const [allHoldings, setAllHoldings] = useState([]);
 
   useEffect(() => {
@@ -55,30 +53,18 @@ const Holdings = () => {
   // };
 
   return (
-    <div className={`transition-colors ${
-      theme === "light" ? "" : "text-white"
-    }`}>
-      <h3 className={`title ${
-        theme === "light" ? "text-gray-800" : "text-white"
-      }`}>Holdings ({allHoldings.length})</h3>
+    <div className="transition-colors">
+      <h3 className="title text-gray-800">Holdings ({allHoldings.length})</h3>
 
       {allHoldings.length === 0 ? (
         <div className="text-center py-12">
-          <div className={`text-6xl mb-4 ${
-            theme === "light" ? "text-gray-300" : "text-gray-600"
-          }`}>📈</div>
-          <p className={`text-lg mb-2 ${
-            theme === "light" ? "text-gray-600" : "text-gray-400"
-          }`}>No holdings yet</p>
-          <p className={`text-sm ${
-            theme === "light" ? "text-gray-500" : "text-gray-500"
-          }`}>Start trading to see your holdings here</p>
+          <div className="text-6xl mb-4 text-gray-300">📈</div>
+          <p className="text-lg mb-2 text-gray-600">No holdings yet</p>
+          <p className="text-sm text-gray-500">Start trading to see your holdings here</p>
         </div>
       ) : (
         <>
-          <div className={`order-table ${
-            theme === "dark" ? "dark-theme" : ""
-          }`}>
+          <div className="order-table">
             <table>
               <thead>
                 <tr>
@@ -118,17 +104,15 @@ const Holdings = () => {
             </table>
           </div>
 
-          <div className={`row mt-8 ${
-            theme === "dark" ? "text-white" : ""
-          }`}>
+          <div className="row mt-8">
             <div className="col">
-              <h5 className={theme === "dark" ? "text-white" : ""}>
+              <h5>
                 {allHoldings.reduce((total, stock) => total + (stock.avg * stock.qty), 0).toLocaleString()}.<span>00</span>
               </h5>
               <p>Total investment</p>
             </div>
             <div className="col">
-              <h5 className={theme === "dark" ? "text-white" : ""}>
+              <h5>
                 {allHoldings.reduce((total, stock) => total + (stock.price * stock.qty), 0).toLocaleString()}.<span>00</span>
               </h5>
               <p>Current value</p>

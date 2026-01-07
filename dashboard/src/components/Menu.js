@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useTheme } from '../context/ThemeContext';
 
 const Menu = () => {
-  const { theme } = useTheme();
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -43,9 +41,7 @@ const Menu = () => {
   const activeMenuClass = "menu selected";
 
   return (
-    <div className={`menu-container transition-colors ${
-      theme === "light" ? "bg-white text-black" : "bg-gray-800 text-white"
-    }`}>
+    <div className="menu-container transition-colors bg-white text-black">
       <img src="logo.png" style={{ width: "50px" }} alt="Logo" />
       <div className="menus">
         <ul>
@@ -55,9 +51,7 @@ const Menu = () => {
               to="/"
               onClick={() => handleMenuClick(0)}
             >
-              <p className={`${selectedMenu === 0 ? activeMenuClass : menuClass} ${
-                theme === "light" ? "text-gray-700" : "text-gray-200"
-              }`}>
+              <p className={`${selectedMenu === 0 ? activeMenuClass : menuClass} text-gray-700`}>
                 Dashboard
               </p>
             </Link>
@@ -68,9 +62,7 @@ const Menu = () => {
               to="/orders"
               onClick={() => handleMenuClick(1)}
             >
-              <p className={`${selectedMenu === 1 ? activeMenuClass : menuClass} ${
-                theme === "light" ? "text-gray-700" : "text-gray-200"
-              }`}>
+              <p className={`${selectedMenu === 1 ? activeMenuClass : menuClass} text-gray-700`}>
                 Orders
               </p>
             </Link>
@@ -81,9 +73,7 @@ const Menu = () => {
               to="/holdings"
               onClick={() => handleMenuClick(2)}
             >
-              <p className={`${selectedMenu === 2 ? activeMenuClass : menuClass} ${
-                theme === "light" ? "text-gray-700" : "text-gray-200"
-              }`}>
+              <p className={`${selectedMenu === 2 ? activeMenuClass : menuClass} text-gray-700`}>
                 Holdings
               </p>
             </Link>
@@ -94,9 +84,7 @@ const Menu = () => {
               to="/positions"
               onClick={() => handleMenuClick(3)}
             >
-              <p className={`${selectedMenu === 3 ? activeMenuClass : menuClass} ${
-                theme === "light" ? "text-gray-700" : "text-gray-200"
-              }`}>
+              <p className={`${selectedMenu === 3 ? activeMenuClass : menuClass} text-gray-700`}>
                 Positions
               </p>
             </Link>
@@ -107,9 +95,7 @@ const Menu = () => {
               to="funds"
               onClick={() => handleMenuClick(4)}
             >
-              <p className={`${selectedMenu === 4 ? activeMenuClass : menuClass} ${
-                theme === "light" ? "text-gray-700" : "text-gray-200"
-              }`}>
+              <p className={`${selectedMenu === 4 ? activeMenuClass : menuClass} text-gray-700`}>
                 Funds
               </p>
             </Link>
@@ -120,9 +106,7 @@ const Menu = () => {
               to="/apps"
               onClick={() => handleMenuClick(6)}
             >
-              <p className={`${selectedMenu === 6 ? activeMenuClass : menuClass} ${
-                theme === "light" ? "text-gray-700" : "text-gray-200"
-              }`}>
+              <p className={`${selectedMenu === 6 ? activeMenuClass : menuClass} text-gray-700`}>
                 Apps
               </p>
             </Link>
@@ -134,20 +118,18 @@ const Menu = () => {
                 to="/auth"
                 onClick={() => handleMenuClick(7)}
               >
-                <p className={`${selectedMenu === 7 ? activeMenuClass : menuClass} ${
-                  theme === "light" ? "text-gray-700" : "text-gray-200"
-                }`}>
+                <p className={`${selectedMenu === 7 ? activeMenuClass : menuClass} text-gray-700`}>
                   Login
                 </p>
               </Link>
             </li>
           )}
         </ul>
-        <hr className={theme === "light" ? "border-gray-300" : "border-gray-600"} />
+        <hr className="border-gray-300" />
         <Link 
           to="/profile"
           style={{ textDecoration: "none" }}
-          className={`profile cursor-pointer transition-colors ${theme === "light" ? "hover:bg-gray-100" : "hover:bg-gray-700"}`}
+          className="profile cursor-pointer transition-colors hover:bg-gray-100"
         >
           {user ? (
             <>
@@ -160,7 +142,7 @@ const Menu = () => {
                   e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random&color=fff&size=128`;
                 }}
               />
-              <p className={`username ${theme === "light" ? "text-gray-700" : "text-gray-200"}`}>{user.name}</p>
+              <p className="username text-gray-700">{user.name}</p>
             </>
           ) : (
             <>
