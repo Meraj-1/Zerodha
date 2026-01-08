@@ -15,8 +15,8 @@ const router = express.Router();
 // In-memory storage for Google OAuth users (demo purposes)
 const googleUserBalances = new Map();
 const googleUserTransactions = new Map();
-const googleUserProfiles = new Map(); // Store profile data for Google users
-const blacklistedTokens = new Set(); // Store invalidated tokens
+const googleUserProfiles = new Map(); 
+const blacklistedTokens = new Set(); 
 
 // Helper function to blacklist a token
 const blacklistToken = (token) => {
@@ -37,7 +37,7 @@ const isTokenBlacklisted = (token) => {
 // Helper function to get/set balance for Google users
 const getGoogleUserBalance = (userId) => {
   return googleUserBalances.get(userId) || 0;
-};
+};    
 
 const setGoogleUserBalance = (userId, balance) => {
   googleUserBalances.set(userId, Math.max(0, balance));
@@ -86,42 +86,43 @@ const upload = multer({
 });
 
 // Test route to check if server is working
-router.get("/test", async (req, res) => {
-  let dbStatus = "Not tested";
-  let dbError = null;
+// router.get("/test", async (req, res) => {
+
+//   let dbStatus = "Not tested";
+//   let dbError = null;
   
-  try {
-    // Test database connection
-    const { connectDB } = await import("../utils/db.js");
-    await connectDB();
+//   try {
+//     // Test database connection
+//     const { connectDB } = await import("../utils/db.js");
+//     await connectDB();
     
-    // Try to query database
-    const testUser = await User.findOne({}).limit(1);
-    dbStatus = testUser ? "Connected with data" : "Connected but no users";
-  } catch (error) {
-    dbStatus = "Connection failed";
-    dbError = error.message;
-  }
+//     // Try to query database
+//     const testUser = await User.findOne({}).limit(1);
+//     dbStatus = testUser ? "Connected with data" : "Connected but no users";
+//   } catch (error) {
+//     dbStatus = "Connection failed";
+//     dbError = error.message;
+//   }
   
-  res.json({ 
-    message: "Auth routes working", 
-    timestamp: new Date().toISOString(),
-    env: {
-      hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
-      hasGoogleSecret: !!process.env.GOOGLE_CLIENT_SECRET,
-      hasMongoUri: !!process.env.MONGO_URI
-    },
-    database: {
-      status: dbStatus,
-      error: dbError
-    }
-  });
-});
+//   res.json({ 
+//     message: "Auth routes working", 
+//     timestamp: new Date().toISOString(),
+//     env: {
+//       hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
+//       hasGoogleSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+//       hasMongoUri: !!process.env.MONGO_URI
+//     },
+//     database: {
+//       status: dbStatus,
+//       error: dbError
+//     }
+//   });
+// });
 
 // Regular signup/login routes
-router.get("/signup", (req, res) => {
-  res.json({ message: "Signup endpoint - use POST method with name, email, password" });
-});
+// router.get("/signup", (req, res) => {
+//   res.json({ message: "Signup endpoint - use POST method with name, email, password" });
+// });
 router.post("/signup", signup);
 router.post("/login", login);
 
@@ -210,24 +211,24 @@ router.get(
 );
 
 // Simple test callback without passport
-router.get("/google/test-callback", async (req, res) => {
-  try {
-    console.log('Test callback hit with code:', req.query.code ? 'YES' : 'NO');
+// router.get("/google/test-callback", async (req, res) => {
+//   try {
+//     console.log('Test callback hit with code:', req.query.code ? 'YES' : 'NO');
     
-    // Test database connection
-    const testUser = await User.findOne({}).limit(1);
-    console.log('Database test:', testUser ? 'Connected' : 'No users found');
+//     // Test database connection
+//     const testUser = await User.findOne({}).limit(1);
+//     console.log('Database test:', testUser ? 'Connected' : 'No users found');
     
-    res.json({
-      message: 'Test callback working',
-      hasCode: !!req.query.code,
-      dbConnected: !!testUser || 'No users but connected'
-    });
-  } catch (error) {
-    console.error('Test callback error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
+//     res.json({
+//       message: 'Test callback working',
+//       hasCode: !!req.query.code,
+//       dbConnected: !!testUser || 'No users but connected'
+//     });
+//   } catch (error) {
+//     console.error('Test callback error:', error);
+//     res.status(500).json({ error: error.message });
+//   }
+// });
 
 
 //protected route - Get user details after login
@@ -634,138 +635,215 @@ router.post("/request-deletion-otp", authMiddleware, userOrAdmin, async (req, re
 });
 
 // Verify OTP and delete account (User or Admin only)
-router.post("/delete-account", authMiddleware, userOrAdmin, async (req, res) => {
-  try {
-    const { otp } = req.body;
+// router.post("/delete-account", authMiddleware, userOrAdmin, async (req, res) => {
+//   try {
+//     const { otp } = req.body;
     
-    if (!otp) {
-      return res.status(400).json({ message: "OTP is required" });
-    }
+//     if (!otp) {
+//       return res.status(400).json({ message: "OTP is required" });
+//     }
     
-    // Get user's current token for blacklisting
-    const userToken = req.headers.authorization;
+//     // Get user's current token for blacklisting
+//     const userToken = req.headers.authorization;
     
-    // Handle Google OAuth users
-    if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
-      // Check temp OTP for Google users
-      if (global.tempOTP && global.tempOTP.userId === req.user._id && global.tempOTP.otp === otp) {
-        try {
-          await sendDeletionConfirmation(req.user.email, req.user.name);
-        } catch (emailError) {
-          console.log('Deletion confirmation email failed');
-        }
+//     // Handle Google OAuth users
+//     if (req.user.isGoogleConnected || req.user._id.startsWith('google_')) {
+//       // Check temp OTP for Google users
+//       if (global.tempOTP && global.tempOTP.userId === req.user._id && global.tempOTP.otp === otp) {
+//         try {
+//           await sendDeletionConfirmation(req.user.email, req.user.name);
+//         } catch (emailError) {
+//           console.log('Deletion confirmation email failed');
+//         }
         
-        // Blacklist current token to logout user from all sessions
-        if (userToken) {
-          blacklistToken(userToken);
-        }
+//         // Blacklist current token to logout user from all sessions
+//         if (userToken) {
+//           blacklistToken(userToken);
+//         }
         
-        // Complete data erasure for Google OAuth users
-        try {
-          // Remove from memory storage
-          googleUserBalances.delete(req.user._id);
-          googleUserTransactions.delete(req.user._id);
-          googleUserProfiles.delete(req.user._id);
+//         // Complete data erasure for Google OAuth users
+//         try {
+//           // Remove from memory storage
+//           googleUserBalances.delete(req.user._id);
+//           googleUserTransactions.delete(req.user._id);
+//           googleUserProfiles.delete(req.user._id);
           
-          // Remove from database if exists (some Google users might have DB records)
-          await User.findOneAndDelete({ 
-            $or: [
-              { googleId: req.user.googleId },
-              { email: req.user.email },
-              { _id: req.user._id }
-            ]
-          });
+//           // Remove from database if exists (some Google users might have DB records)
+//           await User.findOneAndDelete({ 
+//             $or: [
+//               { googleId: req.user.googleId },
+//               { email: req.user.email },
+//               { _id: req.user._id }
+//             ]
+//           });
           
-          // Remove all transactions associated with this user
-          await Transaction.deleteMany({ 
-            $or: [
-              { userId: req.user._id },
-              { userEmail: req.user.email }
-            ]
-          });
+//           // Remove all transactions associated with this user
+//           await Transaction.deleteMany({ 
+//             $or: [
+//               { userId: req.user._id },
+//               { userEmail: req.user.email }
+//             ]
+//           });
           
-          // Remove all OTPs associated with this user
-          await OTP.deleteMany({ 
-            $or: [
-              { userId: req.user._id },
-              { userEmail: req.user.email }
-            ]
-          });
+//           // Remove all OTPs associated with this user
+//           await OTP.deleteMany({ 
+//             $or: [
+//               { userId: req.user._id },
+//               { userEmail: req.user.email }
+//             ]
+//           });
           
-          console.log(`Google user ${req.user.email} completely erased from all systems`);
-        } catch (cleanupError) {
-          console.log('Data cleanup completed with some warnings:', cleanupError.message);
-        }
+//           console.log(`Google user ${req.user.email} completely erased from all systems`);
+//         } catch (cleanupError) {
+//           console.log('Data cleanup completed with some warnings:', cleanupError.message);
+//         }
         
-        delete global.tempOTP;
-        return res.json({ 
-          message: "Account and all associated data deleted successfully. You have been logged out from all devices.",
-          logout: true 
-        });
-      } else {
-        return res.status(400).json({ message: "Invalid or expired OTP" });
+//         delete global.tempOTP;
+//         return res.json({ 
+//           message: "Account and all associated data deleted successfully. You have been logged out from all devices.",
+//           logout: true 
+//         });
+//       } else {
+//         return res.status(400).json({ message: "Invalid or expired OTP" });
+//       }
+//     }
+    
+//     // Find valid OTP for regular users
+//     const validOTP = await OTP.findOne({
+//       userId: req.user._id,
+//       otp: otp,
+//       purpose: "account_deletion"
+//     });
+    
+//     if (!validOTP) {
+//       return res.status(400).json({ message: "Invalid or expired OTP" });
+//     }
+    
+//     // Blacklist current token to logout user from all sessions
+//     if (userToken) {
+//       blacklistToken(userToken);
+//     }
+    
+//     // Send confirmation email before deletion
+//     try {
+//       await sendDeletionConfirmation(req.user.email, req.user.name);
+//     } catch (emailError) {
+//       console.log('Deletion confirmation email failed:', emailError);
+//     }
+    
+//     // Complete data erasure for regular users
+//     try {
+//       const userId = req.user._id;
+//       const userEmail = req.user.email;
+      
+//       // Delete all user transactions
+//       await Transaction.deleteMany({ userId: userId });
+//       console.log(`Deleted transactions for user ${userEmail}`);
+      
+//       // Delete all user OTPs
+//       await OTP.deleteMany({ userId: userId });
+//       console.log(`Deleted OTPs for user ${userEmail}`);
+      
+//       // Delete user account
+//       await User.findByIdAndDelete(userId);
+//       console.log(`Deleted user account ${userEmail}`);
+      
+//       // Remove from memory storage (if exists)
+//       googleUserBalances.delete(userId.toString());
+//       googleUserTransactions.delete(userId.toString());
+//       googleUserProfiles.delete(userId.toString());
+      
+//       console.log(`User ${userEmail} completely erased from all systems`);
+//     } catch (dbError) {
+//       console.log('Database deletion completed with some warnings:', dbError.message);
+//     }
+    
+//     res.json({ 
+//       message: "Account and all associated data deleted successfully. You have been logged out from all devices.",
+//       logout: true 
+//     });
+//   } catch (error) {
+//     console.error("Account deletion error:", error);
+//     res.status(500).json({ message: "Error deleting account" });
+//   }
+// });
+router.post(
+  "/delete-account",
+  authMiddleware,
+  userOrAdmin,
+  async (req, res) => {
+    try {
+      const { otp } = req.body;
+
+      if (!otp) {
+        return res.status(400).json({ message: "OTP is required" });
       }
-    }
-    
-    // Find valid OTP for regular users
-    const validOTP = await OTP.findOne({
-      userId: req.user._id,
-      otp: otp,
-      purpose: "account_deletion"
-    });
-    
-    if (!validOTP) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
-    }
-    
-    // Blacklist current token to logout user from all sessions
-    if (userToken) {
-      blacklistToken(userToken);
-    }
-    
-    // Send confirmation email before deletion
-    try {
-      await sendDeletionConfirmation(req.user.email, req.user.name);
-    } catch (emailError) {
-      console.log('Deletion confirmation email failed:', emailError);
-    }
-    
-    // Complete data erasure for regular users
-    try {
+
       const userId = req.user._id;
       const userEmail = req.user.email;
-      
-      // Delete all user transactions
-      await Transaction.deleteMany({ userId: userId });
-      console.log(`Deleted transactions for user ${userEmail}`);
-      
-      // Delete all user OTPs
-      await OTP.deleteMany({ userId: userId });
-      console.log(`Deleted OTPs for user ${userEmail}`);
-      
-      // Delete user account
-      await User.findByIdAndDelete(userId);
-      console.log(`Deleted user account ${userEmail}`);
-      
-      // Remove from memory storage (if exists)
-      googleUserBalances.delete(userId.toString());
-      googleUserTransactions.delete(userId.toString());
-      googleUserProfiles.delete(userId.toString());
-      
-      console.log(`User ${userEmail} completely erased from all systems`);
-    } catch (dbError) {
-      console.log('Database deletion completed with some warnings:', dbError.message);
+      const authProvider = req.user.authProvider;
+
+      // 1️⃣ OTP VERIFY (DB based – no global memory)
+      const validOTP = await OTP.findOne({
+        userId,
+        otp,
+        expiresAt: { $gt: new Date() }
+      });
+
+      if (!validOTP) {
+        return res.status(400).json({ message: "Invalid or expired OTP" });
+      }
+
+      // 2️⃣ SEND CONFIRMATION EMAIL (non-blocking)
+      sendDeletionConfirmation(userEmail, req.user.name)
+        .catch(() => console.log("Deletion email failed"));
+
+      // 3️⃣ BLACKLIST JWT (logout from all devices)
+      const token = req.headers.authorization;
+      if (token) {
+        blacklistToken(token);
+      }
+
+      // 4️⃣ DELETE RELATED DATA (ORDER MATTERS)
+      await Promise.all([
+        Transaction.deleteMany({ userId }),
+        OTP.deleteMany({ userId }),
+        Session?.deleteMany?.({ userId }) // if sessions collection exists
+      ]);
+
+      // 5️⃣ DELETE USER ACCOUNT (DB)
+      await User.deleteOne({ _id: userId });
+
+      // 6️⃣ GOOGLE CLEANUP (if needed)
+      if (authProvider === "google") {
+        try {
+          // Optional: revoke Google token if stored
+          if (req.user.googleAccessToken) {
+            await revokeGoogleToken(req.user.googleAccessToken);
+          }
+        } catch (e) {
+          console.log("Google revoke failed (safe to ignore)");
+        }
+      }
+
+      // 7️⃣ MEMORY CLEANUP (if legacy memory stores exist)
+      googleUserBalances?.delete?.(userId.toString());
+      googleUserTransactions?.delete?.(userId.toString());
+      googleUserProfiles?.delete?.(userId.toString());
+
+      return res.json({
+        message:
+          "Account deleted permanently from database, Google linkage, and all systems.",
+        logout: true
+      });
+
+    } catch (error) {
+      console.error("Delete account error:", error.message);
+      return res.status(500).json({ message: "Account deletion failed" });
     }
-    
-    res.json({ 
-      message: "Account and all associated data deleted successfully. You have been logged out from all devices.",
-      logout: true 
-    });
-  } catch (error) {
-    console.error("Account deletion error:", error);
-    res.status(500).json({ message: "Error deleting account" });
   }
-});
+);
+
 
 // Make blacklist functions globally available
 global.isTokenBlacklisted = isTokenBlacklisted;

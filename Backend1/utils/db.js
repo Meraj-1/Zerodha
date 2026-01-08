@@ -19,7 +19,7 @@ export const connectDB = async () => {
       connectTimeoutMS: 3000,
     });
 
-    isConnected = db.connections[0].readyState === 1;
+    // isConnected = db.connections[0].readyState === 1;
     console.log('MongoDB connected for serverless');
   } catch (error) {
     console.error('MongoDB connection error:', error);

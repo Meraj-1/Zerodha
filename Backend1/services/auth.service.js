@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { generateToken } from "../utils/jwt.js";
 import { connectDB } from "../utils/db.js";
 
-export const signup = async ({ name, email, password, role }) => {
+export const signup = async ({ name, email, password }) => {
   try {
     await connectDB();
     
@@ -12,8 +12,9 @@ export const signup = async ({ name, email, password, role }) => {
     if (userExist) {
       throw new Error("User already exists");
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    // const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
       name,
@@ -77,7 +78,6 @@ export const googleLogin = async (googleUser) => {
         authProvider: "google",
         avatar: googleUser.avatar,
         isGoogleConnected: true,
-        isAccountVerified: true, // Google users are automatically verified
         role: 'user',
         balance: 0
       });

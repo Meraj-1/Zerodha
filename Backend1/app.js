@@ -10,7 +10,6 @@ import isLoggedIn from "./middleware/isLoggedIn.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import "./config/passport.js";
 import authRoutes from "./routes/auth.routes.js";
-// import testRoutes from "./routes/test.routes.js";
 import userRoutes from "./routes/user.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
