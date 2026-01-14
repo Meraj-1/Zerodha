@@ -1,41 +1,73 @@
-import React from 'react';
-import { useTheme } from '../../contexts/ThemeContext';
-import { themes } from '../../contexts/themeConfig';
+import React from "react";
+import { useTheme } from "../../contexts/ThemeContext";
+import { themes } from "../../contexts/themeConfig";
+import { ArrowRight } from "lucide-react";
 
 function Education() {
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const t = themes[theme];
 
   return (
-    <div className={`flex flex-col ${t.bgSecondary}  md:flex-row`}> {/* Main container */}
-      <div className="flex-shrink-0 justify-center w-full md:w-1/2"> {/* Image container */}
-        <img
-          className="mt:x md:pl-20"
-          src="https://zerodha.com/static/images/index-education.svg"
-          alt="Free and open market education"
-        />
-      </div>
-      <div className="flex-grow md:p-8 sm:mt-20"> {/* Content container */}
-        <h3 className={` ${t.text} text-2xl font-medium mb-4`}>Free and open market education</h3>
-        <p className={`${t.textSecondary} mb-4`}>
-          Varsity, the largest online stock market education book in the world
-          covering everything from the basics to advanced trading.
-          <a href="#" className={`${t.accent} hover:underline mx-2 md:mx-5`}>
-        Varsity →
-        </a>
-        </p>
-    
-        <div className="mt-4"> {/* TradingQ&A section */}
-          <p className={`${t.textSecondary} mb-2`}>
-            TradingQ&A, the most active trading and investment community in India
-            for all your market related queries.
-            <a href="#" className={`${t.accent} hover:underline mx-2 md:mx-5`}>
-            TradingQ&A →
-          </a>
-          </p>
+    <section className={`${t.bgSecondary} py-20`}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex flex-col-reverse md:flex-row items-center gap-14">
+
+          {/* Content */}
+          <div className="md:w-1/2 text-center md:text-left">
+            <h2 className={`text-2xl md:text-3xl font-semibold ${t.text} mb-5`}>
+              Free and open market education
+            </h2>
+
+            <p className={`${t.textSecondary} text-lg leading-relaxed mb-6`}>
+              <strong className={t.text}>Varsity</strong>, the largest online stock
+              market education platform, covering everything from basics to
+              advanced trading.
+            </p>
+
+            <a
+              href="#"
+              className={`inline-flex items-center gap-2 ${t.accent}
+                          font-semibold hover:underline
+                          focus-visible:outline focus-visible:outline-2
+                          focus-visible:outline-offset-2`}
+            >
+              Explore Varsity
+              <ArrowRight size={18} />
+            </a>
+
+            <div className="mt-10">
+              <p className={`${t.textSecondary} text-lg leading-relaxed mb-3`}>
+                <strong className={t.text}>TradingQ&amp;A</strong>, India’s most
+                active trading and investment community for all market-related
+                queries.
+              </p>
+
+              <a
+                href="#"
+                className={`inline-flex items-center gap-2 ${t.accent}
+                            font-semibold hover:underline
+                            focus-visible:outline focus-visible:outline-2
+                            focus-visible:outline-offset-2`}
+              >
+                Visit TradingQ&amp;A
+                <ArrowRight size={18} />
+              </a>
+            </div>
+          </div>
+
+          {/* Image */}
+          <div className="md:w-1/2 flex justify-center">
+            <img
+              src="https://zerodha.com/static/images/index-education.svg"
+              alt="Free and open market education"
+              loading="lazy"
+              className="w-full max-w-lg"
+            />
+          </div>
+
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
