@@ -1,6 +1,68 @@
 import React from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { themes } from "../../contexts/themeConfig";
+import { ArrowRight } from "lucide-react";
+
+const TICKET_CATEGORIES = [
+  {
+    title: "Account Opening",
+    items: [
+      "Trading FAQs",
+      "Kite",
+      "Margin",
+      "Product & Order Types",
+      "Corporate Actions",
+      "Kite Features",
+    ],
+  },
+  {
+    title: "Your Zerodha Account",
+    items: [
+      "Login Credentials",
+      "Profile",
+      "Account Modification",
+      "CMR & DP ID",
+      "Nomination",
+      "Transfer & Conversion",
+    ],
+  },
+  {
+    title: "Trading & Markets",
+    items: [
+      "Getting Started",
+      "Online Trading",
+      "Offline Trading",
+      "Charges",
+      "Company / Partnership / HUF",
+      "NRI",
+    ],
+  },
+  {
+    title: "Funds",
+    items: ["Fund Withdrawal", "Adding Funds", "Bank Accounts", "eMandate"],
+  },
+  {
+    title: "Console",
+    items: [
+      "IPO",
+      "Portfolio",
+      "Fund Statement",
+      "Profile",
+      "Reports",
+      "Referral Program",
+    ],
+  },
+  {
+    title: "Coin",
+    items: [
+      "Mutual Funds & Coin",
+      "Coin App",
+      "Coin Web",
+      "Transactions & Reports",
+      "National Pension Scheme (NPS)",
+    ],
+  },
+];
 
 function CreateTicket() {
   const { theme } = useTheme();
@@ -11,105 +73,44 @@ function CreateTicket() {
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}
-        <div className="mb-12">
-          <h4 className={`text-2xl md:text-3xl font-extrabold ${t.text} mb-2`}>
+        <header className="mb-14 max-w-2xl">
+          <h2 className={`text-3xl md:text-4xl font-extrabold ${t.text} mb-3`}>
             Create a support ticket
-          </h4>
+          </h2>
           <p className={`${t.textSecondary} text-lg`}>
-            Select a relevant topic below to get started.
+            Choose a category below to find relevant help topics or raise a ticket.
           </p>
-        </div>
+        </header>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {TICKET_CATEGORIES.map((category) => (
+            <div
+              key={category.title}
+              className={`${t.bg} rounded-2xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}
+            >
+              <h3 className={`text-xl font-bold ${t.accent} mb-5`}>
+                {category.title}
+              </h3>
 
-          {/* Card */}
-          <div className={`${t.bg} rounded-xl p-6 shadow-sm hover:shadow-md transition`}>
-            <h5 className={`text-lg font-bold ${t.accent} mb-4`}>
-              Account Opening
-            </h5>
-            <ul className={`space-y-2 ${t.textSecondary}`}>
-              <li><a href="#" className={`${t.hover}`}>Trading FAQs</a></li>
-              <li><a href="#" className={`${t.hover}`}>Kite</a></li>
-              <li><a href="#" className={`${t.hover}`}>Margin</a></li>
-              <li><a href="#" className={`${t.hover}`}>Product & Order Types</a></li>
-              <li><a href="#" className={`${t.hover}`}>Corporate Actions</a></li>
-              <li><a href="#" className={`${t.hover}`}>Kite Features</a></li>
-            </ul>
-          </div>
-
-          {/* Card */}
-          <div className={`${t.bg} rounded-xl p-6 shadow-sm hover:shadow-md transition`}>
-            <h5 className={`text-lg font-bold ${t.accent} mb-4`}>
-              Your Zerodha Account
-            </h5>
-            <ul className={`space-y-2 ${t.textSecondary}`}>
-              <li><a href="#" className={`${t.hover}`}>Login Credentials</a></li>
-              <li><a href="#" className={`${t.hover}`}>Profile</a></li>
-              <li><a href="#" className={`${t.hover}`}>Account Modification</a></li>
-              <li><a href="#" className={`${t.hover}`}>CMR & DP ID</a></li>
-              <li><a href="#" className={`${t.hover}`}>Nomination</a></li>
-              <li><a href="#" className={`${t.hover}`}>Transfer & Conversion</a></li>
-            </ul>
-          </div>
-
-          {/* Card */}
-          <div className={`${t.bg} rounded-xl p-6 shadow-sm hover:shadow-md transition`}>
-            <h5 className={`text-lg font-bold ${t.accent} mb-4`}>
-              Trading & Markets
-            </h5>
-            <ul className={`space-y-2 ${t.textSecondary}`}>
-              <li><a href="#" className={`${t.hover}`}>Getting Started</a></li>
-              <li><a href="#" className={`${t.hover}`}>Online Trading</a></li>
-              <li><a href="#" className={`${t.hover}`}>Offline Trading</a></li>
-              <li><a href="#" className={`${t.hover}`}>Charges</a></li>
-              <li><a href="#" className={`${t.hover}`}>Company / Partnership / HUF</a></li>
-              <li><a href="#" className={`${t.hover}`}>NRI</a></li>
-            </ul>
-          </div>
-
-          {/* Card */}
-          <div className={`${t.bg} rounded-xl p-6 shadow-sm hover:shadow-md transition`}>
-            <h5 className={`text-lg font-bold ${t.accent} mb-4`}>
-              Funds
-            </h5>
-            <ul className={`space-y-2 ${t.textSecondary}`}>
-              <li><a href="#" className={`${t.hover}`}>Fund Withdrawal</a></li>
-              <li><a href="#" className={`${t.hover}`}>Adding Funds</a></li>
-              <li><a href="#" className={`${t.hover}`}>Bank Accounts</a></li>
-              <li><a href="#" className={`${t.hover}`}>eMandate</a></li>
-            </ul>
-          </div>
-
-          {/* Card */}
-          <div className={`${t.bg} rounded-xl p-6 shadow-sm hover:shadow-md transition`}>
-            <h5 className={`text-lg font-bold ${t.accent} mb-4`}>
-              Console
-            </h5>
-            <ul className={`space-y-2 ${t.textSecondary}`}>
-              <li><a href="#" className={`${t.hover}`}>IPO</a></li>
-              <li><a href="#" className={`${t.hover}`}>Portfolio</a></li>
-              <li><a href="#" className={`${t.hover}`}>Fund Statement</a></li>
-              <li><a href="#" className={`${t.hover}`}>Profile</a></li>
-              <li><a href="#" className={`${t.hover}`}>Reports</a></li>
-              <li><a href="#" className={`${t.hover}`}>Referral Program</a></li>
-            </ul>
-          </div>
-
-          {/* Card */}
-          <div className={`${t.bg} rounded-xl p-6 shadow-sm hover:shadow-md transition`}>
-            <h5 className={`text-lg font-bold ${t.accent} mb-4`}>
-              Coin
-            </h5>
-            <ul className={`space-y-2 ${t.textSecondary}`}>
-              <li><a href="#" className={`${t.hover}`}>Mutual Funds & Coin</a></li>
-              <li><a href="#" className={`${t.hover}`}>Coin App</a></li>
-              <li><a href="#" className={`${t.hover}`}>Coin Web</a></li>
-              <li><a href="#" className={`${t.hover}`}>Transactions & Reports</a></li>
-              <li><a href="#" className={`${t.hover}`}>National Pension Scheme (NPS)</a></li>
-            </ul>
-          </div>
-
+              <ul className={`space-y-3 ${t.textSecondary}`}>
+                {category.items.map((item) => (
+                  <li key={item}>
+                    <a
+                      href="#"
+                      className={`group inline-flex items-center gap-2 ${t.hover} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`}
+                    >
+                      <span>{item}</span>
+                      <ArrowRight
+                        size={14}
+                        className="opacity-0 group-hover:opacity-100 transition"
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </section>
