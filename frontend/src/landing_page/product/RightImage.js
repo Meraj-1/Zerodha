@@ -1,30 +1,39 @@
 import React from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { themes } from "../../contexts/themeConfig";
+import { ArrowRight } from "lucide-react";
 
-function RightImage({ imageURL, productName, productDescription, learnmore }) {
+function RightImage({
+  imageURL,
+  productName,
+  productDescription,
+  learnmore = "Learn more",
+}) {
   const { theme } = useTheme();
   const t = themes[theme];
 
   return (
-    <section className="max-w-7xl mx-auto px-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <section className="max-w-7xl mx-auto px-6 py-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
 
         {/* Text */}
         <div className="text-center md:text-left">
-          <h3 className={`text-3xl md:text-4xl font-extrabold ${t.text} mb-4`}>
+          <h2 className={`text-3xl md:text-4xl font-extrabold ${t.text} mb-5`}>
             {productName}
-          </h3>
+          </h2>
 
-          <p className={`text-lg ${t.textSecondary} leading-relaxed mb-6`}>
+          <p className={`text-lg ${t.textSecondary} leading-relaxed mb-7 max-w-xl`}>
             {productDescription}
           </p>
 
           <a
             href="#"
-            className={`inline-flex items-center ${t.accent} font-semibold hover:underline`}
+            className={`inline-flex items-center gap-2 ${t.accent} font-semibold
+                        hover:underline focus-visible:outline focus-visible:outline-2
+                        focus-visible:outline-offset-2`}
           >
-            {learnmore || "Learn more →"}
+            {learnmore}
+            <ArrowRight size={18} />
           </a>
         </div>
 
@@ -32,8 +41,11 @@ function RightImage({ imageURL, productName, productDescription, learnmore }) {
         <div className="flex justify-center">
           <img
             src={imageURL}
-            alt={productName}
-            className="w-full max-w-xl rounded-xl shadow-md hover:shadow-xl transition"
+            alt={`${productName} product preview`}
+            loading="lazy"
+            className="w-full max-w-xl rounded-2xl shadow-lg
+                       transition-transform duration-300 hover:-translate-y-1
+                       hover:shadow-xl"
           />
         </div>
 
